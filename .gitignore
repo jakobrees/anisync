@@ -26,3 +26,5 @@ data/processed/*
 
 # Docker
 *.log
+
+*.egg-info/
