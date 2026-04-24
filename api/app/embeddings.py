@@ -1,9 +1,18 @@
 from functools import lru_cache
 
 import numpy as np
+import torch
 from sentence_transformers import SentenceTransformer
 
 from app.config import get_settings
+
+
+def _best_device() -> str:
+    if torch.cuda.is_available():
+        return "cuda"
+    if torch.backends.mps.is_available():
+        return "mps"
+    return "cpu"
 
 
 @lru_cache(maxsize=1)
@@ -15,7 +24,10 @@ def get_embedding_model() -> SentenceTransformer:
     Anime embeddings are precomputed offline. Query embeddings are generated at runtime.
     """
     settings = get_settings()
-    return SentenceTransformer(settings.embedding_model_name)
+    device = _best_device()
+    model = SentenceTransformer(settings.embedding_model_name, device=device)
+    print(f"Embedding model: {settings.embedding_model_name} | device: {device}")
+    return model
 
 
 def normalize_rows(vectors: np.ndarray) -> np.ndarray:

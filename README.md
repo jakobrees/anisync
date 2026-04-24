@@ -84,7 +84,7 @@
 - **`api/app/services/recommender.py`** — Recommendation pipeline that retrieves candidates, clusters anime, ranks results, builds final lists, and summarizes votes.
 - **`api/app/ml/kmeans.py`** — Manual K-means implementation with initialization, assignment, update, empty-cluster repair, silhouette scoring, and K selection.
 - **`api/app/scripts/init_db.py`** — Script that creates the pgvector extension and initializes database tables.
-- **`api/app/scripts/preprocess_catalog.py`** — Offline preprocessing script that filters anime, builds metadata, downloads or generates images, computes embeddings, and loads the catalog into PostgreSQL.
+- **`api/app/scripts/preprocess_catalog.py`** — Offline preprocessing script that filters anime, builds metadata, downloads or generates images in parallel (with atomic writes for safe restarts), computes embeddings using the best available device (CUDA/MPS/CPU), and loads the catalog into PostgreSQL.
 - **`api/app/scripts/seed_demo.py`** — Demo seeding script that creates local test users with known login credentials.
 - **`api/app/scripts/sync_media_to_supabase.py`** — Deployment helper script for uploading local media assets to Supabase Storage and updating catalog image paths.
 - **`api/tests/test_kmeans.py`** — Backend unit tests for the manual K-means and silhouette logic.
