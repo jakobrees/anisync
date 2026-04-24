@@ -4,10 +4,12 @@ import hashlib
 import json
 import re
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.parse import urlparse
 
 import httpx
+from tqdm import tqdm
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from sqlalchemy import delete, select
@@ -15,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from app.config import get_settings
 from app.db import SessionLocal
-from app.embeddings import embed_texts
+from app.embeddings import embed_texts, get_embedding_model
 from app.models import CatalogItem
 
 
@@ -216,6 +218,9 @@ def save_placeholder(title: str, item_id: str, output_path: Path, size: tuple[in
 def normalize_and_save_image(raw_bytes: bytes, output_path: Path, size: tuple[int, int]) -> tuple[str, int, int, str]:
     """
     Decode, center-crop, resize, and save a runtime JPEG asset.
+
+    Writes to a temp file then renames atomically so an interrupted write
+    never leaves a corrupt file that the cache check would treat as valid.
     """
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -224,7 +229,10 @@ def normalize_and_save_image(raw_bytes: bytes, output_path: Path, size: tuple[in
     image = Image.open(BytesIO(raw_bytes))
     image = image.convert("RGB")
     image = ImageOps.fit(image, size, method=Image.Resampling.LANCZOS)
-    image.save(output_path, "JPEG", quality=88, optimize=True)
+
+    tmp_path = output_path.with_suffix(".tmp")
+    image.save(tmp_path, "JPEG", quality=88, optimize=True)
+    tmp_path.rename(output_path)
 
     sha = hashlib.sha256(output_path.read_bytes()).hexdigest()
     return "image/jpeg", size[0], size[1], sha
@@ -279,6 +287,17 @@ def create_image_assets(
     """
     poster_path = media_dir / "posters" / f"{item_id}.jpg"
     thumbnail_path = media_dir / "thumbnails" / f"{item_id}.jpg"
+
+    if poster_path.exists() and thumbnail_path.exists():
+        return {
+            "image_local_path": f"/media/posters/{item_id}.jpg",
+            "thumbnail_local_path": f"/media/thumbnails/{item_id}.jpg",
+            "image_download_status": "cached",
+            "image_mime_type": "image/jpeg",
+            "image_width": None,
+            "image_height": None,
+            "image_sha256": None,
+        }
 
     raw = try_download_image(client, thumbnail_url) or try_download_image(client, picture_url)
 
@@ -482,6 +501,7 @@ def main() -> None:
     parser.add_argument("--skip-images", action="store_true", help="Generate placeholders instead of downloading images")
     parser.add_argument("--max-items", type=int, default=None, help="Optional development-only item limit")
     parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--workers", type=int, default=32, help="Parallel workers for image downloading")
     args = parser.parse_args()
 
     raw_path = Path(args.raw).resolve()
@@ -503,45 +523,36 @@ def main() -> None:
     client = httpx.Client(
         follow_redirects=True,
         timeout=10.0,
+        limits=httpx.Limits(max_connections=args.workers, max_keepalive_connections=args.workers),
         headers={"User-Agent": "AniSync educational project"},
     )
 
+    def fetch_assets(row: dict) -> dict:
+        assets = create_image_assets(
+            client=client,
+            item_id=row["source_item_id"],
+            title=row["title"],
+            thumbnail_url=None if args.skip_images else row.get("thumbnail_original_url"),
+            picture_url=None if args.skip_images else row.get("image_original_url"),
+            media_dir=media_dir,
+        )
+        row.update(assets)
+        return row
+
     with processed_output.open("w", encoding="utf-8") as summary_file:
-        for index, row in enumerate(rows, start=1):
-            if args.skip_images:
-                assets = create_image_assets(
-                    client=client,
-                    item_id=row["source_item_id"],
-                    title=row["title"],
-                    thumbnail_url=None,
-                    picture_url=None,
-                    media_dir=media_dir,
-                )
-            else:
-                assets = create_image_assets(
-                    client=client,
-                    item_id=row["source_item_id"],
-                    title=row["title"],
-                    thumbnail_url=row.get("thumbnail_original_url"),
-                    picture_url=row.get("image_original_url"),
-                    media_dir=media_dir,
-                )
-
-            row.update(assets)
-            summary_file.write(json.dumps(
-                {
-                    "source_item_id": row["source_item_id"],
-                    "title": row["title"],
-                    "year": row["year"],
-                    "media_type": row["media_type"],
-                    "status": row["status"],
-                    "thumbnail_local_path": row["thumbnail_local_path"],
-                },
-                ensure_ascii=False,
-            ) + "\n")
-
-            if index % 500 == 0:
-                print(f"Prepared images/metadata for {index}/{len(rows)} items...")
+        with ThreadPoolExecutor(max_workers=args.workers) as executor:
+            for row in tqdm(executor.map(fetch_assets, rows), total=len(rows), desc="Downloading images", unit="anime"):
+                summary_file.write(json.dumps(
+                    {
+                        "source_item_id": row["source_item_id"],
+                        "title": row["title"],
+                        "year": row["year"],
+                        "media_type": row["media_type"],
+                        "status": row["status"],
+                        "thumbnail_local_path": row["thumbnail_local_path"],
+                    },
+                    ensure_ascii=False,
+                ) + "\n")
 
     text_blobs = [row["text_blob"] for row in rows]
 
@@ -552,12 +563,13 @@ def main() -> None:
             db.execute(delete(CatalogItem))
             db.commit()
 
-        for start in range(0, len(rows), args.batch_size):
+        get_embedding_model()
+        batches = range(0, len(rows), args.batch_size)
+        for start in tqdm(batches, desc="Embedding & importing", unit="batch"):
             end = min(start + args.batch_size, len(rows))
             batch_rows = rows[start:end]
             batch_texts = text_blobs[start:end]
 
-            print(f"Embedding/importing rows {start + 1}-{end}...")
             embeddings = embed_texts(batch_texts, batch_size=args.batch_size)
 
             for row, embedding in zip(batch_rows, embeddings, strict=True):

@@ -143,16 +143,8 @@ function Shell({
   return (
     <main className="min-h-screen bg-[#060816] text-slate-50">
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        <motion.div
-          className="absolute left-[-10%] top-[-20%] h-[420px] w-[420px] rounded-full bg-fuchsia-500/30 blur-3xl"
-          animate={{ x: [0, 40, 0], y: [0, 30, 0], scale: [1, 1.08, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-[-20%] right-[-10%] h-[520px] w-[520px] rounded-full bg-cyan-500/20 blur-3xl"
-          animate={{ x: [0, -30, 0], y: [0, -40, 0], scale: [1, 1.12, 1] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        <div className="bg-blob-a absolute left-[-10%] top-[-20%] h-[420px] w-[420px] rounded-full bg-fuchsia-500/30 blur-3xl" />
+        <div className="bg-blob-b absolute bottom-[-20%] right-[-10%] h-[520px] w-[520px] rounded-full bg-cyan-500/20 blur-3xl" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.10),transparent_30%),linear-gradient(180deg,rgba(6,8,22,0.2),#060816)]" />
       </div>
 

@@ -1,3 +1,23 @@
+@keyframes blob-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 30px) scale(1.08); }
+}
+
+@keyframes blob-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-30px, -40px) scale(1.12); }
+}
+
+.bg-blob-a {
+  animation: blob-a 12s ease-in-out infinite;
+  will-change: transform;
+}
+
+.bg-blob-b {
+  animation: blob-b 14s ease-in-out infinite;
+  will-change: transform;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
