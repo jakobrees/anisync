@@ -79,6 +79,7 @@ class CatalogItem(Base):
     related_anime_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
     embedding: Mapped[list[float]] = mapped_column(Vector(384), nullable=False)
+    embedding_msmarco: Mapped[list[float] | None] = mapped_column(Vector(384), nullable=True)
 
     metadata_json: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
     raw_dataset_record_json: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
