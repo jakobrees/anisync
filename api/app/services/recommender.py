@@ -229,7 +229,11 @@ def compute_recommendations(db: Session, room: Room) -> dict:
         "deduplicated_room_candidate_pool_ids": [item.id for item in candidate_items],
         "chosen_k": int(kmeans_result.k),
         "kmeans_objective": round(float(kmeans_result.objective), 4),
-        "kmeans_silhouette": round(float(kmeans_result.silhouette or 0.0), 4),
+        "kmeans_silhouette": (
+            round(float(kmeans_result.silhouette), 4)
+            if kmeans_result.silhouette is not None
+            else None
+        ),
         "cluster_assignments": {
             str(item.id): int(assignment)
             for item, assignment in zip(candidate_items, kmeans_result.assignments, strict=True)
