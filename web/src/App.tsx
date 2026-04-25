@@ -80,7 +80,7 @@ type RoomPayload = {
   }
   results: null | {
     chosen_k: number
-    kmeans_silhouette: number
+    kmeans_silhouette: number | null
     eligible_catalog_subset_size: number
     clusters: Cluster[]
     final_recommendations: AnimeItem[]
@@ -868,7 +868,7 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
       <Card>
         <h2 className="text-2xl font-black">Clustered Anime Lists</h2>
         <p className="mt-2 text-sm text-slate-400">
-          K={results.chosen_k}, silhouette={results.kmeans_silhouette}. Each cluster is ranked by Group Match Score.
+          K={results.chosen_k}, silhouette={results.kmeans_silhouette !== null ? results.kmeans_silhouette.toFixed(4) : 'n/a'}. Each cluster is ranked by Group Match Score.
         </p>
 
         <div className="mt-5 space-y-5">
