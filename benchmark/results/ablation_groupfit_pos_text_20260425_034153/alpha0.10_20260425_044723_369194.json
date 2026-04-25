@@ -1,0 +1,6823 @@
+{
+  "algorithm": "groupfit_pos_text",
+  "config": {
+    "visible_ratio": 0.5,
+    "group_size": 4,
+    "num_groups": 400,
+    "ndcg_k": 200,
+    "profile_seed": 123,
+    "group_seed": 42,
+    "groupfit_lambda": 0.3,
+    "groupfit_beta": 0.5,
+    "groupfit_alpha": 0.1
+  },
+  "run_at": "2026-04-25T04:47:23.369176+00:00",
+  "groups": [
+    {
+      "users": [
+        "kisamethegrey",
+        "Defy24601",
+        "WintermuteCZ",
+        "MengeleCS"
+      ],
+      "per_user_ndcg": [
+        0.152448,
+        0.117187,
+        0.135949,
+        0.089184
+      ],
+      "mean_ndcg": 0.123692,
+      "worst_user_ndcg": 0.089184,
+      "group_id": 0
+    },
+    {
+      "users": [
+        "FlunentDirty",
+        "BlackHunter",
+        "Lersveen",
+        "Daevalyn"
+      ],
+      "per_user_ndcg": [
+        0.068664,
+        0.099874,
+        0.212943,
+        0.01543
+      ],
+      "mean_ndcg": 0.099228,
+      "worst_user_ndcg": 0.01543,
+      "group_id": 1
+    },
+    {
+      "users": [
+        "sor4Alchemist",
+        "SpaKk",
+        "Coud",
+        "cherii"
+      ],
+      "per_user_ndcg": [
+        0.10871,
+        0.079552,
+        0.04991,
+        0.089267
+      ],
+      "mean_ndcg": 0.081859,
+      "worst_user_ndcg": 0.04991,
+      "group_id": 2
+    },
+    {
+      "users": [
+        "tamama_kuroyuki",
+        "kurikusu",
+        "Lust_221B",
+        "Czukieras"
+      ],
+      "per_user_ndcg": [
+        0.123058,
+        0.077807,
+        0.045639,
+        0.113931
+      ],
+      "mean_ndcg": 0.090108,
+      "worst_user_ndcg": 0.045639,
+      "group_id": 3
+    },
+    {
+      "users": [
+        "chaos-x-bot",
+        "Ahlala",
+        "Deathwaffle",
+        "Shinobi2b"
+      ],
+      "per_user_ndcg": [
+        0.071016,
+        0.040836,
+        0.231112,
+        0.054387
+      ],
+      "mean_ndcg": 0.099338,
+      "worst_user_ndcg": 0.040836,
+      "group_id": 4
+    },
+    {
+      "users": [
+        "kinhomelo",
+        "Equim-chan",
+        "micky2nana",
+        "Senozza"
+      ],
+      "per_user_ndcg": [
+        0.039301,
+        0.099658,
+        0.106857,
+        0.061586
+      ],
+      "mean_ndcg": 0.07685,
+      "worst_user_ndcg": 0.039301,
+      "group_id": 5
+    },
+    {
+      "users": [
+        "Haru88",
+        "jeremiah",
+        "aninjatool",
+        "reeceisrag"
+      ],
+      "per_user_ndcg": [
+        0.088649,
+        0.129978,
+        0.134441,
+        0.060148
+      ],
+      "mean_ndcg": 0.103304,
+      "worst_user_ndcg": 0.060148,
+      "group_id": 6
+    },
+    {
+      "users": [
+        "SwegShady",
+        "Affligere",
+        "Qc_Cerberus",
+        "maliani"
+      ],
+      "per_user_ndcg": [
+        0.064326,
+        0.098375,
+        0.058489,
+        0.062452
+      ],
+      "mean_ndcg": 0.07091,
+      "worst_user_ndcg": 0.058489,
+      "group_id": 7
+    },
+    {
+      "users": [
+        "Cherrihartz",
+        "Ame_star",
+        "hurried",
+        "Danz_RS"
+      ],
+      "per_user_ndcg": [
+        0.129074,
+        0.137466,
+        0.089071,
+        0.096431
+      ],
+      "mean_ndcg": 0.113011,
+      "worst_user_ndcg": 0.089071,
+      "group_id": 8
+    },
+    {
+      "users": [
+        "BlueOrchids",
+        "Gunbladewarrior",
+        "ArcticJester",
+        "MilordLana"
+      ],
+      "per_user_ndcg": [
+        0.134832,
+        0.014341,
+        0.066893,
+        0.036144
+      ],
+      "mean_ndcg": 0.063052,
+      "worst_user_ndcg": 0.014341,
+      "group_id": 9
+    },
+    {
+      "users": [
+        "Mandar_Bloodhart",
+        "Wit",
+        "iwanna38",
+        "King_Kenshiro"
+      ],
+      "per_user_ndcg": [
+        0.162598,
+        0.172932,
+        0.0,
+        0.162805
+      ],
+      "mean_ndcg": 0.124584,
+      "worst_user_ndcg": 0.0,
+      "group_id": 10
+    },
+    {
+      "users": [
+        "Moones95",
+        "Leka92",
+        "Hothooves",
+        "AliceHeart"
+      ],
+      "per_user_ndcg": [
+        0.050087,
+        0.047511,
+        0.075967,
+        0.149519
+      ],
+      "mean_ndcg": 0.080771,
+      "worst_user_ndcg": 0.047511,
+      "group_id": 11
+    },
+    {
+      "users": [
+        "Sharpness",
+        "ahmad11anwar",
+        "dragonbuster",
+        "MultiSras"
+      ],
+      "per_user_ndcg": [
+        0.02872,
+        0.167987,
+        0.100738,
+        0.121873
+      ],
+      "mean_ndcg": 0.10483,
+      "worst_user_ndcg": 0.02872,
+      "group_id": 12
+    },
+    {
+      "users": [
+        "Kaze_Hime",
+        "catialessandra",
+        "Em_Leingod",
+        "MxZxB"
+      ],
+      "per_user_ndcg": [
+        0.081516,
+        0.109036,
+        0.089032,
+        0.041458
+      ],
+      "mean_ndcg": 0.08026,
+      "worst_user_ndcg": 0.041458,
+      "group_id": 13
+    },
+    {
+      "users": [
+        "catwitch",
+        "TheLastGreenBoat",
+        "deideiblueeyez",
+        "Satoru-kun"
+      ],
+      "per_user_ndcg": [
+        0.122472,
+        0.013811,
+        0.018806,
+        0.14521
+      ],
+      "mean_ndcg": 0.075075,
+      "worst_user_ndcg": 0.013811,
+      "group_id": 14
+    },
+    {
+      "users": [
+        "ibellis",
+        "tatiiz02",
+        "Rokudou_Mukuro",
+        "RnD"
+      ],
+      "per_user_ndcg": [
+        0.167995,
+        0.248782,
+        0.065965,
+        0.035452
+      ],
+      "mean_ndcg": 0.129549,
+      "worst_user_ndcg": 0.035452,
+      "group_id": 15
+    },
+    {
+      "users": [
+        "Feyris",
+        "92Natsu",
+        "MikenzieNoelle",
+        "aiakash"
+      ],
+      "per_user_ndcg": [
+        0.107248,
+        0.173928,
+        0.19404,
+        0.154929
+      ],
+      "mean_ndcg": 0.157536,
+      "worst_user_ndcg": 0.107248,
+      "group_id": 16
+    },
+    {
+      "users": [
+        "ayyfish",
+        "Hikari0Kakashi",
+        "WettySpaghetti",
+        "BoyMais"
+      ],
+      "per_user_ndcg": [
+        0.044356,
+        0.037309,
+        0.190402,
+        0.105504
+      ],
+      "mean_ndcg": 0.094393,
+      "worst_user_ndcg": 0.037309,
+      "group_id": 17
+    },
+    {
+      "users": [
+        "carringtonlove",
+        "Vanille97",
+        "corruptcore",
+        "Vanyl"
+      ],
+      "per_user_ndcg": [
+        0.190296,
+        0.050949,
+        0.043385,
+        0.167971
+      ],
+      "mean_ndcg": 0.11315,
+      "worst_user_ndcg": 0.043385,
+      "group_id": 18
+    },
+    {
+      "users": [
+        "seola",
+        "Kayllum",
+        "Strawy",
+        "Y4nGeek"
+      ],
+      "per_user_ndcg": [
+        0.018215,
+        0.156967,
+        0.092242,
+        0.062062
+      ],
+      "mean_ndcg": 0.082371,
+      "worst_user_ndcg": 0.018215,
+      "group_id": 19
+    },
+    {
+      "users": [
+        "SilverEureka",
+        "catauciu",
+        "Oscaryn",
+        "inspiracja"
+      ],
+      "per_user_ndcg": [
+        0.156518,
+        0.179699,
+        0.051443,
+        0.161468
+      ],
+      "mean_ndcg": 0.137282,
+      "worst_user_ndcg": 0.051443,
+      "group_id": 20
+    },
+    {
+      "users": [
+        "lil-moe",
+        "lesleytheguy",
+        "Xoroth-of-Zeran",
+        "Kile"
+      ],
+      "per_user_ndcg": [
+        0.130052,
+        0.108773,
+        0.092473,
+        0.085563
+      ],
+      "mean_ndcg": 0.104215,
+      "worst_user_ndcg": 0.085563,
+      "group_id": 21
+    },
+    {
+      "users": [
+        "Brimantorch07",
+        "EverybodyDies",
+        "BlitzKeeg",
+        "edi46"
+      ],
+      "per_user_ndcg": [
+        0.040269,
+        0.191552,
+        0.089628,
+        0.061463
+      ],
+      "mean_ndcg": 0.095728,
+      "worst_user_ndcg": 0.040269,
+      "group_id": 22
+    },
+    {
+      "users": [
+        "kaigen",
+        "TaigaAisaka",
+        "fi3ryfalc0nZ",
+        "Arvinael"
+      ],
+      "per_user_ndcg": [
+        0.013828,
+        0.189586,
+        0.106944,
+        0.029793
+      ],
+      "mean_ndcg": 0.085038,
+      "worst_user_ndcg": 0.013828,
+      "group_id": 23
+    },
+    {
+      "users": [
+        "Czarls",
+        "weird_pirate",
+        "cutlass",
+        "Namida2u"
+      ],
+      "per_user_ndcg": [
+        0.053838,
+        0.111539,
+        0.014898,
+        0.054781
+      ],
+      "mean_ndcg": 0.058764,
+      "worst_user_ndcg": 0.014898,
+      "group_id": 24
+    },
+    {
+      "users": [
+        "graduation2000",
+        "Ultimate_Cori",
+        "Killraven",
+        "Kiyin"
+      ],
+      "per_user_ndcg": [
+        0.072781,
+        0.107607,
+        0.066161,
+        0.076535
+      ],
+      "mean_ndcg": 0.080771,
+      "worst_user_ndcg": 0.066161,
+      "group_id": 25
+    },
+    {
+      "users": [
+        "Bestor",
+        "Misa97",
+        "King_Aomine",
+        "balot55"
+      ],
+      "per_user_ndcg": [
+        0.043461,
+        0.090733,
+        0.009818,
+        0.083943
+      ],
+      "mean_ndcg": 0.056989,
+      "worst_user_ndcg": 0.009818,
+      "group_id": 26
+    },
+    {
+      "users": [
+        "winryrocabell",
+        "WillCastillo",
+        "Dedere",
+        "MayTail"
+      ],
+      "per_user_ndcg": [
+        0.074399,
+        0.072373,
+        0.05488,
+        0.060684
+      ],
+      "mean_ndcg": 0.065584,
+      "worst_user_ndcg": 0.05488,
+      "group_id": 27
+    },
+    {
+      "users": [
+        "ivan_nawval",
+        "Hinotori_ru",
+        "hummmer",
+        "SwordArt"
+      ],
+      "per_user_ndcg": [
+        0.117432,
+        0.077149,
+        0.077321,
+        0.064391
+      ],
+      "mean_ndcg": 0.084073,
+      "worst_user_ndcg": 0.064391,
+      "group_id": 28
+    },
+    {
+      "users": [
+        "euuandnee",
+        "Teren",
+        "leszczyk98",
+        "Gureto-Daze"
+      ],
+      "per_user_ndcg": [
+        0.054533,
+        0.042401,
+        0.089278,
+        0.124738
+      ],
+      "mean_ndcg": 0.077738,
+      "worst_user_ndcg": 0.042401,
+      "group_id": 29
+    },
+    {
+      "users": [
+        "ni-juu",
+        "zlood",
+        "MikotoChan",
+        "ooichanel"
+      ],
+      "per_user_ndcg": [
+        0.036777,
+        0.018101,
+        0.115426,
+        0.088358
+      ],
+      "mean_ndcg": 0.064665,
+      "worst_user_ndcg": 0.018101,
+      "group_id": 30
+    },
+    {
+      "users": [
+        "_Myst",
+        "Nevar89",
+        "Shereoh",
+        "Cestovatel"
+      ],
+      "per_user_ndcg": [
+        0.065015,
+        0.091215,
+        0.0,
+        0.128936
+      ],
+      "mean_ndcg": 0.071292,
+      "worst_user_ndcg": 0.0,
+      "group_id": 31
+    },
+    {
+      "users": [
+        "RyanExplains",
+        "M_F_M",
+        "theonewhoknocks2",
+        "AnyaOtaku"
+      ],
+      "per_user_ndcg": [
+        0.095071,
+        0.081007,
+        0.226143,
+        0.154309
+      ],
+      "mean_ndcg": 0.139132,
+      "worst_user_ndcg": 0.081007,
+      "group_id": 32
+    },
+    {
+      "users": [
+        "P1pis1990",
+        "XSayuki",
+        "KingMickey",
+        "strawhart"
+      ],
+      "per_user_ndcg": [
+        0.08259,
+        0.069966,
+        0.024469,
+        0.087685
+      ],
+      "mean_ndcg": 0.066178,
+      "worst_user_ndcg": 0.024469,
+      "group_id": 33
+    },
+    {
+      "users": [
+        "Dille",
+        "SVChaosagent",
+        "Yz4k",
+        "EvilWolf"
+      ],
+      "per_user_ndcg": [
+        0.102075,
+        0.06492,
+        0.233877,
+        0.038783
+      ],
+      "mean_ndcg": 0.109914,
+      "worst_user_ndcg": 0.038783,
+      "group_id": 34
+    },
+    {
+      "users": [
+        "Insomnium",
+        "BawoliKMK",
+        "bubbles20",
+        "IKAH"
+      ],
+      "per_user_ndcg": [
+        0.094672,
+        0.080955,
+        0.168518,
+        0.128079
+      ],
+      "mean_ndcg": 0.118056,
+      "worst_user_ndcg": 0.080955,
+      "group_id": 35
+    },
+    {
+      "users": [
+        "Kojitara",
+        "Ehegi",
+        "KnightRE",
+        "aakashwadhwa7"
+      ],
+      "per_user_ndcg": [
+        0.103213,
+        0.103232,
+        0.136282,
+        0.1704
+      ],
+      "mean_ndcg": 0.128282,
+      "worst_user_ndcg": 0.103213,
+      "group_id": 36
+    },
+    {
+      "users": [
+        "diegdulceo",
+        "SaintWishes",
+        "xxVampireAngelxx",
+        "Shytixa"
+      ],
+      "per_user_ndcg": [
+        0.083235,
+        0.195736,
+        0.171476,
+        0.180936
+      ],
+      "mean_ndcg": 0.157846,
+      "worst_user_ndcg": 0.083235,
+      "group_id": 37
+    },
+    {
+      "users": [
+        "Gradzik14",
+        "VickyV",
+        "SinXtian",
+        "Jizzy2007"
+      ],
+      "per_user_ndcg": [
+        0.192427,
+        0.102568,
+        0.13373,
+        0.060411
+      ],
+      "mean_ndcg": 0.122284,
+      "worst_user_ndcg": 0.060411,
+      "group_id": 38
+    },
+    {
+      "users": [
+        "LloydMinamitsu",
+        "silverwalls",
+        "luluko",
+        "YuiHonma933"
+      ],
+      "per_user_ndcg": [
+        0.104326,
+        0.072841,
+        0.148774,
+        0.025605
+      ],
+      "mean_ndcg": 0.087887,
+      "worst_user_ndcg": 0.025605,
+      "group_id": 39
+    },
+    {
+      "users": [
+        "AussieAnimeLad",
+        "Quorzom",
+        "Streamliner",
+        "xLan-kun"
+      ],
+      "per_user_ndcg": [
+        0.090764,
+        0.055913,
+        0.118321,
+        0.146188
+      ],
+      "mean_ndcg": 0.102796,
+      "worst_user_ndcg": 0.055913,
+      "group_id": 40
+    },
+    {
+      "users": [
+        "okwhynot",
+        "tukan123",
+        "thefadinglight17",
+        "Pk7Fox"
+      ],
+      "per_user_ndcg": [
+        0.122945,
+        0.161322,
+        0.111212,
+        0.092
+      ],
+      "mean_ndcg": 0.12187,
+      "worst_user_ndcg": 0.092,
+      "group_id": 41
+    },
+    {
+      "users": [
+        "Whip1asH",
+        "nezumi86",
+        "Altheim",
+        "D4RKFLAMEM4STER"
+      ],
+      "per_user_ndcg": [
+        0.068685,
+        0.205453,
+        0.096049,
+        0.064135
+      ],
+      "mean_ndcg": 0.108581,
+      "worst_user_ndcg": 0.064135,
+      "group_id": 42
+    },
+    {
+      "users": [
+        "dj-flash",
+        "ElPsyAkki",
+        "Bambobo",
+        "nojby"
+      ],
+      "per_user_ndcg": [
+        0.05303,
+        0.026574,
+        0.169839,
+        0.007779
+      ],
+      "mean_ndcg": 0.064305,
+      "worst_user_ndcg": 0.007779,
+      "group_id": 43
+    },
+    {
+      "users": [
+        "JrAsare",
+        "Tessar",
+        "Julka",
+        "BheraZ"
+      ],
+      "per_user_ndcg": [
+        0.029179,
+        0.07271,
+        0.156178,
+        0.027778
+      ],
+      "mean_ndcg": 0.071461,
+      "worst_user_ndcg": 0.027778,
+      "group_id": 44
+    },
+    {
+      "users": [
+        "slavit",
+        "dopestkitty",
+        "JediahSk",
+        "Shiniryuu"
+      ],
+      "per_user_ndcg": [
+        0.024013,
+        0.111741,
+        0.158401,
+        0.043216
+      ],
+      "mean_ndcg": 0.084343,
+      "worst_user_ndcg": 0.024013,
+      "group_id": 45
+    },
+    {
+      "users": [
+        "ShinichiTatsumi",
+        "Lunaeclispe",
+        "Mihai-Alex",
+        "Tuckerdude6"
+      ],
+      "per_user_ndcg": [
+        0.060343,
+        0.093404,
+        0.094875,
+        0.039321
+      ],
+      "mean_ndcg": 0.071986,
+      "worst_user_ndcg": 0.039321,
+      "group_id": 46
+    },
+    {
+      "users": [
+        "Warlordscuz",
+        "kuroryu",
+        "KahrRamsus",
+        "csra30"
+      ],
+      "per_user_ndcg": [
+        0.083222,
+        0.044972,
+        0.14693,
+        0.165863
+      ],
+      "mean_ndcg": 0.110247,
+      "worst_user_ndcg": 0.044972,
+      "group_id": 47
+    },
+    {
+      "users": [
+        "Hiei3x",
+        "JuniorMintKiss",
+        "AKAMATSU18",
+        "shortpachoo"
+      ],
+      "per_user_ndcg": [
+        0.104319,
+        0.149185,
+        0.064549,
+        0.124195
+      ],
+      "mean_ndcg": 0.110562,
+      "worst_user_ndcg": 0.064549,
+      "group_id": 48
+    },
+    {
+      "users": [
+        "Sodom",
+        "XeonDude",
+        "Sennes",
+        "JustMax"
+      ],
+      "per_user_ndcg": [
+        0.16971,
+        0.101519,
+        0.090776,
+        0.174611
+      ],
+      "mean_ndcg": 0.134154,
+      "worst_user_ndcg": 0.090776,
+      "group_id": 49
+    },
+    {
+      "users": [
+        "bbyluv",
+        "TriAxis101",
+        "Tessie",
+        "thelotosoul"
+      ],
+      "per_user_ndcg": [
+        0.146902,
+        0.051977,
+        0.115386,
+        0.10764
+      ],
+      "mean_ndcg": 0.105476,
+      "worst_user_ndcg": 0.051977,
+      "group_id": 50
+    },
+    {
+      "users": [
+        "NoctOs543",
+        "ViolentDemise",
+        "yukipie-chan",
+        "tk-noodles"
+      ],
+      "per_user_ndcg": [
+        0.074977,
+        0.069485,
+        0.110452,
+        0.139655
+      ],
+      "mean_ndcg": 0.098642,
+      "worst_user_ndcg": 0.069485,
+      "group_id": 51
+    },
+    {
+      "users": [
+        "Divertino",
+        "Candied-Citrus",
+        "JMBassoN",
+        "vintagevale"
+      ],
+      "per_user_ndcg": [
+        0.026114,
+        0.155808,
+        0.081054,
+        0.119321
+      ],
+      "mean_ndcg": 0.095574,
+      "worst_user_ndcg": 0.026114,
+      "group_id": 52
+    },
+    {
+      "users": [
+        "Yj",
+        "annah-nyan",
+        "Jody2339",
+        "serksz"
+      ],
+      "per_user_ndcg": [
+        0.074587,
+        0.054948,
+        0.042388,
+        0.057172
+      ],
+      "mean_ndcg": 0.057274,
+      "worst_user_ndcg": 0.042388,
+      "group_id": 53
+    },
+    {
+      "users": [
+        "TLH420",
+        "LooLo",
+        "Optic_LEEROY",
+        "Greenoo"
+      ],
+      "per_user_ndcg": [
+        0.064325,
+        0.104359,
+        0.213495,
+        0.013141
+      ],
+      "mean_ndcg": 0.09883,
+      "worst_user_ndcg": 0.013141,
+      "group_id": 54
+    },
+    {
+      "users": [
+        "shadowl00t",
+        "Codelicious",
+        "AmyThaStrawberry",
+        "supersalamandar"
+      ],
+      "per_user_ndcg": [
+        0.066735,
+        0.159707,
+        0.164611,
+        0.148792
+      ],
+      "mean_ndcg": 0.134961,
+      "worst_user_ndcg": 0.066735,
+      "group_id": 55
+    },
+    {
+      "users": [
+        "ninjadave",
+        "Ryoichi",
+        "vrba2811",
+        "totikki"
+      ],
+      "per_user_ndcg": [
+        0.078171,
+        0.038435,
+        0.051816,
+        0.123293
+      ],
+      "mean_ndcg": 0.072929,
+      "worst_user_ndcg": 0.038435,
+      "group_id": 56
+    },
+    {
+      "users": [
+        "dinocats",
+        "Jiffie",
+        "Odive",
+        "atu"
+      ],
+      "per_user_ndcg": [
+        0.18316,
+        0.143978,
+        0.127334,
+        0.083531
+      ],
+      "mean_ndcg": 0.134501,
+      "worst_user_ndcg": 0.083531,
+      "group_id": 57
+    },
+    {
+      "users": [
+        "IoNeL97",
+        "gamerpaul",
+        "MrColy69",
+        "Draco008"
+      ],
+      "per_user_ndcg": [
+        0.078278,
+        0.063837,
+        0.028117,
+        0.044887
+      ],
+      "mean_ndcg": 0.053779,
+      "worst_user_ndcg": 0.028117,
+      "group_id": 58
+    },
+    {
+      "users": [
+        "the_orange",
+        "GhostShadow",
+        "Rei_12",
+        "Makoto_Ikari"
+      ],
+      "per_user_ndcg": [
+        0.077864,
+        0.143098,
+        0.181863,
+        0.034884
+      ],
+      "mean_ndcg": 0.109427,
+      "worst_user_ndcg": 0.034884,
+      "group_id": 59
+    },
+    {
+      "users": [
+        "Kisamcia",
+        "MAXP41N",
+        "Col_Escobar",
+        "Chokko"
+      ],
+      "per_user_ndcg": [
+        0.025427,
+        0.042015,
+        0.164407,
+        0.194741
+      ],
+      "mean_ndcg": 0.106648,
+      "worst_user_ndcg": 0.025427,
+      "group_id": 60
+    },
+    {
+      "users": [
+        "SatokoChan",
+        "chb47",
+        "zombiemage",
+        "Waanlox"
+      ],
+      "per_user_ndcg": [
+        0.145438,
+        0.0,
+        0.036622,
+        0.095696
+      ],
+      "mean_ndcg": 0.069439,
+      "worst_user_ndcg": 0.0,
+      "group_id": 61
+    },
+    {
+      "users": [
+        "dukemax",
+        "Azulassin",
+        "lluambo",
+        "otaku4"
+      ],
+      "per_user_ndcg": [
+        0.140173,
+        0.066882,
+        0.073825,
+        0.122658
+      ],
+      "mean_ndcg": 0.100885,
+      "worst_user_ndcg": 0.066882,
+      "group_id": 62
+    },
+    {
+      "users": [
+        "hawtfrank",
+        "Quivis",
+        "aisaka09",
+        "Ligita"
+      ],
+      "per_user_ndcg": [
+        0.018995,
+        0.017925,
+        0.10217,
+        0.128324
+      ],
+      "mean_ndcg": 0.066853,
+      "worst_user_ndcg": 0.017925,
+      "group_id": 63
+    },
+    {
+      "users": [
+        "LollipopXXX",
+        "hikurashi83",
+        "Pinkydiamondx3",
+        "Urmomsanoob"
+      ],
+      "per_user_ndcg": [
+        0.15463,
+        0.087203,
+        0.0,
+        0.062151
+      ],
+      "mean_ndcg": 0.075996,
+      "worst_user_ndcg": 0.0,
+      "group_id": 64
+    },
+    {
+      "users": [
+        "powerscody",
+        "gebb",
+        "EdenFrost_",
+        "Diamond_Dust"
+      ],
+      "per_user_ndcg": [
+        0.04878,
+        0.084199,
+        0.050659,
+        0.152208
+      ],
+      "mean_ndcg": 0.083962,
+      "worst_user_ndcg": 0.04878,
+      "group_id": 65
+    },
+    {
+      "users": [
+        "Qwentxz",
+        "Melfes",
+        "Rikzoor",
+        "OldVincent"
+      ],
+      "per_user_ndcg": [
+        0.051538,
+        0.129984,
+        0.22641,
+        0.149636
+      ],
+      "mean_ndcg": 0.139392,
+      "worst_user_ndcg": 0.051538,
+      "group_id": 66
+    },
+    {
+      "users": [
+        "Mannish",
+        "Jordanwutang",
+        "MisakiJaz",
+        "egloshe"
+      ],
+      "per_user_ndcg": [
+        0.141261,
+        0.142622,
+        0.123648,
+        0.124978
+      ],
+      "mean_ndcg": 0.133127,
+      "worst_user_ndcg": 0.123648,
+      "group_id": 67
+    },
+    {
+      "users": [
+        "Cetais",
+        "FeatherLynne",
+        "Silmarillion",
+        "Lurenpuren"
+      ],
+      "per_user_ndcg": [
+        0.085008,
+        0.079307,
+        0.098096,
+        0.214373
+      ],
+      "mean_ndcg": 0.119196,
+      "worst_user_ndcg": 0.079307,
+      "group_id": 68
+    },
+    {
+      "users": [
+        "M05",
+        "TYWM",
+        "nanko2006",
+        "anka-chan"
+      ],
+      "per_user_ndcg": [
+        0.086926,
+        0.050368,
+        0.161631,
+        0.097407
+      ],
+      "mean_ndcg": 0.099083,
+      "worst_user_ndcg": 0.050368,
+      "group_id": 69
+    },
+    {
+      "users": [
+        "Lihn",
+        "Clue-",
+        "taqcos182",
+        "toukeii"
+      ],
+      "per_user_ndcg": [
+        0.213931,
+        0.056705,
+        0.128779,
+        0.102614
+      ],
+      "mean_ndcg": 0.125508,
+      "worst_user_ndcg": 0.056705,
+      "group_id": 70
+    },
+    {
+      "users": [
+        "2LazyToCare",
+        "splyy",
+        "momoji",
+        "Yhuuro"
+      ],
+      "per_user_ndcg": [
+        0.151765,
+        0.049444,
+        0.088181,
+        0.044105
+      ],
+      "mean_ndcg": 0.083374,
+      "worst_user_ndcg": 0.044105,
+      "group_id": 71
+    },
+    {
+      "users": [
+        "S1rZ3ck",
+        "Ehwaz",
+        "artzcrazy",
+        "dasmastic"
+      ],
+      "per_user_ndcg": [
+        0.027118,
+        0.154854,
+        0.116822,
+        0.055856
+      ],
+      "mean_ndcg": 0.088662,
+      "worst_user_ndcg": 0.027118,
+      "group_id": 72
+    },
+    {
+      "users": [
+        "fapk",
+        "Triksteri",
+        "TheCookie",
+        "Natsuneeel"
+      ],
+      "per_user_ndcg": [
+        0.06993,
+        0.024897,
+        0.113158,
+        0.047406
+      ],
+      "mean_ndcg": 0.063848,
+      "worst_user_ndcg": 0.024897,
+      "group_id": 73
+    },
+    {
+      "users": [
+        "delieta",
+        "Demonit",
+        "Elio90",
+        "Shizuokujo"
+      ],
+      "per_user_ndcg": [
+        0.135957,
+        0.079333,
+        0.054285,
+        0.040426
+      ],
+      "mean_ndcg": 0.0775,
+      "worst_user_ndcg": 0.040426,
+      "group_id": 74
+    },
+    {
+      "users": [
+        "canislupus_vt",
+        "cindy088",
+        "textinct",
+        "andream_b"
+      ],
+      "per_user_ndcg": [
+        0.05828,
+        0.1388,
+        0.241587,
+        0.127169
+      ],
+      "mean_ndcg": 0.141459,
+      "worst_user_ndcg": 0.05828,
+      "group_id": 75
+    },
+    {
+      "users": [
+        "serenarla",
+        "LiamApollo",
+        "BOBTHEKNOB",
+        "Ettl"
+      ],
+      "per_user_ndcg": [
+        0.076547,
+        0.11708,
+        0.191546,
+        0.137953
+      ],
+      "mean_ndcg": 0.130781,
+      "worst_user_ndcg": 0.076547,
+      "group_id": 76
+    },
+    {
+      "users": [
+        "ajsuson",
+        "kroshka_strekoza",
+        "FoulOwl",
+        "T0LEK"
+      ],
+      "per_user_ndcg": [
+        0.066422,
+        0.096162,
+        0.117297,
+        0.149582
+      ],
+      "mean_ndcg": 0.107366,
+      "worst_user_ndcg": 0.066422,
+      "group_id": 77
+    },
+    {
+      "users": [
+        "Hathac",
+        "Addishere",
+        "Mastakilla",
+        "jama326"
+      ],
+      "per_user_ndcg": [
+        0.079528,
+        0.131058,
+        0.183336,
+        0.061727
+      ],
+      "mean_ndcg": 0.113912,
+      "worst_user_ndcg": 0.061727,
+      "group_id": 78
+    },
+    {
+      "users": [
+        "3delQ8",
+        "Lumi-chan",
+        "Akichii",
+        "alexanderthekek"
+      ],
+      "per_user_ndcg": [
+        0.217938,
+        0.200712,
+        0.06097,
+        0.032074
+      ],
+      "mean_ndcg": 0.127923,
+      "worst_user_ndcg": 0.032074,
+      "group_id": 79
+    },
+    {
+      "users": [
+        "LifeVirus27",
+        "auraxiannc",
+        "KamiPhoenix",
+        "xAngelic_Ichigox"
+      ],
+      "per_user_ndcg": [
+        0.133329,
+        0.038912,
+        0.11361,
+        0.153735
+      ],
+      "mean_ndcg": 0.109896,
+      "worst_user_ndcg": 0.038912,
+      "group_id": 80
+    },
+    {
+      "users": [
+        "Asunyan",
+        "CatarinaMartins",
+        "iDizzy",
+        "SoraAkuma"
+      ],
+      "per_user_ndcg": [
+        0.24255,
+        0.172367,
+        0.061863,
+        0.220445
+      ],
+      "mean_ndcg": 0.174306,
+      "worst_user_ndcg": 0.061863,
+      "group_id": 81
+    },
+    {
+      "users": [
+        "Heralder",
+        "Stardust3",
+        "marcopadillajr",
+        "Datenshi_Kaito"
+      ],
+      "per_user_ndcg": [
+        0.073784,
+        0.11374,
+        0.132057,
+        0.045034
+      ],
+      "mean_ndcg": 0.091154,
+      "worst_user_ndcg": 0.045034,
+      "group_id": 82
+    },
+    {
+      "users": [
+        "SugarCubeChibi",
+        "dfgzb",
+        "Joowiiiii",
+        "Manipuladora"
+      ],
+      "per_user_ndcg": [
+        0.022635,
+        0.064503,
+        0.053132,
+        0.047572
+      ],
+      "mean_ndcg": 0.046961,
+      "worst_user_ndcg": 0.022635,
+      "group_id": 83
+    },
+    {
+      "users": [
+        "Ersh",
+        "Chihir0",
+        "warriorzgiom",
+        "Samuraisami"
+      ],
+      "per_user_ndcg": [
+        0.235199,
+        0.169052,
+        0.021539,
+        0.114823
+      ],
+      "mean_ndcg": 0.135153,
+      "worst_user_ndcg": 0.021539,
+      "group_id": 84
+    },
+    {
+      "users": [
+        "SystemLurker",
+        "Askell",
+        "Lookie",
+        "allenswalkers"
+      ],
+      "per_user_ndcg": [
+        0.103987,
+        0.048143,
+        0.123991,
+        0.121367
+      ],
+      "mean_ndcg": 0.099372,
+      "worst_user_ndcg": 0.048143,
+      "group_id": 85
+    },
+    {
+      "users": [
+        "Raikon",
+        "BareAlan",
+        "BarefootCommando",
+        "hitchi"
+      ],
+      "per_user_ndcg": [
+        0.048101,
+        0.216446,
+        0.039424,
+        0.132842
+      ],
+      "mean_ndcg": 0.109203,
+      "worst_user_ndcg": 0.039424,
+      "group_id": 86
+    },
+    {
+      "users": [
+        "AisBarbs",
+        "JTSlayer",
+        "Rise",
+        "erik_phantom"
+      ],
+      "per_user_ndcg": [
+        0.021833,
+        0.005756,
+        0.039539,
+        0.092567
+      ],
+      "mean_ndcg": 0.039924,
+      "worst_user_ndcg": 0.005756,
+      "group_id": 87
+    },
+    {
+      "users": [
+        "joelhoneywell",
+        "ScarletDreamer",
+        "Truemakuso",
+        "DrakonCatPhoenix"
+      ],
+      "per_user_ndcg": [
+        0.077145,
+        0.157417,
+        0.106519,
+        0.160841
+      ],
+      "mean_ndcg": 0.125481,
+      "worst_user_ndcg": 0.077145,
+      "group_id": 88
+    },
+    {
+      "users": [
+        "AnaDeLaNeu",
+        "Lubbo",
+        "Gabolak",
+        "nayne"
+      ],
+      "per_user_ndcg": [
+        0.111783,
+        0.056258,
+        0.128044,
+        0.061073
+      ],
+      "mean_ndcg": 0.089289,
+      "worst_user_ndcg": 0.056258,
+      "group_id": 89
+    },
+    {
+      "users": [
+        "sorumoon",
+        "zeozen",
+        "becool",
+        "FrakkinChar"
+      ],
+      "per_user_ndcg": [
+        0.191876,
+        0.084599,
+        0.067762,
+        0.041443
+      ],
+      "mean_ndcg": 0.09642,
+      "worst_user_ndcg": 0.041443,
+      "group_id": 90
+    },
+    {
+      "users": [
+        "Dblitzer",
+        "rzaevorhan",
+        "reishicolleen",
+        "bregor"
+      ],
+      "per_user_ndcg": [
+        0.013419,
+        0.078161,
+        0.082065,
+        0.12259
+      ],
+      "mean_ndcg": 0.074059,
+      "worst_user_ndcg": 0.013419,
+      "group_id": 91
+    },
+    {
+      "users": [
+        "Nical",
+        "xXyuuki_zeroXx",
+        "UnlimitedCruise",
+        "-Jhon-"
+      ],
+      "per_user_ndcg": [
+        0.104903,
+        0.030372,
+        0.1341,
+        0.086867
+      ],
+      "mean_ndcg": 0.089061,
+      "worst_user_ndcg": 0.030372,
+      "group_id": 92
+    },
+    {
+      "users": [
+        "funtoo2",
+        "MG_Ace",
+        "prisuguimoto",
+        "Nannercakes"
+      ],
+      "per_user_ndcg": [
+        0.129934,
+        0.056947,
+        0.038809,
+        0.168773
+      ],
+      "mean_ndcg": 0.098616,
+      "worst_user_ndcg": 0.038809,
+      "group_id": 93
+    },
+    {
+      "users": [
+        "Pineapple42",
+        "SoulReaverDan",
+        "Retro3000",
+        "Itou"
+      ],
+      "per_user_ndcg": [
+        0.109251,
+        0.167197,
+        0.01429,
+        0.138543
+      ],
+      "mean_ndcg": 0.10732,
+      "worst_user_ndcg": 0.01429,
+      "group_id": 94
+    },
+    {
+      "users": [
+        "pokemonrh",
+        "kurokenkaku",
+        "Ayaxxx",
+        "DIMASH"
+      ],
+      "per_user_ndcg": [
+        0.098376,
+        0.129109,
+        0.129282,
+        0.10111
+      ],
+      "mean_ndcg": 0.114469,
+      "worst_user_ndcg": 0.098376,
+      "group_id": 95
+    },
+    {
+      "users": [
+        "jacksonjames",
+        "therivergirl",
+        "cr0n0triger",
+        "_Souichi"
+      ],
+      "per_user_ndcg": [
+        0.025851,
+        0.169934,
+        0.055664,
+        0.040135
+      ],
+      "mean_ndcg": 0.072896,
+      "worst_user_ndcg": 0.025851,
+      "group_id": 96
+    },
+    {
+      "users": [
+        "BlastWiz",
+        "mdm24",
+        "Infancen",
+        "tenryuwu"
+      ],
+      "per_user_ndcg": [
+        0.12246,
+        0.112691,
+        0.042571,
+        0.144486
+      ],
+      "mean_ndcg": 0.105552,
+      "worst_user_ndcg": 0.042571,
+      "group_id": 97
+    },
+    {
+      "users": [
+        "Python117",
+        "Byakurau",
+        "Toduro-Kun",
+        "mahoushoujodesu"
+      ],
+      "per_user_ndcg": [
+        0.081332,
+        0.043045,
+        0.090371,
+        0.127687
+      ],
+      "mean_ndcg": 0.085609,
+      "worst_user_ndcg": 0.043045,
+      "group_id": 98
+    },
+    {
+      "users": [
+        "Xytriz",
+        "DeepEmbrace",
+        "Moondrops",
+        "spanda"
+      ],
+      "per_user_ndcg": [
+        0.083396,
+        0.103931,
+        0.167143,
+        0.038197
+      ],
+      "mean_ndcg": 0.098167,
+      "worst_user_ndcg": 0.038197,
+      "group_id": 99
+    },
+    {
+      "users": [
+        "martinalee86",
+        "LadyYuna",
+        "Oreoxdyowel",
+        "blazeSpike23"
+      ],
+      "per_user_ndcg": [
+        0.044176,
+        0.147582,
+        0.098411,
+        0.099784
+      ],
+      "mean_ndcg": 0.097488,
+      "worst_user_ndcg": 0.044176,
+      "group_id": 100
+    },
+    {
+      "users": [
+        "Odyseja2011",
+        "MatZiN",
+        "dutch29",
+        "DarkSlayer"
+      ],
+      "per_user_ndcg": [
+        0.048436,
+        0.105728,
+        0.130461,
+        0.132665
+      ],
+      "mean_ndcg": 0.104323,
+      "worst_user_ndcg": 0.048436,
+      "group_id": 101
+    },
+    {
+      "users": [
+        "K-Coffee",
+        "McClaren",
+        "Eslaron",
+        "Niennalissesul"
+      ],
+      "per_user_ndcg": [
+        0.126812,
+        0.05164,
+        0.056191,
+        0.127606
+      ],
+      "mean_ndcg": 0.090562,
+      "worst_user_ndcg": 0.05164,
+      "group_id": 102
+    },
+    {
+      "users": [
+        "LilDreamer",
+        "Zorton",
+        "LadyEboshi",
+        "AdrianBrown16"
+      ],
+      "per_user_ndcg": [
+        0.105277,
+        0.138382,
+        0.129128,
+        0.097651
+      ],
+      "mean_ndcg": 0.11761,
+      "worst_user_ndcg": 0.097651,
+      "group_id": 103
+    },
+    {
+      "users": [
+        "The_Beholder",
+        "wanderingron1n",
+        "rakusu_klein",
+        "mangopore"
+      ],
+      "per_user_ndcg": [
+        0.091812,
+        0.063842,
+        0.075691,
+        0.075545
+      ],
+      "mean_ndcg": 0.076723,
+      "worst_user_ndcg": 0.063842,
+      "group_id": 104
+    },
+    {
+      "users": [
+        "hikaricore",
+        "Reaper-Jack",
+        "sylphio",
+        "NLoncar"
+      ],
+      "per_user_ndcg": [
+        0.082286,
+        0.09169,
+        0.100506,
+        0.103495
+      ],
+      "mean_ndcg": 0.094494,
+      "worst_user_ndcg": 0.082286,
+      "group_id": 105
+    },
+    {
+      "users": [
+        "asukai_kun",
+        "Raikse",
+        "Tegar_123",
+        "-VividDeath-"
+      ],
+      "per_user_ndcg": [
+        0.097056,
+        0.073129,
+        0.01705,
+        0.062123
+      ],
+      "mean_ndcg": 0.062339,
+      "worst_user_ndcg": 0.01705,
+      "group_id": 106
+    },
+    {
+      "users": [
+        "animatedcookie",
+        "subrosa",
+        "-Testarossa-",
+        "shadoweye14"
+      ],
+      "per_user_ndcg": [
+        0.089756,
+        0.037073,
+        0.069437,
+        0.072147
+      ],
+      "mean_ndcg": 0.067103,
+      "worst_user_ndcg": 0.037073,
+      "group_id": 107
+    },
+    {
+      "users": [
+        "Misa_Hatsune",
+        "GodsDragon",
+        "volendar",
+        "vcky4v"
+      ],
+      "per_user_ndcg": [
+        0.0,
+        0.063902,
+        0.184398,
+        0.085917
+      ],
+      "mean_ndcg": 0.083554,
+      "worst_user_ndcg": 0.0,
+      "group_id": 108
+    },
+    {
+      "users": [
+        "manequin",
+        "moonstrider",
+        "azarathkhan",
+        "suicune94"
+      ],
+      "per_user_ndcg": [
+        0.070312,
+        0.015531,
+        0.118778,
+        0.061808
+      ],
+      "mean_ndcg": 0.066607,
+      "worst_user_ndcg": 0.015531,
+      "group_id": 109
+    },
+    {
+      "users": [
+        "5ebaML96",
+        "yamato21",
+        "CrimsonCloud",
+        "Myraculous1"
+      ],
+      "per_user_ndcg": [
+        0.177258,
+        0.123936,
+        0.130694,
+        0.106309
+      ],
+      "mean_ndcg": 0.134549,
+      "worst_user_ndcg": 0.106309,
+      "group_id": 110
+    },
+    {
+      "users": [
+        "AndreFoltran",
+        "ANW",
+        "PsychoticDave",
+        "dany565"
+      ],
+      "per_user_ndcg": [
+        0.084939,
+        0.079718,
+        0.184292,
+        0.140703
+      ],
+      "mean_ndcg": 0.122413,
+      "worst_user_ndcg": 0.079718,
+      "group_id": 111
+    },
+    {
+      "users": [
+        "YellowFlashOP",
+        "Dollie-chan",
+        "Minami",
+        "shoutans"
+      ],
+      "per_user_ndcg": [
+        0.086886,
+        0.118737,
+        0.209224,
+        0.030943
+      ],
+      "mean_ndcg": 0.111448,
+      "worst_user_ndcg": 0.030943,
+      "group_id": 112
+    },
+    {
+      "users": [
+        "Extazis",
+        "uchihu",
+        "Queb",
+        "Pat2209s"
+      ],
+      "per_user_ndcg": [
+        0.073813,
+        0.02734,
+        0.037377,
+        0.059495
+      ],
+      "mean_ndcg": 0.049506,
+      "worst_user_ndcg": 0.02734,
+      "group_id": 113
+    },
+    {
+      "users": [
+        "Shilonus",
+        "Onox",
+        "LusseBulle",
+        "Chibi_Riki"
+      ],
+      "per_user_ndcg": [
+        0.093417,
+        0.11247,
+        0.101906,
+        0.126843
+      ],
+      "mean_ndcg": 0.108659,
+      "worst_user_ndcg": 0.093417,
+      "group_id": 114
+    },
+    {
+      "users": [
+        "Kenobi",
+        "Pono",
+        "cheesybites",
+        "NaMiNe_NoBoDiE"
+      ],
+      "per_user_ndcg": [
+        0.116166,
+        0.107277,
+        0.090591,
+        0.07055
+      ],
+      "mean_ndcg": 0.096146,
+      "worst_user_ndcg": 0.07055,
+      "group_id": 115
+    },
+    {
+      "users": [
+        "MY10",
+        "AboveTheBlue",
+        "infiniteXD",
+        "Hiei171"
+      ],
+      "per_user_ndcg": [
+        0.045124,
+        0.127482,
+        0.150867,
+        0.093579
+      ],
+      "mean_ndcg": 0.104263,
+      "worst_user_ndcg": 0.045124,
+      "group_id": 116
+    },
+    {
+      "users": [
+        "AbyssGazer333",
+        "Paz",
+        "2dsenpai",
+        "Tatsuya-Amano"
+      ],
+      "per_user_ndcg": [
+        0.03276,
+        0.08706,
+        0.055392,
+        0.060503
+      ],
+      "mean_ndcg": 0.058929,
+      "worst_user_ndcg": 0.03276,
+      "group_id": 117
+    },
+    {
+      "users": [
+        "-DanZo-",
+        "Perobense",
+        "BlackSwordsman28",
+        "Meowrie"
+      ],
+      "per_user_ndcg": [
+        0.11912,
+        0.050736,
+        0.098625,
+        0.066309
+      ],
+      "mean_ndcg": 0.083697,
+      "worst_user_ndcg": 0.050736,
+      "group_id": 118
+    },
+    {
+      "users": [
+        "Nakathor",
+        "mrchan",
+        "Alex_anime",
+        "Vurtox"
+      ],
+      "per_user_ndcg": [
+        0.058305,
+        0.157184,
+        0.018122,
+        0.091605
+      ],
+      "mean_ndcg": 0.081304,
+      "worst_user_ndcg": 0.018122,
+      "group_id": 119
+    },
+    {
+      "users": [
+        "zerotohero111",
+        "maddiemellow",
+        "electricsquid",
+        "ksuunja"
+      ],
+      "per_user_ndcg": [
+        0.165343,
+        0.187372,
+        0.152227,
+        0.194907
+      ],
+      "mean_ndcg": 0.174963,
+      "worst_user_ndcg": 0.152227,
+      "group_id": 120
+    },
+    {
+      "users": [
+        "Epifiro64",
+        "Scottttt",
+        "GummeBearz",
+        "masterpunk"
+      ],
+      "per_user_ndcg": [
+        0.155871,
+        0.089647,
+        0.058534,
+        0.0
+      ],
+      "mean_ndcg": 0.076013,
+      "worst_user_ndcg": 0.0,
+      "group_id": 121
+    },
+    {
+      "users": [
+        "ShinXP",
+        "Kurenai-Iris",
+        "Saumon",
+        "dardanuyp"
+      ],
+      "per_user_ndcg": [
+        0.072725,
+        0.071052,
+        0.084157,
+        0.038242
+      ],
+      "mean_ndcg": 0.066544,
+      "worst_user_ndcg": 0.038242,
+      "group_id": 122
+    },
+    {
+      "users": [
+        "Kayla_Kitty",
+        "yagamipoop",
+        "BURNTHECOW",
+        "Psicopatty"
+      ],
+      "per_user_ndcg": [
+        0.083557,
+        0.181145,
+        0.113627,
+        0.021832
+      ],
+      "mean_ndcg": 0.10004,
+      "worst_user_ndcg": 0.021832,
+      "group_id": 123
+    },
+    {
+      "users": [
+        "Purple-E",
+        "Marcipanmacsek",
+        "newbveronica",
+        "Sirius_lover"
+      ],
+      "per_user_ndcg": [
+        0.121211,
+        0.078012,
+        0.180601,
+        0.091714
+      ],
+      "mean_ndcg": 0.117884,
+      "worst_user_ndcg": 0.078012,
+      "group_id": 124
+    },
+    {
+      "users": [
+        "Nuluvian",
+        "Citizen-Erased",
+        "ProDy94",
+        "Zvonky"
+      ],
+      "per_user_ndcg": [
+        0.176628,
+        0.044794,
+        0.120418,
+        0.187295
+      ],
+      "mean_ndcg": 0.132284,
+      "worst_user_ndcg": 0.044794,
+      "group_id": 125
+    },
+    {
+      "users": [
+        "Biishamon",
+        "loukas21",
+        "MoonLord",
+        "someoneusedmyid"
+      ],
+      "per_user_ndcg": [
+        0.145835,
+        0.026707,
+        0.107383,
+        0.092934
+      ],
+      "mean_ndcg": 0.093215,
+      "worst_user_ndcg": 0.026707,
+      "group_id": 126
+    },
+    {
+      "users": [
+        "Zero888",
+        "starrykins",
+        "darkdevilbr",
+        "XeroxBlazer"
+      ],
+      "per_user_ndcg": [
+        0.071568,
+        0.110208,
+        0.03799,
+        0.083316
+      ],
+      "mean_ndcg": 0.075771,
+      "worst_user_ndcg": 0.03799,
+      "group_id": 127
+    },
+    {
+      "users": [
+        "mightyUnderdog",
+        "SnowFormat",
+        "rachelrozx",
+        "Dodai"
+      ],
+      "per_user_ndcg": [
+        0.194834,
+        0.121197,
+        0.051071,
+        0.025244
+      ],
+      "mean_ndcg": 0.098087,
+      "worst_user_ndcg": 0.025244,
+      "group_id": 128
+    },
+    {
+      "users": [
+        "Yamada2",
+        "Lilibeth",
+        "Fr4gma",
+        "KnightingGale2KY"
+      ],
+      "per_user_ndcg": [
+        0.149644,
+        0.08225,
+        0.071338,
+        0.078894
+      ],
+      "mean_ndcg": 0.095531,
+      "worst_user_ndcg": 0.071338,
+      "group_id": 129
+    },
+    {
+      "users": [
+        "hamha109",
+        "Khaleemira",
+        "moonlightZ",
+        "marta_lutus"
+      ],
+      "per_user_ndcg": [
+        0.115735,
+        0.090186,
+        0.120391,
+        0.206736
+      ],
+      "mean_ndcg": 0.133262,
+      "worst_user_ndcg": 0.090186,
+      "group_id": 130
+    },
+    {
+      "users": [
+        "White_Phoenix",
+        "Clumsy_Kiko",
+        "SalemJericho",
+        "Wazon123"
+      ],
+      "per_user_ndcg": [
+        0.098838,
+        0.158452,
+        0.092534,
+        0.128833
+      ],
+      "mean_ndcg": 0.119664,
+      "worst_user_ndcg": 0.092534,
+      "group_id": 131
+    },
+    {
+      "users": [
+        "Alyson",
+        "piumaki",
+        "KaiserB",
+        "12g"
+      ],
+      "per_user_ndcg": [
+        0.09975,
+        0.126867,
+        0.041373,
+        0.210518
+      ],
+      "mean_ndcg": 0.119627,
+      "worst_user_ndcg": 0.041373,
+      "group_id": 132
+    },
+    {
+      "users": [
+        "Feyd666",
+        "gabi_josugas",
+        "Brufob",
+        "sasky_96"
+      ],
+      "per_user_ndcg": [
+        0.121644,
+        0.079213,
+        0.16904,
+        0.131398
+      ],
+      "mean_ndcg": 0.125324,
+      "worst_user_ndcg": 0.079213,
+      "group_id": 133
+    },
+    {
+      "users": [
+        "Brissinger",
+        "NightmareXNina",
+        "taira",
+        "lxjeroenxl"
+      ],
+      "per_user_ndcg": [
+        0.130933,
+        0.126118,
+        0.094374,
+        0.108362
+      ],
+      "mean_ndcg": 0.114947,
+      "worst_user_ndcg": 0.094374,
+      "group_id": 134
+    },
+    {
+      "users": [
+        "Luofpan",
+        "tiwohunter",
+        "AirKing47",
+        "RusSlan"
+      ],
+      "per_user_ndcg": [
+        0.129354,
+        0.13342,
+        0.06984,
+        0.165907
+      ],
+      "mean_ndcg": 0.12463,
+      "worst_user_ndcg": 0.06984,
+      "group_id": 135
+    },
+    {
+      "users": [
+        "-sahchan",
+        "Lamboh",
+        "KohakuNeko",
+        "Yaniv_1991"
+      ],
+      "per_user_ndcg": [
+        0.124367,
+        0.136741,
+        0.178383,
+        0.071155
+      ],
+      "mean_ndcg": 0.127662,
+      "worst_user_ndcg": 0.071155,
+      "group_id": 136
+    },
+    {
+      "users": [
+        "Baku_Dark",
+        "Chinchillaman",
+        "Exooodus",
+        "GuhBM666"
+      ],
+      "per_user_ndcg": [
+        0.032584,
+        0.104127,
+        0.057968,
+        0.041007
+      ],
+      "mean_ndcg": 0.058922,
+      "worst_user_ndcg": 0.032584,
+      "group_id": 137
+    },
+    {
+      "users": [
+        "silence210",
+        "TsunemoriAkane",
+        "JoQMan",
+        "PsyCoNoRikAn"
+      ],
+      "per_user_ndcg": [
+        0.124504,
+        0.117006,
+        0.106085,
+        0.149458
+      ],
+      "mean_ndcg": 0.124263,
+      "worst_user_ndcg": 0.106085,
+      "group_id": 138
+    },
+    {
+      "users": [
+        "Dreigo",
+        "Joshua-Desu",
+        "FatherAnderson",
+        "SuppaKiwiMon"
+      ],
+      "per_user_ndcg": [
+        0.109807,
+        0.168006,
+        0.201317,
+        0.225347
+      ],
+      "mean_ndcg": 0.176119,
+      "worst_user_ndcg": 0.109807,
+      "group_id": 139
+    },
+    {
+      "users": [
+        "zaku2s274",
+        "xpucck",
+        "kaoru12211991",
+        "lyrahaphrodite"
+      ],
+      "per_user_ndcg": [
+        0.091033,
+        0.084543,
+        0.146505,
+        0.070548
+      ],
+      "mean_ndcg": 0.098157,
+      "worst_user_ndcg": 0.070548,
+      "group_id": 140
+    },
+    {
+      "users": [
+        "Hafsakawaii",
+        "light-and-death",
+        "SlayerBRwo",
+        "LismyXD"
+      ],
+      "per_user_ndcg": [
+        0.115682,
+        0.0,
+        0.108201,
+        0.024116
+      ],
+      "mean_ndcg": 0.062,
+      "worst_user_ndcg": 0.0,
+      "group_id": 141
+    },
+    {
+      "users": [
+        "Aldo",
+        "VanyaTheGreat",
+        "xXYuukiiXx",
+        "Dacha"
+      ],
+      "per_user_ndcg": [
+        0.221772,
+        0.107576,
+        0.074817,
+        0.08151
+      ],
+      "mean_ndcg": 0.121419,
+      "worst_user_ndcg": 0.074817,
+      "group_id": 142
+    },
+    {
+      "users": [
+        "Martindt",
+        "Nishi_23",
+        "Aseru",
+        "BlazeWerewolf"
+      ],
+      "per_user_ndcg": [
+        0.069507,
+        0.077825,
+        0.145392,
+        0.117762
+      ],
+      "mean_ndcg": 0.102621,
+      "worst_user_ndcg": 0.069507,
+      "group_id": 143
+    },
+    {
+      "users": [
+        "GoddesofEggrolls",
+        "cimeies___",
+        "SnakeDoc83",
+        "Axell"
+      ],
+      "per_user_ndcg": [
+        0.053886,
+        0.114191,
+        0.013268,
+        0.164445
+      ],
+      "mean_ndcg": 0.086447,
+      "worst_user_ndcg": 0.013268,
+      "group_id": 144
+    },
+    {
+      "users": [
+        "Miyazawa_Lulu",
+        "TheSacredHermit",
+        "TurronDuro69",
+        "janEK666"
+      ],
+      "per_user_ndcg": [
+        0.064705,
+        0.120185,
+        0.076304,
+        0.1122
+      ],
+      "mean_ndcg": 0.093349,
+      "worst_user_ndcg": 0.064705,
+      "group_id": 145
+    },
+    {
+      "users": [
+        "m4wolf",
+        "PaleSalad",
+        "tissue",
+        "Kuroi-Mugetsu"
+      ],
+      "per_user_ndcg": [
+        0.047304,
+        0.071143,
+        0.142665,
+        0.036846
+      ],
+      "mean_ndcg": 0.074489,
+      "worst_user_ndcg": 0.036846,
+      "group_id": 146
+    },
+    {
+      "users": [
+        "TheFreshPrince",
+        "SammyG",
+        "Senny",
+        "Naruzaky"
+      ],
+      "per_user_ndcg": [
+        0.106804,
+        0.040985,
+        0.077399,
+        0.063718
+      ],
+      "mean_ndcg": 0.072227,
+      "worst_user_ndcg": 0.040985,
+      "group_id": 147
+    },
+    {
+      "users": [
+        "AyefBD",
+        "juststaywithme",
+        "Nubiengoddess",
+        "JunkHype"
+      ],
+      "per_user_ndcg": [
+        0.122771,
+        0.037844,
+        0.083547,
+        0.112621
+      ],
+      "mean_ndcg": 0.089196,
+      "worst_user_ndcg": 0.037844,
+      "group_id": 148
+    },
+    {
+      "users": [
+        "banwana",
+        "Tyr",
+        "rikorin",
+        "vash33331"
+      ],
+      "per_user_ndcg": [
+        0.17237,
+        0.077636,
+        0.06689,
+        0.177941
+      ],
+      "mean_ndcg": 0.12371,
+      "worst_user_ndcg": 0.06689,
+      "group_id": 149
+    },
+    {
+      "users": [
+        "dotSEA",
+        "Phreak9mm",
+        "Swipee",
+        "Collectivus"
+      ],
+      "per_user_ndcg": [
+        0.076821,
+        0.102511,
+        0.084126,
+        0.059729
+      ],
+      "mean_ndcg": 0.080797,
+      "worst_user_ndcg": 0.059729,
+      "group_id": 150
+    },
+    {
+      "users": [
+        "secondakira",
+        "38cards",
+        "toALSATIA",
+        "AliceB"
+      ],
+      "per_user_ndcg": [
+        0.176486,
+        0.093489,
+        0.077578,
+        0.042105
+      ],
+      "mean_ndcg": 0.097415,
+      "worst_user_ndcg": 0.042105,
+      "group_id": 151
+    },
+    {
+      "users": [
+        "Remyoman",
+        "Starmony",
+        "nuorimaa",
+        "DeadIce"
+      ],
+      "per_user_ndcg": [
+        0.073273,
+        0.094159,
+        0.072074,
+        0.055034
+      ],
+      "mean_ndcg": 0.073635,
+      "worst_user_ndcg": 0.055034,
+      "group_id": 152
+    },
+    {
+      "users": [
+        "Nomesk",
+        "IamFajar",
+        "Animl",
+        "hidate"
+      ],
+      "per_user_ndcg": [
+        0.035667,
+        0.088825,
+        0.149408,
+        0.02376
+      ],
+      "mean_ndcg": 0.074415,
+      "worst_user_ndcg": 0.02376,
+      "group_id": 153
+    },
+    {
+      "users": [
+        "ItachiNight",
+        "RayHammer",
+        "joker92",
+        "wallymunster"
+      ],
+      "per_user_ndcg": [
+        0.037117,
+        0.207261,
+        0.094551,
+        0.127558
+      ],
+      "mean_ndcg": 0.116622,
+      "worst_user_ndcg": 0.037117,
+      "group_id": 154
+    },
+    {
+      "users": [
+        "Corey-Uchiha",
+        "Etora",
+        "SergioBM",
+        "xbaka"
+      ],
+      "per_user_ndcg": [
+        0.196633,
+        0.032069,
+        0.120786,
+        0.069304
+      ],
+      "mean_ndcg": 0.104698,
+      "worst_user_ndcg": 0.032069,
+      "group_id": 155
+    },
+    {
+      "users": [
+        "luciano123",
+        "Leptu",
+        "Acperience",
+        "OtakuLife_"
+      ],
+      "per_user_ndcg": [
+        0.139058,
+        0.054929,
+        0.022283,
+        0.03021
+      ],
+      "mean_ndcg": 0.06162,
+      "worst_user_ndcg": 0.022283,
+      "group_id": 156
+    },
+    {
+      "users": [
+        "Duker",
+        "ncikz",
+        "wiill",
+        "EvilGrimace"
+      ],
+      "per_user_ndcg": [
+        0.062889,
+        0.012061,
+        0.145973,
+        0.107402
+      ],
+      "mean_ndcg": 0.082081,
+      "worst_user_ndcg": 0.012061,
+      "group_id": 157
+    },
+    {
+      "users": [
+        "polo123qwe",
+        "0uka",
+        "sakuraavalon",
+        "Estatige"
+      ],
+      "per_user_ndcg": [
+        0.113411,
+        0.057889,
+        0.126542,
+        0.183179
+      ],
+      "mean_ndcg": 0.120255,
+      "worst_user_ndcg": 0.057889,
+      "group_id": 158
+    },
+    {
+      "users": [
+        "BlackReaper17",
+        "Soffy",
+        "XaelitaX",
+        "Cl4ym0re"
+      ],
+      "per_user_ndcg": [
+        0.0,
+        0.065418,
+        0.177216,
+        0.070195
+      ],
+      "mean_ndcg": 0.078207,
+      "worst_user_ndcg": 0.0,
+      "group_id": 159
+    },
+    {
+      "users": [
+        "Angel-Tabitha",
+        "Bame",
+        "GuilhermeGM",
+        "maxfold"
+      ],
+      "per_user_ndcg": [
+        0.103944,
+        0.166311,
+        0.093551,
+        0.088623
+      ],
+      "mean_ndcg": 0.113107,
+      "worst_user_ndcg": 0.088623,
+      "group_id": 160
+    },
+    {
+      "users": [
+        "MrGuilherme",
+        "Dloc",
+        "Rahawk",
+        "NightSnow"
+      ],
+      "per_user_ndcg": [
+        0.134584,
+        0.063618,
+        0.100574,
+        0.066493
+      ],
+      "mean_ndcg": 0.091317,
+      "worst_user_ndcg": 0.063618,
+      "group_id": 161
+    },
+    {
+      "users": [
+        "AngelOfDeath",
+        "notreallygood",
+        "MetalicarM",
+        "Onii-chan"
+      ],
+      "per_user_ndcg": [
+        0.082425,
+        0.049383,
+        0.054508,
+        0.041018
+      ],
+      "mean_ndcg": 0.056834,
+      "worst_user_ndcg": 0.041018,
+      "group_id": 162
+    },
+    {
+      "users": [
+        "Endaria",
+        "Brolly",
+        "Fugu69",
+        "SavannaShotty"
+      ],
+      "per_user_ndcg": [
+        0.077417,
+        0.248204,
+        0.015645,
+        0.08994
+      ],
+      "mean_ndcg": 0.107802,
+      "worst_user_ndcg": 0.015645,
+      "group_id": 163
+    },
+    {
+      "users": [
+        "Shebadi",
+        "HeyCammi",
+        "evilofprosin",
+        "Evocation"
+      ],
+      "per_user_ndcg": [
+        0.201199,
+        0.126947,
+        0.16317,
+        0.111448
+      ],
+      "mean_ndcg": 0.150691,
+      "worst_user_ndcg": 0.111448,
+      "group_id": 164
+    },
+    {
+      "users": [
+        "catratel",
+        "wurdum",
+        "Viralyon",
+        "seunousu"
+      ],
+      "per_user_ndcg": [
+        0.13637,
+        0.113727,
+        0.120201,
+        0.139804
+      ],
+      "mean_ndcg": 0.127526,
+      "worst_user_ndcg": 0.113727,
+      "group_id": 165
+    },
+    {
+      "users": [
+        "Guillaum",
+        "Jackster94",
+        "AjisioHayato24",
+        "aarx3"
+      ],
+      "per_user_ndcg": [
+        0.184146,
+        0.085066,
+        0.01771,
+        0.049911
+      ],
+      "mean_ndcg": 0.084208,
+      "worst_user_ndcg": 0.01771,
+      "group_id": 166
+    },
+    {
+      "users": [
+        "A_Pimp_Named_Jak",
+        "violinlover",
+        "SpazzBot",
+        "Sukuyo-maki"
+      ],
+      "per_user_ndcg": [
+        0.100677,
+        0.113842,
+        0.137416,
+        0.111272
+      ],
+      "mean_ndcg": 0.115802,
+      "worst_user_ndcg": 0.100677,
+      "group_id": 167
+    },
+    {
+      "users": [
+        "Kona-chan22",
+        "Dethbeast666",
+        "dude1317",
+        "xTrollingGirl"
+      ],
+      "per_user_ndcg": [
+        0.166526,
+        0.204311,
+        0.036142,
+        0.17363
+      ],
+      "mean_ndcg": 0.145152,
+      "worst_user_ndcg": 0.036142,
+      "group_id": 168
+    },
+    {
+      "users": [
+        "Justinkun",
+        "Chenbag",
+        "BRS_Project",
+        "TheFlavius"
+      ],
+      "per_user_ndcg": [
+        0.076643,
+        0.042273,
+        0.051816,
+        0.102646
+      ],
+      "mean_ndcg": 0.068344,
+      "worst_user_ndcg": 0.042273,
+      "group_id": 169
+    },
+    {
+      "users": [
+        "Saiyo",
+        "maou_ajuu",
+        "Oskinho",
+        "tueaii"
+      ],
+      "per_user_ndcg": [
+        0.091305,
+        0.024608,
+        0.038732,
+        0.04634
+      ],
+      "mean_ndcg": 0.050246,
+      "worst_user_ndcg": 0.024608,
+      "group_id": 170
+    },
+    {
+      "users": [
+        "ayameh007",
+        "gurohentai",
+        "Miguru",
+        "Mr_Misawa"
+      ],
+      "per_user_ndcg": [
+        0.046231,
+        0.099692,
+        0.107497,
+        0.109116
+      ],
+      "mean_ndcg": 0.090634,
+      "worst_user_ndcg": 0.046231,
+      "group_id": 171
+    },
+    {
+      "users": [
+        "milkyten",
+        "LesnyJebok",
+        "Anny",
+        "bazpingo"
+      ],
+      "per_user_ndcg": [
+        0.045425,
+        0.024948,
+        0.074258,
+        0.010216
+      ],
+      "mean_ndcg": 0.038712,
+      "worst_user_ndcg": 0.010216,
+      "group_id": 172
+    },
+    {
+      "users": [
+        "BigEdgarP",
+        "WarriorOfIce",
+        "pockynekootaku",
+        "Takeru_Shou"
+      ],
+      "per_user_ndcg": [
+        0.018844,
+        0.035906,
+        0.11358,
+        0.060658
+      ],
+      "mean_ndcg": 0.057247,
+      "worst_user_ndcg": 0.018844,
+      "group_id": 173
+    },
+    {
+      "users": [
+        "Doomclaw",
+        "Bellicose",
+        "Akaryu_Valefor",
+        "Usagichu"
+      ],
+      "per_user_ndcg": [
+        0.04593,
+        0.061458,
+        0.073245,
+        0.087658
+      ],
+      "mean_ndcg": 0.067073,
+      "worst_user_ndcg": 0.04593,
+      "group_id": 174
+    },
+    {
+      "users": [
+        "Hatakemomoko",
+        "shsl-uravity",
+        "princess1gurl",
+        "KaworuBlaze"
+      ],
+      "per_user_ndcg": [
+        0.030174,
+        0.082417,
+        0.039244,
+        0.010006
+      ],
+      "mean_ndcg": 0.04046,
+      "worst_user_ndcg": 0.010006,
+      "group_id": 175
+    },
+    {
+      "users": [
+        "Pein-sama",
+        "Inuyasharuto",
+        "Lonecherry24",
+        "barlonil"
+      ],
+      "per_user_ndcg": [
+        0.097266,
+        0.159358,
+        0.041549,
+        0.086207
+      ],
+      "mean_ndcg": 0.096095,
+      "worst_user_ndcg": 0.041549,
+      "group_id": 176
+    },
+    {
+      "users": [
+        "davers",
+        "andcsil",
+        "LazyScandinavian",
+        "Gadamf"
+      ],
+      "per_user_ndcg": [
+        0.239358,
+        0.061999,
+        0.128262,
+        0.232059
+      ],
+      "mean_ndcg": 0.165419,
+      "worst_user_ndcg": 0.061999,
+      "group_id": 177
+    },
+    {
+      "users": [
+        "TheShehzoreZ",
+        "aerithlol",
+        "tulex",
+        "Rillemus"
+      ],
+      "per_user_ndcg": [
+        0.011681,
+        0.045428,
+        0.058047,
+        0.021882
+      ],
+      "mean_ndcg": 0.034259,
+      "worst_user_ndcg": 0.011681,
+      "group_id": 178
+    },
+    {
+      "users": [
+        "so_mad",
+        "Snoux",
+        "Seiryudan",
+        "JaysFreaky"
+      ],
+      "per_user_ndcg": [
+        0.188848,
+        0.079715,
+        0.02676,
+        0.093233
+      ],
+      "mean_ndcg": 0.097139,
+      "worst_user_ndcg": 0.02676,
+      "group_id": 179
+    },
+    {
+      "users": [
+        "sofymcmofy",
+        "TenshiNoYume",
+        "krizzlybear",
+        "Chiga"
+      ],
+      "per_user_ndcg": [
+        0.10293,
+        0.066952,
+        0.187738,
+        0.101201
+      ],
+      "mean_ndcg": 0.114705,
+      "worst_user_ndcg": 0.066952,
+      "group_id": 180
+    },
+    {
+      "users": [
+        "Rioun",
+        "Callisto",
+        "ChibiHei",
+        "manuerukun"
+      ],
+      "per_user_ndcg": [
+        0.064315,
+        0.134178,
+        0.034647,
+        0.115402
+      ],
+      "mean_ndcg": 0.087135,
+      "worst_user_ndcg": 0.034647,
+      "group_id": 181
+    },
+    {
+      "users": [
+        "eXtermi14",
+        "xellos61",
+        "chaoslimit",
+        "WolfClan"
+      ],
+      "per_user_ndcg": [
+        0.132727,
+        0.065463,
+        0.061209,
+        0.128629
+      ],
+      "mean_ndcg": 0.097007,
+      "worst_user_ndcg": 0.061209,
+      "group_id": 182
+    },
+    {
+      "users": [
+        "oerlemansje",
+        "DatDamnPR",
+        "Himuro-Chan",
+        "tsubasa_ookami"
+      ],
+      "per_user_ndcg": [
+        0.163714,
+        0.069817,
+        0.124515,
+        0.053444
+      ],
+      "mean_ndcg": 0.102872,
+      "worst_user_ndcg": 0.053444,
+      "group_id": 183
+    },
+    {
+      "users": [
+        "Myumi",
+        "baandal",
+        "JazlynBree",
+        "Majoca"
+      ],
+      "per_user_ndcg": [
+        0.08254,
+        0.148383,
+        0.104052,
+        0.079737
+      ],
+      "mean_ndcg": 0.103678,
+      "worst_user_ndcg": 0.079737,
+      "group_id": 184
+    },
+    {
+      "users": [
+        "Ruu39",
+        "Atshushi",
+        "Shallazzarr",
+        "owooveck"
+      ],
+      "per_user_ndcg": [
+        0.143099,
+        0.088381,
+        0.100788,
+        0.102167
+      ],
+      "mean_ndcg": 0.108609,
+      "worst_user_ndcg": 0.088381,
+      "group_id": 185
+    },
+    {
+      "users": [
+        "Aroma",
+        "ahmedrayhan",
+        "Densmore",
+        "UzumakiRin"
+      ],
+      "per_user_ndcg": [
+        0.108391,
+        0.062437,
+        0.142565,
+        0.069816
+      ],
+      "mean_ndcg": 0.095802,
+      "worst_user_ndcg": 0.062437,
+      "group_id": 186
+    },
+    {
+      "users": [
+        "Wanicola",
+        "Akio-kun",
+        "flukthelook",
+        "justinhw"
+      ],
+      "per_user_ndcg": [
+        0.084136,
+        0.115371,
+        0.084523,
+        0.035922
+      ],
+      "mean_ndcg": 0.079988,
+      "worst_user_ndcg": 0.035922,
+      "group_id": 187
+    },
+    {
+      "users": [
+        "MazeltovCocktail",
+        "RNoctum",
+        "molk2",
+        "NightmareRWolf"
+      ],
+      "per_user_ndcg": [
+        0.086304,
+        0.147375,
+        0.109549,
+        0.080599
+      ],
+      "mean_ndcg": 0.105957,
+      "worst_user_ndcg": 0.080599,
+      "group_id": 188
+    },
+    {
+      "users": [
+        "dan_729",
+        "NeroDMCry",
+        "Christinazes",
+        "TajimasPantsu"
+      ],
+      "per_user_ndcg": [
+        0.052678,
+        0.132848,
+        0.084408,
+        0.035908
+      ],
+      "mean_ndcg": 0.07646,
+      "worst_user_ndcg": 0.035908,
+      "group_id": 189
+    },
+    {
+      "users": [
+        "KyraCakez",
+        "_Raiden",
+        "Melyz",
+        "yonaaofthedawn"
+      ],
+      "per_user_ndcg": [
+        0.089129,
+        0.089156,
+        0.046156,
+        0.047401
+      ],
+      "mean_ndcg": 0.067961,
+      "worst_user_ndcg": 0.046156,
+      "group_id": 190
+    },
+    {
+      "users": [
+        "Heartu_Angel",
+        "ramenset",
+        "lcborella",
+        "SarubaChan"
+      ],
+      "per_user_ndcg": [
+        0.047939,
+        0.084709,
+        0.148354,
+        0.109933
+      ],
+      "mean_ndcg": 0.097734,
+      "worst_user_ndcg": 0.047939,
+      "group_id": 191
+    },
+    {
+      "users": [
+        "bobbygrulz",
+        "xXAddulceXx",
+        "Nishiyamo",
+        "Hichigo-San"
+      ],
+      "per_user_ndcg": [
+        0.051153,
+        0.05575,
+        0.122038,
+        0.168944
+      ],
+      "mean_ndcg": 0.099471,
+      "worst_user_ndcg": 0.051153,
+      "group_id": 192
+    },
+    {
+      "users": [
+        "freakymrq",
+        "Nely_Mai89",
+        "Borys",
+        "GuitarGuy9000"
+      ],
+      "per_user_ndcg": [
+        0.212522,
+        0.033194,
+        0.115757,
+        0.06789
+      ],
+      "mean_ndcg": 0.107341,
+      "worst_user_ndcg": 0.033194,
+      "group_id": 193
+    },
+    {
+      "users": [
+        "Himedere-Love",
+        "CHEESYLL4M4",
+        "IceDraconian",
+        "seanryan65"
+      ],
+      "per_user_ndcg": [
+        0.0,
+        0.117765,
+        0.095389,
+        0.060867
+      ],
+      "mean_ndcg": 0.068505,
+      "worst_user_ndcg": 0.0,
+      "group_id": 194
+    },
+    {
+      "users": [
+        "vence_dragonuis",
+        "AccountKiller",
+        "The_Enforcement",
+        "myTrashing"
+      ],
+      "per_user_ndcg": [
+        0.09507,
+        0.021636,
+        0.096207,
+        0.080695
+      ],
+      "mean_ndcg": 0.073402,
+      "worst_user_ndcg": 0.021636,
+      "group_id": 195
+    },
+    {
+      "users": [
+        "Kanakirigoe",
+        "nanachan1999",
+        "dertenzor",
+        "i_am_tiff121297"
+      ],
+      "per_user_ndcg": [
+        0.106916,
+        0.058346,
+        0.14151,
+        0.078354
+      ],
+      "mean_ndcg": 0.096281,
+      "worst_user_ndcg": 0.058346,
+      "group_id": 196
+    },
+    {
+      "users": [
+        "Sertel",
+        "morningrose",
+        "happyhippo2704",
+        "LordAkbar"
+      ],
+      "per_user_ndcg": [
+        0.112144,
+        0.159559,
+        0.016548,
+        0.0387
+      ],
+      "mean_ndcg": 0.081738,
+      "worst_user_ndcg": 0.016548,
+      "group_id": 197
+    },
+    {
+      "users": [
+        "TheFlowingStream",
+        "Vixter",
+        "ImJeremyHD",
+        "zarya7"
+      ],
+      "per_user_ndcg": [
+        0.054568,
+        0.091678,
+        0.028888,
+        0.186462
+      ],
+      "mean_ndcg": 0.090399,
+      "worst_user_ndcg": 0.028888,
+      "group_id": 198
+    },
+    {
+      "users": [
+        "Gogeta_Animeka",
+        "Andypandy",
+        "matt_spb",
+        "DogeDerp"
+      ],
+      "per_user_ndcg": [
+        0.067677,
+        0.16625,
+        0.053851,
+        0.184295
+      ],
+      "mean_ndcg": 0.118018,
+      "worst_user_ndcg": 0.053851,
+      "group_id": 199
+    },
+    {
+      "users": [
+        "eworm",
+        "BBLKing",
+        "dEliciousz",
+        "Drizzle"
+      ],
+      "per_user_ndcg": [
+        0.128839,
+        0.04973,
+        0.159248,
+        0.083329
+      ],
+      "mean_ndcg": 0.105287,
+      "worst_user_ndcg": 0.04973,
+      "group_id": 200
+    },
+    {
+      "users": [
+        "SailorVenus05",
+        "Shirachiyo",
+        "yuval",
+        "AkaiRingo000"
+      ],
+      "per_user_ndcg": [
+        0.146639,
+        0.099469,
+        0.10767,
+        0.119571
+      ],
+      "mean_ndcg": 0.118337,
+      "worst_user_ndcg": 0.099469,
+      "group_id": 201
+    },
+    {
+      "users": [
+        "shalafi",
+        "Kou7793",
+        "Vexama",
+        "Jezal-kun"
+      ],
+      "per_user_ndcg": [
+        0.177617,
+        0.235429,
+        0.062117,
+        0.193589
+      ],
+      "mean_ndcg": 0.167188,
+      "worst_user_ndcg": 0.062117,
+      "group_id": 202
+    },
+    {
+      "users": [
+        "-Ackerman",
+        "AnimePrince29",
+        "TheWhiteCrane",
+        "SMisaki"
+      ],
+      "per_user_ndcg": [
+        0.14179,
+        0.048347,
+        0.115804,
+        0.081921
+      ],
+      "mean_ndcg": 0.096966,
+      "worst_user_ndcg": 0.048347,
+      "group_id": 203
+    },
+    {
+      "users": [
+        "wowshutupjess",
+        "usmcbush",
+        "Paradoxal",
+        "daols"
+      ],
+      "per_user_ndcg": [
+        0.124044,
+        0.121004,
+        0.075682,
+        0.059128
+      ],
+      "mean_ndcg": 0.094964,
+      "worst_user_ndcg": 0.059128,
+      "group_id": 204
+    },
+    {
+      "users": [
+        "Wolfhunter",
+        "Hawkeye-dono",
+        "junintoiro",
+        "moglidor"
+      ],
+      "per_user_ndcg": [
+        0.146048,
+        0.051322,
+        0.11663,
+        0.152583
+      ],
+      "mean_ndcg": 0.116646,
+      "worst_user_ndcg": 0.051322,
+      "group_id": 205
+    },
+    {
+      "users": [
+        "AntitheticMind",
+        "NaiBaG",
+        "veljavex",
+        "maximoose"
+      ],
+      "per_user_ndcg": [
+        0.172081,
+        0.108307,
+        0.208161,
+        0.151535
+      ],
+      "mean_ndcg": 0.160021,
+      "worst_user_ndcg": 0.108307,
+      "group_id": 206
+    },
+    {
+      "users": [
+        "Blazingluke",
+        "Wiggo",
+        "NeoTheOne",
+        "Lord_Orion"
+      ],
+      "per_user_ndcg": [
+        0.112261,
+        0.212399,
+        0.06744,
+        0.146212
+      ],
+      "mean_ndcg": 0.134578,
+      "worst_user_ndcg": 0.06744,
+      "group_id": 207
+    },
+    {
+      "users": [
+        "danzero",
+        "Mello",
+        "Don_Totore",
+        "-Ema-"
+      ],
+      "per_user_ndcg": [
+        0.039721,
+        0.079814,
+        0.133494,
+        0.077078
+      ],
+      "mean_ndcg": 0.082527,
+      "worst_user_ndcg": 0.039721,
+      "group_id": 208
+    },
+    {
+      "users": [
+        "pedrooooo",
+        "Nefisto",
+        "Himeyume",
+        "Animemangamano"
+      ],
+      "per_user_ndcg": [
+        0.118587,
+        0.070147,
+        0.025167,
+        0.040321
+      ],
+      "mean_ndcg": 0.063555,
+      "worst_user_ndcg": 0.025167,
+      "group_id": 209
+    },
+    {
+      "users": [
+        "Arzell",
+        "EssieLove_",
+        "misaseh098",
+        "Gohan-Dono"
+      ],
+      "per_user_ndcg": [
+        0.145805,
+        0.116298,
+        0.052113,
+        0.072544
+      ],
+      "mean_ndcg": 0.09669,
+      "worst_user_ndcg": 0.052113,
+      "group_id": 210
+    },
+    {
+      "users": [
+        "Kondzio",
+        "Terratokyo",
+        "MaayaDestra",
+        "Kambodzo"
+      ],
+      "per_user_ndcg": [
+        0.062186,
+        0.133096,
+        0.100784,
+        0.113707
+      ],
+      "mean_ndcg": 0.102443,
+      "worst_user_ndcg": 0.062186,
+      "group_id": 211
+    },
+    {
+      "users": [
+        "eik_i_baznycia",
+        "ytdh",
+        "Not_Fried_Ham",
+        "Hustik"
+      ],
+      "per_user_ndcg": [
+        0.127369,
+        0.043752,
+        0.077342,
+        0.026692
+      ],
+      "mean_ndcg": 0.068789,
+      "worst_user_ndcg": 0.026692,
+      "group_id": 212
+    },
+    {
+      "users": [
+        "Scalbar",
+        "MaiFoxie",
+        "RaphaGM",
+        "Taz733"
+      ],
+      "per_user_ndcg": [
+        0.023443,
+        0.243509,
+        0.0949,
+        0.169649
+      ],
+      "mean_ndcg": 0.132875,
+      "worst_user_ndcg": 0.023443,
+      "group_id": 213
+    },
+    {
+      "users": [
+        "Gorossy",
+        "blumei",
+        "a_ri",
+        "coachhines"
+      ],
+      "per_user_ndcg": [
+        0.116574,
+        0.121118,
+        0.039965,
+        0.086675
+      ],
+      "mean_ndcg": 0.091083,
+      "worst_user_ndcg": 0.039965,
+      "group_id": 214
+    },
+    {
+      "users": [
+        "Strely",
+        "blackchaos30",
+        "MeganHikari5",
+        "Kurostosuki"
+      ],
+      "per_user_ndcg": [
+        0.095585,
+        0.079262,
+        0.039262,
+        0.169405
+      ],
+      "mean_ndcg": 0.095879,
+      "worst_user_ndcg": 0.039262,
+      "group_id": 215
+    },
+    {
+      "users": [
+        "-Whiplash-",
+        "nanarurui",
+        "jjcabrera18",
+        "iiYama"
+      ],
+      "per_user_ndcg": [
+        0.04396,
+        0.017551,
+        0.123478,
+        0.12115
+      ],
+      "mean_ndcg": 0.076535,
+      "worst_user_ndcg": 0.017551,
+      "group_id": 216
+    },
+    {
+      "users": [
+        "Kogashi",
+        "kagariis",
+        "Flame23",
+        "b0177"
+      ],
+      "per_user_ndcg": [
+        0.058331,
+        0.083867,
+        0.07028,
+        0.190374
+      ],
+      "mean_ndcg": 0.100713,
+      "worst_user_ndcg": 0.058331,
+      "group_id": 217
+    },
+    {
+      "users": [
+        "Wolf-Bunji",
+        "LittleMissCameo",
+        "Lucion666",
+        "Alfian_Kachau"
+      ],
+      "per_user_ndcg": [
+        0.007181,
+        0.046011,
+        0.13087,
+        0.098368
+      ],
+      "mean_ndcg": 0.070608,
+      "worst_user_ndcg": 0.007181,
+      "group_id": 218
+    },
+    {
+      "users": [
+        "Norzon",
+        "Cold_Saturn",
+        "Shiruvya",
+        "Omegacwb101"
+      ],
+      "per_user_ndcg": [
+        0.045814,
+        0.122431,
+        0.058394,
+        0.148131
+      ],
+      "mean_ndcg": 0.093693,
+      "worst_user_ndcg": 0.045814,
+      "group_id": 219
+    },
+    {
+      "users": [
+        "staticdeparture",
+        "Flepidiecki",
+        "Manatic",
+        "PapayaPie"
+      ],
+      "per_user_ndcg": [
+        0.134853,
+        0.096639,
+        0.083328,
+        0.1878
+      ],
+      "mean_ndcg": 0.125655,
+      "worst_user_ndcg": 0.083328,
+      "group_id": 220
+    },
+    {
+      "users": [
+        "Akilux",
+        "pureexe",
+        "ayai",
+        "aquashadowcat"
+      ],
+      "per_user_ndcg": [
+        0.093086,
+        0.039736,
+        0.131726,
+        0.098139
+      ],
+      "mean_ndcg": 0.090672,
+      "worst_user_ndcg": 0.039736,
+      "group_id": 221
+    },
+    {
+      "users": [
+        "doozer667",
+        "white7777",
+        "Axn_70",
+        "mynameyusuf"
+      ],
+      "per_user_ndcg": [
+        0.219122,
+        0.183151,
+        0.145678,
+        0.167194
+      ],
+      "mean_ndcg": 0.178786,
+      "worst_user_ndcg": 0.145678,
+      "group_id": 222
+    },
+    {
+      "users": [
+        "Mallik",
+        "kikimanox",
+        "ACarrasco",
+        "nukedashitette"
+      ],
+      "per_user_ndcg": [
+        0.213411,
+        0.05538,
+        0.10317,
+        0.119103
+      ],
+      "mean_ndcg": 0.122766,
+      "worst_user_ndcg": 0.05538,
+      "group_id": 223
+    },
+    {
+      "users": [
+        "ursaminor",
+        "Ryuzakiii",
+        "jediD15",
+        "JBranch"
+      ],
+      "per_user_ndcg": [
+        0.182083,
+        0.17102,
+        0.047804,
+        0.126116
+      ],
+      "mean_ndcg": 0.131756,
+      "worst_user_ndcg": 0.047804,
+      "group_id": 224
+    },
+    {
+      "users": [
+        "Solokirrik",
+        "Jarpen",
+        "Narurama1995",
+        "android0100"
+      ],
+      "per_user_ndcg": [
+        0.089709,
+        0.107126,
+        0.138106,
+        0.098121
+      ],
+      "mean_ndcg": 0.108265,
+      "worst_user_ndcg": 0.089709,
+      "group_id": 225
+    },
+    {
+      "users": [
+        "ebonywings",
+        "Bierzgal",
+        "clow_card",
+        "-Ryuuji-"
+      ],
+      "per_user_ndcg": [
+        0.135967,
+        0.125981,
+        0.072216,
+        0.121201
+      ],
+      "mean_ndcg": 0.113841,
+      "worst_user_ndcg": 0.072216,
+      "group_id": 226
+    },
+    {
+      "users": [
+        "SanyaLitvyak",
+        "Darkness_lord32",
+        "jayvee",
+        "wd_nintakun"
+      ],
+      "per_user_ndcg": [
+        0.054675,
+        0.133711,
+        0.114744,
+        0.068774
+      ],
+      "mean_ndcg": 0.092976,
+      "worst_user_ndcg": 0.054675,
+      "group_id": 227
+    },
+    {
+      "users": [
+        "sorandomm",
+        "Qualu",
+        "tenma1290",
+        "Alice_Break"
+      ],
+      "per_user_ndcg": [
+        0.064263,
+        0.177535,
+        0.154912,
+        0.066095
+      ],
+      "mean_ndcg": 0.115701,
+      "worst_user_ndcg": 0.064263,
+      "group_id": 228
+    },
+    {
+      "users": [
+        "Shootinguy23",
+        "Kiraism",
+        "otakujess",
+        "kupoartist"
+      ],
+      "per_user_ndcg": [
+        0.091118,
+        0.091062,
+        0.021661,
+        0.065957
+      ],
+      "mean_ndcg": 0.067449,
+      "worst_user_ndcg": 0.021661,
+      "group_id": 229
+    },
+    {
+      "users": [
+        "Awaka",
+        "Bobmonkey07",
+        "Hiro-san",
+        "Chyna"
+      ],
+      "per_user_ndcg": [
+        0.144673,
+        0.141191,
+        0.091082,
+        0.071523
+      ],
+      "mean_ndcg": 0.112117,
+      "worst_user_ndcg": 0.071523,
+      "group_id": 230
+    },
+    {
+      "users": [
+        "Noukie46",
+        "SuburbanPanda",
+        "Isus",
+        "Noktur"
+      ],
+      "per_user_ndcg": [
+        0.168271,
+        0.15216,
+        0.102777,
+        0.084236
+      ],
+      "mean_ndcg": 0.126861,
+      "worst_user_ndcg": 0.084236,
+      "group_id": 231
+    },
+    {
+      "users": [
+        "NikaWatchesAnime",
+        "Osawa_Hidero",
+        "TheTinyChemist",
+        "iamcrazyninja"
+      ],
+      "per_user_ndcg": [
+        0.011484,
+        0.077315,
+        0.052219,
+        0.166448
+      ],
+      "mean_ndcg": 0.076867,
+      "worst_user_ndcg": 0.011484,
+      "group_id": 232
+    },
+    {
+      "users": [
+        "Soge_king999",
+        "sjoebidoea",
+        "secobi",
+        "HellsFinest"
+      ],
+      "per_user_ndcg": [
+        0.066466,
+        0.03569,
+        0.06707,
+        0.132356
+      ],
+      "mean_ndcg": 0.075396,
+      "worst_user_ndcg": 0.03569,
+      "group_id": 233
+    },
+    {
+      "users": [
+        "alpha000",
+        "ELportuxx94",
+        "Robbeks",
+        "ellie_suicide"
+      ],
+      "per_user_ndcg": [
+        0.076031,
+        0.052085,
+        0.068692,
+        0.136781
+      ],
+      "mean_ndcg": 0.083397,
+      "worst_user_ndcg": 0.052085,
+      "group_id": 234
+    },
+    {
+      "users": [
+        "AndrisRiki",
+        "ScarletAurora",
+        "fullmetalnerd",
+        "Theoden"
+      ],
+      "per_user_ndcg": [
+        0.132243,
+        0.132496,
+        0.035189,
+        0.099863
+      ],
+      "mean_ndcg": 0.099948,
+      "worst_user_ndcg": 0.035189,
+      "group_id": 235
+    },
+    {
+      "users": [
+        "TheAnimeAshtray",
+        "SleepyYoshi",
+        "Deathraven",
+        "lainverse"
+      ],
+      "per_user_ndcg": [
+        0.082272,
+        0.120203,
+        0.019806,
+        0.167517
+      ],
+      "mean_ndcg": 0.097449,
+      "worst_user_ndcg": 0.019806,
+      "group_id": 236
+    },
+    {
+      "users": [
+        "rexonbm",
+        "YuiGoggles",
+        "Wolfgar92",
+        "FreedomFighter"
+      ],
+      "per_user_ndcg": [
+        0.060699,
+        0.137086,
+        0.180265,
+        0.102674
+      ],
+      "mean_ndcg": 0.120181,
+      "worst_user_ndcg": 0.060699,
+      "group_id": 237
+    },
+    {
+      "users": [
+        "Mardesuwa",
+        "Azylium",
+        "FlareKnight",
+        "TatsuyaJ35U5"
+      ],
+      "per_user_ndcg": [
+        0.046782,
+        0.170522,
+        0.142482,
+        0.074665
+      ],
+      "mean_ndcg": 0.108613,
+      "worst_user_ndcg": 0.046782,
+      "group_id": 238
+    },
+    {
+      "users": [
+        "Exanimem",
+        "Shelfen",
+        "StavStuva",
+        "toradorarara"
+      ],
+      "per_user_ndcg": [
+        0.064335,
+        0.058274,
+        0.119196,
+        0.09544
+      ],
+      "mean_ndcg": 0.084312,
+      "worst_user_ndcg": 0.058274,
+      "group_id": 239
+    },
+    {
+      "users": [
+        "rkaahean",
+        "Holly_Holley",
+        "KeNnYBeZS",
+        "kaizokuoluffy"
+      ],
+      "per_user_ndcg": [
+        0.126751,
+        0.102562,
+        0.024141,
+        0.099384
+      ],
+      "mean_ndcg": 0.088209,
+      "worst_user_ndcg": 0.024141,
+      "group_id": 240
+    },
+    {
+      "users": [
+        "TheBlackAbyss",
+        "Zoda",
+        "DB-171",
+        "kda7731"
+      ],
+      "per_user_ndcg": [
+        0.016834,
+        0.103904,
+        0.057324,
+        0.107484
+      ],
+      "mean_ndcg": 0.071386,
+      "worst_user_ndcg": 0.016834,
+      "group_id": 241
+    },
+    {
+      "users": [
+        "suterujesu",
+        "Beyond_",
+        "Terminator_Neon",
+        "ultramarinezulu"
+      ],
+      "per_user_ndcg": [
+        0.112032,
+        0.013603,
+        0.077023,
+        0.121468
+      ],
+      "mean_ndcg": 0.081032,
+      "worst_user_ndcg": 0.013603,
+      "group_id": 242
+    },
+    {
+      "users": [
+        "MorpheusTruohgoy",
+        "zLuke",
+        "xJuturna",
+        "karjak"
+      ],
+      "per_user_ndcg": [
+        0.096956,
+        0.056181,
+        0.031807,
+        0.046859
+      ],
+      "mean_ndcg": 0.057951,
+      "worst_user_ndcg": 0.031807,
+      "group_id": 243
+    },
+    {
+      "users": [
+        "Loogs",
+        "Lee-Ron",
+        "amu_037",
+        "Naseb"
+      ],
+      "per_user_ndcg": [
+        0.054513,
+        0.156447,
+        0.090093,
+        0.122792
+      ],
+      "mean_ndcg": 0.105961,
+      "worst_user_ndcg": 0.054513,
+      "group_id": 244
+    },
+    {
+      "users": [
+        "bread4breakfast",
+        "Oseren",
+        "TalesOfDespair",
+        "RoidzBattleShip"
+      ],
+      "per_user_ndcg": [
+        0.176155,
+        0.013833,
+        0.156019,
+        0.113149
+      ],
+      "mean_ndcg": 0.114789,
+      "worst_user_ndcg": 0.013833,
+      "group_id": 245
+    },
+    {
+      "users": [
+        "daphne13n",
+        "J-Pop",
+        "Pringlescan",
+        "bota_nik"
+      ],
+      "per_user_ndcg": [
+        0.051524,
+        0.126411,
+        0.089804,
+        0.09699
+      ],
+      "mean_ndcg": 0.091182,
+      "worst_user_ndcg": 0.051524,
+      "group_id": 246
+    },
+    {
+      "users": [
+        "Jey",
+        "AnimeGumm",
+        "Ray-chan",
+        "Jinto"
+      ],
+      "per_user_ndcg": [
+        0.087458,
+        0.123594,
+        0.120462,
+        0.099164
+      ],
+      "mean_ndcg": 0.10767,
+      "worst_user_ndcg": 0.087458,
+      "group_id": 247
+    },
+    {
+      "users": [
+        "Crumblebox",
+        "Tankair",
+        "iFujimiya",
+        "gabcia1990"
+      ],
+      "per_user_ndcg": [
+        0.029382,
+        0.154469,
+        0.131202,
+        0.116375
+      ],
+      "mean_ndcg": 0.107857,
+      "worst_user_ndcg": 0.029382,
+      "group_id": 248
+    },
+    {
+      "users": [
+        "ItsukiAdhara",
+        "Trisha-chan",
+        "ChickenSpoon",
+        "Setsuna-san"
+      ],
+      "per_user_ndcg": [
+        0.140762,
+        0.085759,
+        0.179997,
+        0.018166
+      ],
+      "mean_ndcg": 0.106171,
+      "worst_user_ndcg": 0.018166,
+      "group_id": 249
+    },
+    {
+      "users": [
+        "ricksmiths",
+        "TheBlackTac",
+        "Cyabvear",
+        "yopickering"
+      ],
+      "per_user_ndcg": [
+        0.052207,
+        0.013632,
+        0.187257,
+        0.082117
+      ],
+      "mean_ndcg": 0.083803,
+      "worst_user_ndcg": 0.013632,
+      "group_id": 250
+    },
+    {
+      "users": [
+        "ewlds",
+        "Ksety",
+        "Reghys",
+        "Kukixxx"
+      ],
+      "per_user_ndcg": [
+        0.113709,
+        0.120254,
+        0.137223,
+        0.11638
+      ],
+      "mean_ndcg": 0.121891,
+      "worst_user_ndcg": 0.113709,
+      "group_id": 251
+    },
+    {
+      "users": [
+        "Tijami",
+        "f2ai",
+        "JulioAxcel",
+        "Gold_Time"
+      ],
+      "per_user_ndcg": [
+        0.079057,
+        0.095837,
+        0.09171,
+        0.093624
+      ],
+      "mean_ndcg": 0.090057,
+      "worst_user_ndcg": 0.079057,
+      "group_id": 252
+    },
+    {
+      "users": [
+        "slicKrox",
+        "Amagai",
+        "Daenur",
+        "jford0422"
+      ],
+      "per_user_ndcg": [
+        0.156602,
+        0.132966,
+        0.125024,
+        0.130247
+      ],
+      "mean_ndcg": 0.13621,
+      "worst_user_ndcg": 0.125024,
+      "group_id": 253
+    },
+    {
+      "users": [
+        "BellaNotte",
+        "khrisdo",
+        "Exclair",
+        "kiyoo"
+      ],
+      "per_user_ndcg": [
+        0.115324,
+        0.164666,
+        0.102546,
+        0.091596
+      ],
+      "mean_ndcg": 0.118533,
+      "worst_user_ndcg": 0.091596,
+      "group_id": 254
+    },
+    {
+      "users": [
+        "shellshock",
+        "Liosdx",
+        "pheika",
+        "Icedout15"
+      ],
+      "per_user_ndcg": [
+        0.103177,
+        0.097043,
+        0.09139,
+        0.009391
+      ],
+      "mean_ndcg": 0.07525,
+      "worst_user_ndcg": 0.009391,
+      "group_id": 255
+    },
+    {
+      "users": [
+        "Muninn",
+        "Ramen918",
+        "MiyamuraHori",
+        "SeviRo"
+      ],
+      "per_user_ndcg": [
+        0.132183,
+        0.045437,
+        0.219253,
+        0.125249
+      ],
+      "mean_ndcg": 0.13053,
+      "worst_user_ndcg": 0.045437,
+      "group_id": 256
+    },
+    {
+      "users": [
+        "rampager112",
+        "RyujiAssassin",
+        "Reqis",
+        "geomeo"
+      ],
+      "per_user_ndcg": [
+        0.148969,
+        0.151579,
+        0.201441,
+        0.106252
+      ],
+      "mean_ndcg": 0.15206,
+      "worst_user_ndcg": 0.106252,
+      "group_id": 257
+    },
+    {
+      "users": [
+        "Rhianne",
+        "Lemonator",
+        "MrAbe",
+        "pompzi"
+      ],
+      "per_user_ndcg": [
+        0.112761,
+        0.100079,
+        0.054632,
+        0.085812
+      ],
+      "mean_ndcg": 0.088321,
+      "worst_user_ndcg": 0.054632,
+      "group_id": 258
+    },
+    {
+      "users": [
+        "CrystalxSword",
+        "K4mpfsch4f",
+        "YoshitoSakurai",
+        "Lol-Master"
+      ],
+      "per_user_ndcg": [
+        0.078716,
+        0.069526,
+        0.167096,
+        0.073652
+      ],
+      "mean_ndcg": 0.097248,
+      "worst_user_ndcg": 0.069526,
+      "group_id": 259
+    },
+    {
+      "users": [
+        "varathal",
+        "Edziauke",
+        "Ker2",
+        "3IceCreaM3"
+      ],
+      "per_user_ndcg": [
+        0.107528,
+        0.040521,
+        0.164608,
+        0.097964
+      ],
+      "mean_ndcg": 0.102655,
+      "worst_user_ndcg": 0.040521,
+      "group_id": 260
+    },
+    {
+      "users": [
+        "tomo-kirisuto",
+        "VegasMazza3",
+        "Paige",
+        "candipants"
+      ],
+      "per_user_ndcg": [
+        0.135823,
+        0.123583,
+        0.158445,
+        0.051565
+      ],
+      "mean_ndcg": 0.117354,
+      "worst_user_ndcg": 0.051565,
+      "group_id": 261
+    },
+    {
+      "users": [
+        "cmonmia",
+        "-Shiro",
+        "Milkypon",
+        "Shukura"
+      ],
+      "per_user_ndcg": [
+        0.142322,
+        0.007538,
+        0.064606,
+        0.033683
+      ],
+      "mean_ndcg": 0.062037,
+      "worst_user_ndcg": 0.007538,
+      "group_id": 262
+    },
+    {
+      "users": [
+        "midgard",
+        "Abdullah_kudo",
+        "rauhanrony",
+        "nanabeth18"
+      ],
+      "per_user_ndcg": [
+        0.12894,
+        0.006965,
+        0.167349,
+        0.038672
+      ],
+      "mean_ndcg": 0.085482,
+      "worst_user_ndcg": 0.006965,
+      "group_id": 263
+    },
+    {
+      "users": [
+        "WolfBane22",
+        "KissingBunny",
+        "neurastenica",
+        "rockberto"
+      ],
+      "per_user_ndcg": [
+        0.141942,
+        0.22717,
+        0.09406,
+        0.101025
+      ],
+      "mean_ndcg": 0.141049,
+      "worst_user_ndcg": 0.09406,
+      "group_id": 264
+    },
+    {
+      "users": [
+        "akuma2002",
+        "tasilla97",
+        "takazawa-genji",
+        "Dyne_Hikazisha"
+      ],
+      "per_user_ndcg": [
+        0.09365,
+        0.065331,
+        0.065615,
+        0.116008
+      ],
+      "mean_ndcg": 0.085151,
+      "worst_user_ndcg": 0.065331,
+      "group_id": 265
+    },
+    {
+      "users": [
+        "DiabloNero",
+        "Traumfrau",
+        "takumi20109",
+        "Zepthix"
+      ],
+      "per_user_ndcg": [
+        0.08081,
+        0.134072,
+        0.07131,
+        0.08701
+      ],
+      "mean_ndcg": 0.093301,
+      "worst_user_ndcg": 0.07131,
+      "group_id": 266
+    },
+    {
+      "users": [
+        "PonyQueen",
+        "proKSA",
+        "Mladen",
+        "Dymonia"
+      ],
+      "per_user_ndcg": [
+        0.071098,
+        0.089657,
+        0.064737,
+        0.069783
+      ],
+      "mean_ndcg": 0.073819,
+      "worst_user_ndcg": 0.064737,
+      "group_id": 267
+    },
+    {
+      "users": [
+        "Tassadar14",
+        "hunimka",
+        "MAjinkratos",
+        "100steps2cum"
+      ],
+      "per_user_ndcg": [
+        0.059018,
+        0.103464,
+        0.00943,
+        0.054034
+      ],
+      "mean_ndcg": 0.056487,
+      "worst_user_ndcg": 0.00943,
+      "group_id": 268
+    },
+    {
+      "users": [
+        "RafaelTrindade",
+        "Link-kun",
+        "Fanti-chan",
+        "ronekozen"
+      ],
+      "per_user_ndcg": [
+        0.112147,
+        0.055143,
+        0.10803,
+        0.155721
+      ],
+      "mean_ndcg": 0.10776,
+      "worst_user_ndcg": 0.055143,
+      "group_id": 269
+    },
+    {
+      "users": [
+        "HaremKing111",
+        "oborozuki",
+        "Earame",
+        "Carbinkz"
+      ],
+      "per_user_ndcg": [
+        0.170385,
+        0.082737,
+        0.094968,
+        0.083009
+      ],
+      "mean_ndcg": 0.107775,
+      "worst_user_ndcg": 0.082737,
+      "group_id": 270
+    },
+    {
+      "users": [
+        "azizborashed",
+        "HolyFuzazzle",
+        "dxdj123",
+        "Kenora_Nayoshi"
+      ],
+      "per_user_ndcg": [
+        0.087446,
+        0.079148,
+        0.109865,
+        0.168002
+      ],
+      "mean_ndcg": 0.111115,
+      "worst_user_ndcg": 0.079148,
+      "group_id": 271
+    },
+    {
+      "users": [
+        "Pannekoek",
+        "alidreams",
+        "Chrisch1498",
+        "michelpf13"
+      ],
+      "per_user_ndcg": [
+        0.100109,
+        0.065294,
+        0.052952,
+        0.057029
+      ],
+      "mean_ndcg": 0.068846,
+      "worst_user_ndcg": 0.052952,
+      "group_id": 272
+    },
+    {
+      "users": [
+        "nicename321",
+        "whooopsann",
+        "zombiesonacid",
+        "5l1v3r"
+      ],
+      "per_user_ndcg": [
+        0.042778,
+        0.168133,
+        0.16658,
+        0.180638
+      ],
+      "mean_ndcg": 0.139532,
+      "worst_user_ndcg": 0.042778,
+      "group_id": 273
+    },
+    {
+      "users": [
+        "cassandraarmijo",
+        "D_K367",
+        "Fuufuu",
+        "Risa0408"
+      ],
+      "per_user_ndcg": [
+        0.113757,
+        0.107432,
+        0.114206,
+        0.053891
+      ],
+      "mean_ndcg": 0.097322,
+      "worst_user_ndcg": 0.053891,
+      "group_id": 274
+    },
+    {
+      "users": [
+        "toastman2295",
+        "Vocaline",
+        "Cat_eater444",
+        "Evan_PT"
+      ],
+      "per_user_ndcg": [
+        0.0319,
+        0.017629,
+        0.050213,
+        0.058289
+      ],
+      "mean_ndcg": 0.039508,
+      "worst_user_ndcg": 0.017629,
+      "group_id": 275
+    },
+    {
+      "users": [
+        "Rawr_Taiga",
+        "Roec",
+        "PikaPuff",
+        "MatoLeLoli"
+      ],
+      "per_user_ndcg": [
+        0.110801,
+        0.07553,
+        0.213077,
+        0.05981
+      ],
+      "mean_ndcg": 0.114805,
+      "worst_user_ndcg": 0.05981,
+      "group_id": 276
+    },
+    {
+      "users": [
+        "UltraN",
+        "MikaYasaki",
+        "Dynama78",
+        "MaKErOfeDen23"
+      ],
+      "per_user_ndcg": [
+        0.0671,
+        0.094254,
+        0.110936,
+        0.057156
+      ],
+      "mean_ndcg": 0.082361,
+      "worst_user_ndcg": 0.057156,
+      "group_id": 277
+    },
+    {
+      "users": [
+        "awkward5otaku",
+        "Ies",
+        "rockman_blues",
+        "Nicola"
+      ],
+      "per_user_ndcg": [
+        0.163441,
+        0.040408,
+        0.09451,
+        0.167099
+      ],
+      "mean_ndcg": 0.116365,
+      "worst_user_ndcg": 0.040408,
+      "group_id": 278
+    },
+    {
+      "users": [
+        "Kotophisto",
+        "KunoichiHakira",
+        "PrivateRyan717",
+        "xMICROICEx"
+      ],
+      "per_user_ndcg": [
+        0.096229,
+        0.150001,
+        0.021068,
+        0.071365
+      ],
+      "mean_ndcg": 0.084666,
+      "worst_user_ndcg": 0.021068,
+      "group_id": 279
+    },
+    {
+      "users": [
+        "Amaharam",
+        "Shooting5tar",
+        "Greco",
+        "JRYongz"
+      ],
+      "per_user_ndcg": [
+        0.040129,
+        0.0522,
+        0.050713,
+        0.093791
+      ],
+      "mean_ndcg": 0.059208,
+      "worst_user_ndcg": 0.040129,
+      "group_id": 280
+    },
+    {
+      "users": [
+        "Sword_master",
+        "Kazuya_",
+        "C-AureliusCotta",
+        "AlanaSenpai"
+      ],
+      "per_user_ndcg": [
+        0.052908,
+        0.093069,
+        0.061301,
+        0.144447
+      ],
+      "mean_ndcg": 0.087931,
+      "worst_user_ndcg": 0.052908,
+      "group_id": 281
+    },
+    {
+      "users": [
+        "bon-kai",
+        "Fia",
+        "rara_chama",
+        "Necromancer13"
+      ],
+      "per_user_ndcg": [
+        0.051618,
+        0.083599,
+        0.205417,
+        0.161291
+      ],
+      "mean_ndcg": 0.125481,
+      "worst_user_ndcg": 0.051618,
+      "group_id": 282
+    },
+    {
+      "users": [
+        "senzoe",
+        "-Vid",
+        "dheenaaoi",
+        "Portales"
+      ],
+      "per_user_ndcg": [
+        0.07483,
+        0.129189,
+        0.076723,
+        0.085611
+      ],
+      "mean_ndcg": 0.091588,
+      "worst_user_ndcg": 0.07483,
+      "group_id": 283
+    },
+    {
+      "users": [
+        "DieOrYouWillDie",
+        "Kur0suke",
+        "RealShinka",
+        "W4LKM4N"
+      ],
+      "per_user_ndcg": [
+        0.013905,
+        0.031573,
+        0.056358,
+        0.04317
+      ],
+      "mean_ndcg": 0.036252,
+      "worst_user_ndcg": 0.013905,
+      "group_id": 284
+    },
+    {
+      "users": [
+        "MelGibson",
+        "TheCasterOfworms",
+        "WilliamFleming",
+        "v3l3no-ansa"
+      ],
+      "per_user_ndcg": [
+        0.095451,
+        0.087503,
+        0.107601,
+        0.111925
+      ],
+      "mean_ndcg": 0.10062,
+      "worst_user_ndcg": 0.087503,
+      "group_id": 285
+    },
+    {
+      "users": [
+        "Marteezy",
+        "wloczykij1988",
+        "DrakieV",
+        "alvaro909"
+      ],
+      "per_user_ndcg": [
+        0.084601,
+        0.134018,
+        0.090278,
+        0.064868
+      ],
+      "mean_ndcg": 0.093441,
+      "worst_user_ndcg": 0.064868,
+      "group_id": 286
+    },
+    {
+      "users": [
+        "Savage738",
+        "FireFistBilly",
+        "CaptainSquidHat",
+        "HiImFern"
+      ],
+      "per_user_ndcg": [
+        0.164472,
+        0.10345,
+        0.056296,
+        0.119257
+      ],
+      "mean_ndcg": 0.110869,
+      "worst_user_ndcg": 0.056296,
+      "group_id": 287
+    },
+    {
+      "users": [
+        "Nnight",
+        "yurete",
+        "hellen1402",
+        "postcoitusraaawk"
+      ],
+      "per_user_ndcg": [
+        0.133292,
+        0.205728,
+        0.030713,
+        0.19676
+      ],
+      "mean_ndcg": 0.141623,
+      "worst_user_ndcg": 0.030713,
+      "group_id": 288
+    },
+    {
+      "users": [
+        "Darkslayer117",
+        "tak10",
+        "snake_panicali",
+        "juliavonstein"
+      ],
+      "per_user_ndcg": [
+        0.065788,
+        0.089191,
+        0.051852,
+        0.116877
+      ],
+      "mean_ndcg": 0.080927,
+      "worst_user_ndcg": 0.051852,
+      "group_id": 289
+    },
+    {
+      "users": [
+        "DamnYankee",
+        "Psykio",
+        "ouchmaster5000",
+        "eonder87"
+      ],
+      "per_user_ndcg": [
+        0.140759,
+        0.042142,
+        0.173784,
+        0.021786
+      ],
+      "mean_ndcg": 0.094618,
+      "worst_user_ndcg": 0.021786,
+      "group_id": 290
+    },
+    {
+      "users": [
+        "Mikumon",
+        "jclemente93",
+        "rukia16",
+        "FatalRuin"
+      ],
+      "per_user_ndcg": [
+        0.025563,
+        0.065495,
+        0.087994,
+        0.07759
+      ],
+      "mean_ndcg": 0.064161,
+      "worst_user_ndcg": 0.025563,
+      "group_id": 291
+    },
+    {
+      "users": [
+        "Mayuno_Cyo",
+        "Cegla",
+        "AsyrafFile",
+        "Ashrak"
+      ],
+      "per_user_ndcg": [
+        0.009069,
+        0.083367,
+        0.079644,
+        0.088371
+      ],
+      "mean_ndcg": 0.065113,
+      "worst_user_ndcg": 0.009069,
+      "group_id": 292
+    },
+    {
+      "users": [
+        "ElenaRockbell",
+        "Naoti",
+        "JadedRouge",
+        "Willowshade"
+      ],
+      "per_user_ndcg": [
+        0.018669,
+        0.12573,
+        0.116085,
+        0.204548
+      ],
+      "mean_ndcg": 0.116258,
+      "worst_user_ndcg": 0.018669,
+      "group_id": 293
+    },
+    {
+      "users": [
+        "HCDman007",
+        "ranirsdt",
+        "MinimalWage",
+        "BiancaRosa"
+      ],
+      "per_user_ndcg": [
+        0.155395,
+        0.122056,
+        0.138373,
+        0.154998
+      ],
+      "mean_ndcg": 0.142706,
+      "worst_user_ndcg": 0.122056,
+      "group_id": 294
+    },
+    {
+      "users": [
+        "kashieris",
+        "nikookie",
+        "kandiiyuutaamu",
+        "astraldragon88"
+      ],
+      "per_user_ndcg": [
+        0.121651,
+        0.038932,
+        0.072596,
+        0.119979
+      ],
+      "mean_ndcg": 0.088289,
+      "worst_user_ndcg": 0.038932,
+      "group_id": 295
+    },
+    {
+      "users": [
+        "Rydia69",
+        "DarthNicolas",
+        "darkknight00900",
+        "NewtypeSEED"
+      ],
+      "per_user_ndcg": [
+        0.216515,
+        0.233962,
+        0.188077,
+        0.104941
+      ],
+      "mean_ndcg": 0.185874,
+      "worst_user_ndcg": 0.104941,
+      "group_id": 296
+    },
+    {
+      "users": [
+        "LeeKaori",
+        "Kylew",
+        "TriNeaX",
+        "SnowcatChopycat"
+      ],
+      "per_user_ndcg": [
+        0.064966,
+        0.07167,
+        0.130306,
+        0.109038
+      ],
+      "mean_ndcg": 0.093995,
+      "worst_user_ndcg": 0.064966,
+      "group_id": 297
+    },
+    {
+      "users": [
+        "jazzlsx",
+        "SugarSprinkles",
+        "sasohina",
+        "Nathan_Wind"
+      ],
+      "per_user_ndcg": [
+        0.13962,
+        0.076555,
+        0.100394,
+        0.074875
+      ],
+      "mean_ndcg": 0.097861,
+      "worst_user_ndcg": 0.074875,
+      "group_id": 298
+    },
+    {
+      "users": [
+        "neovenezian",
+        "xKanax",
+        "Gemzie",
+        "Gwynbleidd"
+      ],
+      "per_user_ndcg": [
+        0.074678,
+        0.103769,
+        0.096537,
+        0.274413
+      ],
+      "mean_ndcg": 0.137349,
+      "worst_user_ndcg": 0.074678,
+      "group_id": 299
+    },
+    {
+      "users": [
+        "ChinaNumberOne",
+        "Thoranth",
+        "Rozark",
+        "Tru3Ph03niX"
+      ],
+      "per_user_ndcg": [
+        0.062371,
+        0.059473,
+        0.087337,
+        0.085398
+      ],
+      "mean_ndcg": 0.073645,
+      "worst_user_ndcg": 0.059473,
+      "group_id": 300
+    },
+    {
+      "users": [
+        "Miggle",
+        "directionsplans",
+        "Syafiee",
+        "AllenAddicted"
+      ],
+      "per_user_ndcg": [
+        0.07103,
+        0.229987,
+        0.066372,
+        0.053745
+      ],
+      "mean_ndcg": 0.105283,
+      "worst_user_ndcg": 0.053745,
+      "group_id": 301
+    },
+    {
+      "users": [
+        "EFK03",
+        "allan694",
+        "Denesa",
+        "miss-tam"
+      ],
+      "per_user_ndcg": [
+        0.110104,
+        0.057036,
+        0.05243,
+        0.219796
+      ],
+      "mean_ndcg": 0.109842,
+      "worst_user_ndcg": 0.05243,
+      "group_id": 302
+    },
+    {
+      "users": [
+        "CMYK",
+        "Nihi",
+        "ShadowG",
+        "NearL"
+      ],
+      "per_user_ndcg": [
+        0.071328,
+        0.090877,
+        0.129237,
+        0.110442
+      ],
+      "mean_ndcg": 0.100471,
+      "worst_user_ndcg": 0.071328,
+      "group_id": 303
+    },
+    {
+      "users": [
+        "ruudes",
+        "poggs38",
+        "dannydandan",
+        "kbbandgirl"
+      ],
+      "per_user_ndcg": [
+        0.121306,
+        0.142531,
+        0.166683,
+        0.192153
+      ],
+      "mean_ndcg": 0.155668,
+      "worst_user_ndcg": 0.121306,
+      "group_id": 304
+    },
+    {
+      "users": [
+        "ken127",
+        "IttyBitty",
+        "Lilith-senpai",
+        "Jitaku"
+      ],
+      "per_user_ndcg": [
+        0.070681,
+        0.146046,
+        0.074616,
+        0.114178
+      ],
+      "mean_ndcg": 0.10138,
+      "worst_user_ndcg": 0.070681,
+      "group_id": 305
+    },
+    {
+      "users": [
+        "oHYbriDo",
+        "Ryuumiko",
+        "bast",
+        "CrazyDim"
+      ],
+      "per_user_ndcg": [
+        0.017519,
+        0.041313,
+        0.056969,
+        0.006918
+      ],
+      "mean_ndcg": 0.03068,
+      "worst_user_ndcg": 0.006918,
+      "group_id": 306
+    },
+    {
+      "users": [
+        "Athenacut",
+        "Demiture",
+        "Alphard9t",
+        "KiDKhaos"
+      ],
+      "per_user_ndcg": [
+        0.110452,
+        0.116765,
+        0.089707,
+        0.091106
+      ],
+      "mean_ndcg": 0.102008,
+      "worst_user_ndcg": 0.089707,
+      "group_id": 307
+    },
+    {
+      "users": [
+        "xXJesSicaXx",
+        "PunPunBaka",
+        "Kaktusmaenner",
+        "19Pyro90"
+      ],
+      "per_user_ndcg": [
+        0.092429,
+        0.10742,
+        0.067518,
+        0.112528
+      ],
+      "mean_ndcg": 0.094974,
+      "worst_user_ndcg": 0.067518,
+      "group_id": 308
+    },
+    {
+      "users": [
+        "Komirai-H",
+        "Fuu-sama",
+        "Slarkero",
+        "AppleBloomMLP"
+      ],
+      "per_user_ndcg": [
+        0.013664,
+        0.014188,
+        0.066091,
+        0.05541
+      ],
+      "mean_ndcg": 0.037338,
+      "worst_user_ndcg": 0.013664,
+      "group_id": 309
+    },
+    {
+      "users": [
+        "Kermir",
+        "jei_li",
+        "Ryuzaku",
+        "vtteic"
+      ],
+      "per_user_ndcg": [
+        0.111271,
+        0.10114,
+        0.137985,
+        0.089508
+      ],
+      "mean_ndcg": 0.109976,
+      "worst_user_ndcg": 0.089508,
+      "group_id": 310
+    },
+    {
+      "users": [
+        "PeterS",
+        "wandarz1000",
+        "Catralitos",
+        "Lazerturbocine"
+      ],
+      "per_user_ndcg": [
+        0.242263,
+        0.088716,
+        0.078615,
+        0.128436
+      ],
+      "mean_ndcg": 0.134508,
+      "worst_user_ndcg": 0.078615,
+      "group_id": 311
+    },
+    {
+      "users": [
+        "Angela_G",
+        "pygmyhedgehog",
+        "Bitterness11",
+        "Hajinnie"
+      ],
+      "per_user_ndcg": [
+        0.089453,
+        0.139479,
+        0.0,
+        0.032969
+      ],
+      "mean_ndcg": 0.065475,
+      "worst_user_ndcg": 0.0,
+      "group_id": 312
+    },
+    {
+      "users": [
+        "Mechirikato",
+        "333Nyu333",
+        "ayamefan13",
+        "radi4l"
+      ],
+      "per_user_ndcg": [
+        0.0,
+        0.138643,
+        0.022879,
+        0.18006
+      ],
+      "mean_ndcg": 0.085395,
+      "worst_user_ndcg": 0.0,
+      "group_id": 313
+    },
+    {
+      "users": [
+        "orange_bloom",
+        "ChuuiHawkeye",
+        "Silverforgerer",
+        "KyoGobi"
+      ],
+      "per_user_ndcg": [
+        0.165078,
+        0.113666,
+        0.074987,
+        0.118632
+      ],
+      "mean_ndcg": 0.118091,
+      "worst_user_ndcg": 0.074987,
+      "group_id": 314
+    },
+    {
+      "users": [
+        "DWorsnopsisGOD",
+        "CBerry",
+        "Preciosa_vb",
+        "Yami-Dono"
+      ],
+      "per_user_ndcg": [
+        0.119243,
+        0.072971,
+        0.126411,
+        0.06364
+      ],
+      "mean_ndcg": 0.095566,
+      "worst_user_ndcg": 0.06364,
+      "group_id": 315
+    },
+    {
+      "users": [
+        "sirpanda",
+        "Gaiseric",
+        "Shimatakatani",
+        "Bittencourt"
+      ],
+      "per_user_ndcg": [
+        0.213684,
+        0.10735,
+        0.134399,
+        0.110552
+      ],
+      "mean_ndcg": 0.141496,
+      "worst_user_ndcg": 0.10735,
+      "group_id": 316
+    },
+    {
+      "users": [
+        "Kronekodow",
+        "ssnoad",
+        "Bianca",
+        "GodDeadGod"
+      ],
+      "per_user_ndcg": [
+        0.09371,
+        0.088671,
+        0.083457,
+        0.094435
+      ],
+      "mean_ndcg": 0.090068,
+      "worst_user_ndcg": 0.083457,
+      "group_id": 317
+    },
+    {
+      "users": [
+        "Martin-Hyland",
+        "Mony-Chan",
+        "AkaneChii",
+        "chubar"
+      ],
+      "per_user_ndcg": [
+        0.050287,
+        0.136227,
+        0.109404,
+        0.098232
+      ],
+      "mean_ndcg": 0.098538,
+      "worst_user_ndcg": 0.050287,
+      "group_id": 318
+    },
+    {
+      "users": [
+        "MightyJK",
+        "NoReasonReally",
+        "Zephyruss",
+        "mellow-osity"
+      ],
+      "per_user_ndcg": [
+        0.150736,
+        0.138632,
+        0.17099,
+        0.141179
+      ],
+      "mean_ndcg": 0.150384,
+      "worst_user_ndcg": 0.138632,
+      "group_id": 319
+    },
+    {
+      "users": [
+        "WKAweZ02",
+        "iamamylala",
+        "Yu-Yu",
+        "cpribilski"
+      ],
+      "per_user_ndcg": [
+        0.110467,
+        0.047628,
+        0.24119,
+        0.041096
+      ],
+      "mean_ndcg": 0.110095,
+      "worst_user_ndcg": 0.041096,
+      "group_id": 320
+    },
+    {
+      "users": [
+        "Trinny",
+        "guillaumec",
+        "Shigure_Toshiro",
+        "Firipu-kun"
+      ],
+      "per_user_ndcg": [
+        0.092174,
+        0.022991,
+        0.163791,
+        0.125142
+      ],
+      "mean_ndcg": 0.101025,
+      "worst_user_ndcg": 0.022991,
+      "group_id": 321
+    },
+    {
+      "users": [
+        "OctavioZ1X2",
+        "zerfblerf",
+        "Ashleyzors",
+        "poh8840"
+      ],
+      "per_user_ndcg": [
+        0.093278,
+        0.056264,
+        0.102933,
+        0.135367
+      ],
+      "mean_ndcg": 0.09696,
+      "worst_user_ndcg": 0.056264,
+      "group_id": 322
+    },
+    {
+      "users": [
+        "Janethan23",
+        "amy93",
+        "kuby37",
+        "pure_cure"
+      ],
+      "per_user_ndcg": [
+        0.13945,
+        0.065154,
+        0.230063,
+        0.12976
+      ],
+      "mean_ndcg": 0.141107,
+      "worst_user_ndcg": 0.065154,
+      "group_id": 323
+    },
+    {
+      "users": [
+        "PrioriIncantatem",
+        "Hyrule_enciclo",
+        "Ryogachan",
+        "Ketchup111"
+      ],
+      "per_user_ndcg": [
+        0.074405,
+        0.073473,
+        0.089571,
+        0.075197
+      ],
+      "mean_ndcg": 0.078162,
+      "worst_user_ndcg": 0.073473,
+      "group_id": 324
+    },
+    {
+      "users": [
+        "Natsunoyo",
+        "Vanilla77",
+        "mada_mada_dane",
+        "IchigoWarrior"
+      ],
+      "per_user_ndcg": [
+        0.18451,
+        0.015951,
+        0.088828,
+        0.178095
+      ],
+      "mean_ndcg": 0.116846,
+      "worst_user_ndcg": 0.015951,
+      "group_id": 325
+    },
+    {
+      "users": [
+        "Miyachii",
+        "sweetngenki",
+        "TragedyCupcakes",
+        "kipp"
+      ],
+      "per_user_ndcg": [
+        0.111932,
+        0.114299,
+        0.248704,
+        0.11025
+      ],
+      "mean_ndcg": 0.146296,
+      "worst_user_ndcg": 0.11025,
+      "group_id": 326
+    },
+    {
+      "users": [
+        "Andou-kun",
+        "Yipikaye",
+        "subazf",
+        "Bimoto"
+      ],
+      "per_user_ndcg": [
+        0.137071,
+        0.096214,
+        0.07709,
+        0.075121
+      ],
+      "mean_ndcg": 0.096374,
+      "worst_user_ndcg": 0.075121,
+      "group_id": 327
+    },
+    {
+      "users": [
+        "shakilsmash",
+        "Ptati",
+        "loveHunter",
+        "Shirikiri"
+      ],
+      "per_user_ndcg": [
+        0.055706,
+        0.109063,
+        0.235281,
+        0.192371
+      ],
+      "mean_ndcg": 0.148105,
+      "worst_user_ndcg": 0.055706,
+      "group_id": 328
+    },
+    {
+      "users": [
+        "war2244",
+        "Fantasidjuret",
+        "GLISSE0",
+        "Ruler632"
+      ],
+      "per_user_ndcg": [
+        0.059835,
+        0.098218,
+        0.126489,
+        0.159892
+      ],
+      "mean_ndcg": 0.111109,
+      "worst_user_ndcg": 0.059835,
+      "group_id": 329
+    },
+    {
+      "users": [
+        "SawlSeki",
+        "Finan",
+        "naruuto-kun",
+        "_Haikara_"
+      ],
+      "per_user_ndcg": [
+        0.16739,
+        0.041401,
+        0.081685,
+        0.139765
+      ],
+      "mean_ndcg": 0.10756,
+      "worst_user_ndcg": 0.041401,
+      "group_id": 330
+    },
+    {
+      "users": [
+        "Mystery94",
+        "Kouma",
+        "Peixe-boi",
+        "joaniedark"
+      ],
+      "per_user_ndcg": [
+        0.149321,
+        0.176895,
+        0.105206,
+        0.047515
+      ],
+      "mean_ndcg": 0.119734,
+      "worst_user_ndcg": 0.047515,
+      "group_id": 331
+    },
+    {
+      "users": [
+        "leighya",
+        "MrsBlondine",
+        "z3n4k0s",
+        "toshiro789"
+      ],
+      "per_user_ndcg": [
+        0.112807,
+        0.167556,
+        0.0,
+        0.037889
+      ],
+      "mean_ndcg": 0.079563,
+      "worst_user_ndcg": 0.0,
+      "group_id": 332
+    },
+    {
+      "users": [
+        "MrEmq",
+        "Kitsutengu",
+        "danny_chan",
+        "Biancasaur"
+      ],
+      "per_user_ndcg": [
+        0.182142,
+        0.052467,
+        0.06585,
+        0.163072
+      ],
+      "mean_ndcg": 0.115883,
+      "worst_user_ndcg": 0.052467,
+      "group_id": 333
+    },
+    {
+      "users": [
+        "silvatyr",
+        "Runtripfall",
+        "DarthKelevra",
+        "rocketboys"
+      ],
+      "per_user_ndcg": [
+        0.023764,
+        0.078747,
+        0.180092,
+        0.067691
+      ],
+      "mean_ndcg": 0.087573,
+      "worst_user_ndcg": 0.023764,
+      "group_id": 334
+    },
+    {
+      "users": [
+        "xxmikanxx",
+        "patjean",
+        "Dimitrije1606",
+        "PsychoSienna"
+      ],
+      "per_user_ndcg": [
+        0.067626,
+        0.021766,
+        0.122225,
+        0.072622
+      ],
+      "mean_ndcg": 0.07106,
+      "worst_user_ndcg": 0.021766,
+      "group_id": 335
+    },
+    {
+      "users": [
+        "Brasa",
+        "LelouchvB94",
+        "HesDavis",
+        "Hoisonhere"
+      ],
+      "per_user_ndcg": [
+        0.127501,
+        0.097387,
+        0.070821,
+        0.041723
+      ],
+      "mean_ndcg": 0.084358,
+      "worst_user_ndcg": 0.041723,
+      "group_id": 336
+    },
+    {
+      "users": [
+        "Malcolm",
+        "KatieC",
+        "fire_eagle",
+        "AudriSampson"
+      ],
+      "per_user_ndcg": [
+        0.063991,
+        0.0,
+        0.084462,
+        0.093176
+      ],
+      "mean_ndcg": 0.060407,
+      "worst_user_ndcg": 0.0,
+      "group_id": 337
+    },
+    {
+      "users": [
+        "wiredman11",
+        "AkiSmash",
+        "hayderxyz",
+        "goreismore"
+      ],
+      "per_user_ndcg": [
+        0.08323,
+        0.060395,
+        0.087745,
+        0.058274
+      ],
+      "mean_ndcg": 0.072411,
+      "worst_user_ndcg": 0.058274,
+      "group_id": 338
+    },
+    {
+      "users": [
+        "HotarOreki",
+        "SVELXR",
+        "Magical_Maido",
+        "mi-chan94"
+      ],
+      "per_user_ndcg": [
+        0.064557,
+        0.096784,
+        0.02659,
+        0.090356
+      ],
+      "mean_ndcg": 0.069572,
+      "worst_user_ndcg": 0.02659,
+      "group_id": 339
+    },
+    {
+      "users": [
+        "Karria",
+        "ultimaweapon",
+        "PetalPierrot",
+        "ViewtifulFella"
+      ],
+      "per_user_ndcg": [
+        0.116051,
+        0.204378,
+        0.117406,
+        0.148233
+      ],
+      "mean_ndcg": 0.146517,
+      "worst_user_ndcg": 0.116051,
+      "group_id": 340
+    },
+    {
+      "users": [
+        "begum",
+        "Redstar2613",
+        "Neniv",
+        "MikeEibs"
+      ],
+      "per_user_ndcg": [
+        0.178523,
+        0.078294,
+        0.08533,
+        0.088524
+      ],
+      "mean_ndcg": 0.107668,
+      "worst_user_ndcg": 0.078294,
+      "group_id": 341
+    },
+    {
+      "users": [
+        "braineater382",
+        "izayka",
+        "Laucha_gay",
+        "crazyspinz"
+      ],
+      "per_user_ndcg": [
+        0.102283,
+        0.031339,
+        0.084668,
+        0.08365
+      ],
+      "mean_ndcg": 0.075485,
+      "worst_user_ndcg": 0.031339,
+      "group_id": 342
+    },
+    {
+      "users": [
+        "Legion17",
+        "sy_fadhlina",
+        "Aelisya",
+        "Shynoro-kun"
+      ],
+      "per_user_ndcg": [
+        0.065557,
+        0.016135,
+        0.043292,
+        0.190569
+      ],
+      "mean_ndcg": 0.078888,
+      "worst_user_ndcg": 0.016135,
+      "group_id": 343
+    },
+    {
+      "users": [
+        "KaioRoberto",
+        "Serious07-sama",
+        "ondgaku",
+        "RS11"
+      ],
+      "per_user_ndcg": [
+        0.050436,
+        0.054442,
+        0.080976,
+        0.154029
+      ],
+      "mean_ndcg": 0.084971,
+      "worst_user_ndcg": 0.050436,
+      "group_id": 344
+    },
+    {
+      "users": [
+        "LimonGCU",
+        "Thespark784",
+        "FrvrAwesome",
+        "Makkesu"
+      ],
+      "per_user_ndcg": [
+        0.20343,
+        0.144376,
+        0.099311,
+        0.058227
+      ],
+      "mean_ndcg": 0.126336,
+      "worst_user_ndcg": 0.058227,
+      "group_id": 345
+    },
+    {
+      "users": [
+        "Tin-sensei",
+        "kawajka",
+        "OtakuSanyam",
+        "Xenoknight"
+      ],
+      "per_user_ndcg": [
+        0.052327,
+        0.152578,
+        0.044497,
+        0.060478
+      ],
+      "mean_ndcg": 0.07747,
+      "worst_user_ndcg": 0.044497,
+      "group_id": 346
+    },
+    {
+      "users": [
+        "milyspark",
+        "Naoe",
+        "Thanatos-XIII",
+        "Gebcy"
+      ],
+      "per_user_ndcg": [
+        0.108256,
+        0.088977,
+        0.091302,
+        0.090735
+      ],
+      "mean_ndcg": 0.094817,
+      "worst_user_ndcg": 0.088977,
+      "group_id": 347
+    },
+    {
+      "users": [
+        "ice1st",
+        "Bufuserk",
+        "B_Boy_Rock",
+        "Koradus"
+      ],
+      "per_user_ndcg": [
+        0.196246,
+        0.030836,
+        0.098973,
+        0.020666
+      ],
+      "mean_ndcg": 0.08668,
+      "worst_user_ndcg": 0.020666,
+      "group_id": 348
+    },
+    {
+      "users": [
+        "Samii",
+        "i4_Matthew",
+        "Chronoluiz",
+        "xMangos"
+      ],
+      "per_user_ndcg": [
+        0.168973,
+        0.03531,
+        0.044013,
+        0.103974
+      ],
+      "mean_ndcg": 0.088067,
+      "worst_user_ndcg": 0.03531,
+      "group_id": 349
+    },
+    {
+      "users": [
+        "DarkPersona",
+        "mitsuneyuki",
+        "Japoneris",
+        "EskimoKing"
+      ],
+      "per_user_ndcg": [
+        0.025504,
+        0.063853,
+        0.019758,
+        0.099373
+      ],
+      "mean_ndcg": 0.052122,
+      "worst_user_ndcg": 0.019758,
+      "group_id": 350
+    },
+    {
+      "users": [
+        "TokuShige-kun",
+        "piotrszczepaniak",
+        "TheJareBox",
+        "misterramen"
+      ],
+      "per_user_ndcg": [
+        0.035306,
+        0.19139,
+        0.16395,
+        0.19618
+      ],
+      "mean_ndcg": 0.146707,
+      "worst_user_ndcg": 0.035306,
+      "group_id": 351
+    },
+    {
+      "users": [
+        "Raph95",
+        "fizzmo",
+        "tiago32",
+        "Kamax"
+      ],
+      "per_user_ndcg": [
+        0.121198,
+        0.094749,
+        0.044303,
+        0.088144
+      ],
+      "mean_ndcg": 0.087098,
+      "worst_user_ndcg": 0.044303,
+      "group_id": 352
+    },
+    {
+      "users": [
+        "Ksa",
+        "ChaosEvaUnit",
+        "shippo188",
+        "-Hiryuu-"
+      ],
+      "per_user_ndcg": [
+        0.042253,
+        0.128333,
+        0.162106,
+        0.141014
+      ],
+      "mean_ndcg": 0.118427,
+      "worst_user_ndcg": 0.042253,
+      "group_id": 353
+    },
+    {
+      "users": [
+        "eccchi",
+        "lainmai",
+        "lucas1705",
+        "Sskout"
+      ],
+      "per_user_ndcg": [
+        0.039546,
+        0.019399,
+        0.072366,
+        0.140711
+      ],
+      "mean_ndcg": 0.068005,
+      "worst_user_ndcg": 0.019399,
+      "group_id": 354
+    },
+    {
+      "users": [
+        "Pumpunxita",
+        "b3n3v0L3nT1",
+        "freammer",
+        "MealFourteen"
+      ],
+      "per_user_ndcg": [
+        0.064078,
+        0.10819,
+        0.115449,
+        0.067197
+      ],
+      "mean_ndcg": 0.088728,
+      "worst_user_ndcg": 0.064078,
+      "group_id": 355
+    },
+    {
+      "users": [
+        "Naughty-Seraph",
+        "Tsuyum",
+        "Enoia",
+        "XavierPMillar"
+      ],
+      "per_user_ndcg": [
+        0.083798,
+        0.086974,
+        0.085402,
+        0.075753
+      ],
+      "mean_ndcg": 0.082982,
+      "worst_user_ndcg": 0.075753,
+      "group_id": 356
+    },
+    {
+      "users": [
+        "LaxusAK",
+        "Mort-sama",
+        "BasementEggplant",
+        "Sanpii"
+      ],
+      "per_user_ndcg": [
+        0.134453,
+        0.116412,
+        0.111663,
+        0.048157
+      ],
+      "mean_ndcg": 0.102671,
+      "worst_user_ndcg": 0.048157,
+      "group_id": 357
+    },
+    {
+      "users": [
+        "cxss",
+        "kira-nekosan",
+        "IIFrostBite",
+        "Kafenrel"
+      ],
+      "per_user_ndcg": [
+        0.146833,
+        0.16223,
+        0.049946,
+        0.200812
+      ],
+      "mean_ndcg": 0.139955,
+      "worst_user_ndcg": 0.049946,
+      "group_id": 358
+    },
+    {
+      "users": [
+        "marchenhaft",
+        "Sp4rtanA",
+        "faust",
+        "KellyMoons"
+      ],
+      "per_user_ndcg": [
+        0.076628,
+        0.064143,
+        0.048031,
+        0.126599
+      ],
+      "mean_ndcg": 0.07885,
+      "worst_user_ndcg": 0.048031,
+      "group_id": 359
+    },
+    {
+      "users": [
+        "Ares86",
+        "GBG_WolfWood",
+        "armina08",
+        "SkingM"
+      ],
+      "per_user_ndcg": [
+        0.252355,
+        0.083896,
+        0.042813,
+        0.154264
+      ],
+      "mean_ndcg": 0.133332,
+      "worst_user_ndcg": 0.042813,
+      "group_id": 360
+    },
+    {
+      "users": [
+        "neratza713",
+        "Rokkikenguru",
+        "Relient",
+        "devil_99"
+      ],
+      "per_user_ndcg": [
+        0.055993,
+        0.169653,
+        0.071397,
+        0.136323
+      ],
+      "mean_ndcg": 0.108341,
+      "worst_user_ndcg": 0.055993,
+      "group_id": 361
+    },
+    {
+      "users": [
+        "lovesign",
+        "diablo93",
+        "Luffy_no_haki",
+        "rorozco181"
+      ],
+      "per_user_ndcg": [
+        0.134064,
+        0.106029,
+        0.111054,
+        0.126232
+      ],
+      "mean_ndcg": 0.119345,
+      "worst_user_ndcg": 0.106029,
+      "group_id": 362
+    },
+    {
+      "users": [
+        "mikikamote",
+        "sammiiii-san",
+        "slowp0ke",
+        "naitoray"
+      ],
+      "per_user_ndcg": [
+        0.044436,
+        0.218795,
+        0.190667,
+        0.024607
+      ],
+      "mean_ndcg": 0.119626,
+      "worst_user_ndcg": 0.024607,
+      "group_id": 363
+    },
+    {
+      "users": [
+        "JohnEz",
+        "TwinTenshi",
+        "vallar",
+        "Birnir"
+      ],
+      "per_user_ndcg": [
+        0.135852,
+        0.06233,
+        0.09859,
+        0.041009
+      ],
+      "mean_ndcg": 0.084445,
+      "worst_user_ndcg": 0.041009,
+      "group_id": 364
+    },
+    {
+      "users": [
+        "Koizumi_Kaoru",
+        "kuroya",
+        "skillblack",
+        "Nagit0"
+      ],
+      "per_user_ndcg": [
+        0.108161,
+        0.168178,
+        0.066288,
+        0.203912
+      ],
+      "mean_ndcg": 0.136635,
+      "worst_user_ndcg": 0.066288,
+      "group_id": 365
+    },
+    {
+      "users": [
+        "AkiNoAkuma",
+        "Help403",
+        "Prognosis",
+        "spikesreign"
+      ],
+      "per_user_ndcg": [
+        0.089587,
+        0.00989,
+        0.092686,
+        0.166985
+      ],
+      "mean_ndcg": 0.089787,
+      "worst_user_ndcg": 0.00989,
+      "group_id": 366
+    },
+    {
+      "users": [
+        "Daitsuke-kun",
+        "FrozenOmoi",
+        "nenetm",
+        "Bunyon"
+      ],
+      "per_user_ndcg": [
+        0.170291,
+        0.075932,
+        0.110188,
+        0.113081
+      ],
+      "mean_ndcg": 0.117373,
+      "worst_user_ndcg": 0.075932,
+      "group_id": 367
+    },
+    {
+      "users": [
+        "Milaya",
+        "KaaN",
+        "Karin21",
+        "HectorGurru"
+      ],
+      "per_user_ndcg": [
+        0.036307,
+        0.122905,
+        0.239926,
+        0.066337
+      ],
+      "mean_ndcg": 0.116369,
+      "worst_user_ndcg": 0.036307,
+      "group_id": 368
+    },
+    {
+      "users": [
+        "konsek",
+        "Sandels",
+        "Bitchysavage",
+        "genxtrigun"
+      ],
+      "per_user_ndcg": [
+        0.068854,
+        0.074277,
+        0.107473,
+        0.061274
+      ],
+      "mean_ndcg": 0.077969,
+      "worst_user_ndcg": 0.061274,
+      "group_id": 369
+    },
+    {
+      "users": [
+        "LNeoKnight",
+        "gluon28",
+        "Inquisitor1",
+        "Weiss_"
+      ],
+      "per_user_ndcg": [
+        0.169257,
+        0.180085,
+        0.230715,
+        0.108329
+      ],
+      "mean_ndcg": 0.172097,
+      "worst_user_ndcg": 0.108329,
+      "group_id": 370
+    },
+    {
+      "users": [
+        "SarahLewandowski",
+        "DeathAssistant",
+        "pccool007",
+        "Shikijika"
+      ],
+      "per_user_ndcg": [
+        0.041822,
+        0.17361,
+        0.053271,
+        0.094514
+      ],
+      "mean_ndcg": 0.090804,
+      "worst_user_ndcg": 0.041822,
+      "group_id": 371
+    },
+    {
+      "users": [
+        "AnlaShockAdam",
+        "xXxRoninxXx",
+        "Zeus404",
+        "jestembartos"
+      ],
+      "per_user_ndcg": [
+        0.038258,
+        0.083042,
+        0.060306,
+        0.129353
+      ],
+      "mean_ndcg": 0.077739,
+      "worst_user_ndcg": 0.038258,
+      "group_id": 372
+    },
+    {
+      "users": [
+        "Numerol",
+        "Nixzilla",
+        "BorjaGC_24",
+        "kyoutarou"
+      ],
+      "per_user_ndcg": [
+        0.100485,
+        0.063117,
+        0.092083,
+        0.096106
+      ],
+      "mean_ndcg": 0.087948,
+      "worst_user_ndcg": 0.063117,
+      "group_id": 373
+    },
+    {
+      "users": [
+        "Evilhomer138",
+        "Waltfer",
+        "aza_flor",
+        "MagicWookie"
+      ],
+      "per_user_ndcg": [
+        0.022616,
+        0.146685,
+        0.101756,
+        0.055392
+      ],
+      "mean_ndcg": 0.081612,
+      "worst_user_ndcg": 0.022616,
+      "group_id": 374
+    },
+    {
+      "users": [
+        "Anastasia9",
+        "lenquist",
+        "elxrThief",
+        "xKbryan"
+      ],
+      "per_user_ndcg": [
+        0.113342,
+        0.089177,
+        0.19555,
+        0.272051
+      ],
+      "mean_ndcg": 0.16753,
+      "worst_user_ndcg": 0.089177,
+      "group_id": 375
+    },
+    {
+      "users": [
+        "K_P",
+        "yulapka",
+        "Oxidyzed",
+        "Evalia"
+      ],
+      "per_user_ndcg": [
+        0.072835,
+        0.020025,
+        0.0,
+        0.129202
+      ],
+      "mean_ndcg": 0.055516,
+      "worst_user_ndcg": 0.0,
+      "group_id": 376
+    },
+    {
+      "users": [
+        "SozinNoroko",
+        "Yuko-Lin",
+        "Jake_Ace",
+        "Mintyrawr"
+      ],
+      "per_user_ndcg": [
+        0.163169,
+        0.094384,
+        0.184525,
+        0.0
+      ],
+      "mean_ndcg": 0.110519,
+      "worst_user_ndcg": 0.0,
+      "group_id": 377
+    },
+    {
+      "users": [
+        "Gustavo_Schmidt",
+        "TheSameHiDDen",
+        "Slytherind",
+        "mau214"
+      ],
+      "per_user_ndcg": [
+        0.170442,
+        0.031681,
+        0.143143,
+        0.145891
+      ],
+      "mean_ndcg": 0.122789,
+      "worst_user_ndcg": 0.031681,
+      "group_id": 378
+    },
+    {
+      "users": [
+        "iareeb",
+        "aleclemes",
+        "Caramelithoo",
+        "Wolficek32"
+      ],
+      "per_user_ndcg": [
+        0.059352,
+        0.037302,
+        0.057635,
+        0.123897
+      ],
+      "mean_ndcg": 0.069546,
+      "worst_user_ndcg": 0.037302,
+      "group_id": 379
+    },
+    {
+      "users": [
+        "DaSigrid",
+        "Shikai9",
+        "Naasuk",
+        "Dewzy"
+      ],
+      "per_user_ndcg": [
+        0.104933,
+        0.100583,
+        0.041399,
+        0.061495
+      ],
+      "mean_ndcg": 0.077103,
+      "worst_user_ndcg": 0.041399,
+      "group_id": 380
+    },
+    {
+      "users": [
+        "Mendoksai",
+        "Golti",
+        "Astralfreak",
+        "armadaxster"
+      ],
+      "per_user_ndcg": [
+        0.15061,
+        0.165845,
+        0.065547,
+        0.184343
+      ],
+      "mean_ndcg": 0.141586,
+      "worst_user_ndcg": 0.065547,
+      "group_id": 381
+    },
+    {
+      "users": [
+        "windtribe",
+        "Cherrim",
+        "piercetheheavens",
+        "AjkaChan"
+      ],
+      "per_user_ndcg": [
+        0.098857,
+        0.091698,
+        0.115341,
+        0.124802
+      ],
+      "mean_ndcg": 0.107675,
+      "worst_user_ndcg": 0.091698,
+      "group_id": 382
+    },
+    {
+      "users": [
+        "seshka",
+        "mokachan13",
+        "shizu-or-fluor",
+        "Yaminoma"
+      ],
+      "per_user_ndcg": [
+        0.034499,
+        0.067065,
+        0.104669,
+        0.068303
+      ],
+      "mean_ndcg": 0.068634,
+      "worst_user_ndcg": 0.034499,
+      "group_id": 383
+    },
+    {
+      "users": [
+        "novusluna",
+        "Hana_Haruky",
+        "YuukihiraSouma",
+        "Monster838"
+      ],
+      "per_user_ndcg": [
+        0.091619,
+        0.087469,
+        0.016037,
+        0.0
+      ],
+      "mean_ndcg": 0.048781,
+      "worst_user_ndcg": 0.0,
+      "group_id": 384
+    },
+    {
+      "users": [
+        "ikhypk",
+        "Farben",
+        "SteveKanonfreak",
+        "Ballardo"
+      ],
+      "per_user_ndcg": [
+        0.211282,
+        0.056726,
+        0.118906,
+        0.185553
+      ],
+      "mean_ndcg": 0.143117,
+      "worst_user_ndcg": 0.056726,
+      "group_id": 385
+    },
+    {
+      "users": [
+        "Lacus3Clyne",
+        "FreiaLuna",
+        "RedSon14",
+        "Dratak"
+      ],
+      "per_user_ndcg": [
+        0.053513,
+        0.064737,
+        0.075524,
+        0.114311
+      ],
+      "mean_ndcg": 0.077021,
+      "worst_user_ndcg": 0.053513,
+      "group_id": 386
+    },
+    {
+      "users": [
+        "CygnusStar",
+        "Sephix",
+        "Buzika",
+        "goofanader"
+      ],
+      "per_user_ndcg": [
+        0.034871,
+        0.112907,
+        0.14327,
+        0.127185
+      ],
+      "mean_ndcg": 0.104558,
+      "worst_user_ndcg": 0.034871,
+      "group_id": 387
+    },
+    {
+      "users": [
+        "Dark-thorn",
+        "sarahbug73",
+        "Hesaizo",
+        "tenshiamon"
+      ],
+      "per_user_ndcg": [
+        0.104684,
+        0.099692,
+        0.029076,
+        0.024066
+      ],
+      "mean_ndcg": 0.06438,
+      "worst_user_ndcg": 0.024066,
+      "group_id": 388
+    },
+    {
+      "users": [
+        "hwitaek",
+        "jerom93",
+        "Luscinia_Lullaby",
+        "Dumnezho"
+      ],
+      "per_user_ndcg": [
+        0.083428,
+        0.103419,
+        0.038607,
+        0.104962
+      ],
+      "mean_ndcg": 0.082604,
+      "worst_user_ndcg": 0.038607,
+      "group_id": 389
+    },
+    {
+      "users": [
+        "Hornetz",
+        "tajio-kun",
+        "helpmeiamonfire",
+        "defrayal"
+      ],
+      "per_user_ndcg": [
+        0.026359,
+        0.039283,
+        0.07626,
+        0.084133
+      ],
+      "mean_ndcg": 0.056509,
+      "worst_user_ndcg": 0.026359,
+      "group_id": 390
+    },
+    {
+      "users": [
+        "dark_ogamiya",
+        "Puchkov",
+        "XshinigamiXw",
+        "RedCloudNinja"
+      ],
+      "per_user_ndcg": [
+        0.113066,
+        0.12678,
+        0.054226,
+        0.106871
+      ],
+      "mean_ndcg": 0.100236,
+      "worst_user_ndcg": 0.054226,
+      "group_id": 391
+    },
+    {
+      "users": [
+        "Cruelsader",
+        "Nabudis",
+        "KingUndead",
+        "cruznik71450"
+      ],
+      "per_user_ndcg": [
+        0.045458,
+        0.198211,
+        0.129448,
+        0.09532
+      ],
+      "mean_ndcg": 0.117109,
+      "worst_user_ndcg": 0.045458,
+      "group_id": 392
+    },
+    {
+      "users": [
+        "MononokeChan",
+        "Roronoa_Zoro_",
+        "JETJK3",
+        "KillerDizzy"
+      ],
+      "per_user_ndcg": [
+        0.146668,
+        0.074241,
+        0.089669,
+        0.071021
+      ],
+      "mean_ndcg": 0.0954,
+      "worst_user_ndcg": 0.071021,
+      "group_id": 393
+    },
+    {
+      "users": [
+        "jesuajovan",
+        "francokills",
+        "Stromfresser",
+        "Geolga9"
+      ],
+      "per_user_ndcg": [
+        0.142934,
+        0.26842,
+        0.124629,
+        0.101656
+      ],
+      "mean_ndcg": 0.15941,
+      "worst_user_ndcg": 0.101656,
+      "group_id": 394
+    },
+    {
+      "users": [
+        "andimanimefan",
+        "Stunfisk",
+        "shinpuu",
+        "PowerArmorGuy"
+      ],
+      "per_user_ndcg": [
+        0.19308,
+        0.201712,
+        0.157174,
+        0.023647
+      ],
+      "mean_ndcg": 0.143904,
+      "worst_user_ndcg": 0.023647,
+      "group_id": 395
+    },
+    {
+      "users": [
+        "HxVb",
+        "sherimi",
+        "Hafio",
+        "Cezzy"
+      ],
+      "per_user_ndcg": [
+        0.151301,
+        0.158565,
+        0.05394,
+        0.177118
+      ],
+      "mean_ndcg": 0.135231,
+      "worst_user_ndcg": 0.05394,
+      "group_id": 396
+    },
+    {
+      "users": [
+        "Shadetouch",
+        "Queentiana",
+        "kurokaijin",
+        "FightingSpirit22"
+      ],
+      "per_user_ndcg": [
+        0.034036,
+        0.187197,
+        0.124471,
+        0.109585
+      ],
+      "mean_ndcg": 0.113822,
+      "worst_user_ndcg": 0.034036,
+      "group_id": 397
+    },
+    {
+      "users": [
+        "Xaley",
+        "suuui",
+        "Semishigure",
+        "Rawries"
+      ],
+      "per_user_ndcg": [
+        0.138016,
+        0.217351,
+        0.051515,
+        0.150622
+      ],
+      "mean_ndcg": 0.139376,
+      "worst_user_ndcg": 0.051515,
+      "group_id": 398
+    },
+    {
+      "users": [
+        "Serathius",
+        "Ethernya",
+        "kusthegreat",
+        "bopp20"
+      ],
+      "per_user_ndcg": [
+        0.296332,
+        0.094728,
+        0.257114,
+        0.0
+      ],
+      "mean_ndcg": 0.162043,
+      "worst_user_ndcg": 0.0,
+      "group_id": 399
+    }
+  ],
+  "summary": {
+    "mean_ndcg": 0.099353,
+    "std_ndcg": 0.027911,
+    "mean_worst_user_ndcg": 0.049544,
+    "num_groups": 400
+  }
+}
