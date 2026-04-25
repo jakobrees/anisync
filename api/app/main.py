@@ -30,19 +30,19 @@ app = FastAPI(title="AniSync API")
 
 
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.add_middleware(
     SessionMiddleware,
     secret_key=settings.session_secret,
     https_only=settings.cookie_secure,
     same_site=settings.cookie_same_site,
     max_age=60 * 60 * 24 * 14,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # In local development, FastAPI serves preprocessed local image files.
