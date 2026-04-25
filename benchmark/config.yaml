@@ -1,0 +1,11 @@
+min_ratings: 15
+max_users: 2000
+visible_ratio: 0.5
+profile_seed: 123
+group_size: 4
+group_seed: 42
+num_groups: 50
+ndcg_k: 100
+llm_model: claude-haiku-4-5-20251001
+llm_cache_dir: ../benchmark/cache/llm
+results_dir: ../benchmark/results
