@@ -9,13 +9,18 @@ from app.ml.kmeans import choose_k_and_cluster
 from app.models import CatalogItem, Room, RoomPreferenceSubmission
 
 
-def item_tags(item: CatalogItem) -> list[str]:
-    """
-    Return anime tags safely.
+# GroupFit pos+text hyperparameters chosen by the offline benchmark
+# (see benchmark/writeup.tex, Section "From benchmark to product"):
+#   alpha = 0.30  → text alignment as a light complement to the positive term.
+#   lambda = 0    → negative-similarity penalty is not used (proven harmful).
+GROUPFIT_ALPHA = 0.30
+POSITIVE_THRESHOLD = 7  # used in benchmark for filtering liked items by score
+EMBEDDING_DIM = 384
+EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
-    New rows use item.tags_json.
-    Older rows can fall back to metadata_json["tags"].
-    """
+
+def item_tags(item: CatalogItem) -> list[str]:
+    """Return anime tags safely, with metadata_json fallback for older rows."""
     tags_json = getattr(item, "tags_json", None)
     if isinstance(tags_json, list):
         return [str(tag) for tag in tags_json]
@@ -32,7 +37,8 @@ def public_item_payload(item: CatalogItem, group_match_score: float | None = Non
     """
     Safe public item payload.
 
-    This does not expose user-specific similarity scores or private retrieval data.
+    `group_match_score` retains its name in the API for frontend compatibility,
+    but its value is now the GroupFit pos+text score.
     """
     tags = item_tags(item)
     payload = {
@@ -54,17 +60,11 @@ def public_item_payload(item: CatalogItem, group_match_score: float | None = Non
 
 
 def cluster_label(items: list[CatalogItem], scores_by_id: dict[int, float]) -> str:
-    """
-    Derive a simple tag-based cluster label.
-
-    Weighted tag frequency:
-    tag score += max(group match score, 0)
-    """
+    """Derive a short tag-based cluster label, weighted by GroupFit score."""
     weights: defaultdict[str, float] = defaultdict(float)
 
     for item in items:
-        tags = item_tags(item)
-        for tag in tags:
+        for tag in item_tags(item):
             weights[str(tag).lower()] += max(scores_by_id.get(item.id, 0.0), 0.0)
 
     if not weights:
@@ -74,20 +74,104 @@ def cluster_label(items: list[CatalogItem], scores_by_id: dict[int, float]) -> s
     return " / ".join(tag for tag, _ in top_tags)
 
 
+def _normalize(vector: np.ndarray) -> np.ndarray:
+    """Cosine-normalize a vector, with a small floor to avoid divide-by-zero."""
+    norm = float(np.linalg.norm(vector))
+    return vector / max(norm, 1e-12)
+
+
+def _build_user_signals(
+    submissions: list[RoomPreferenceSubmission],
+    db: Session,
+) -> tuple[
+    dict[int, np.ndarray],   # liked_matrix_by_user_id  (n_liked_items × 384)
+    dict[int, np.ndarray],   # text_vec_by_user_id      (384,)
+    dict[int, np.ndarray],   # query_vec_by_user_id     (384,) — used for retrieval
+]:
+    """
+    For each submission, compute:
+      - a liked-item embedding matrix (rows = liked items)
+      - a text query embedding (or None if no text)
+      - a single retrieval query vector (mean of liked items, or text fallback)
+
+    A user with no liked items has the text embedding repeated as their single
+    "liked vector" so the GroupFit pos formula degenerates cleanly to a
+    text-only score for them.
+    """
+    # 1. Embed all texts in one batch.
+    texts_by_uid = {s.user_id: s.query_text.strip() for s in submissions}
+    uids_with_text = [uid for uid, t in texts_by_uid.items() if t]
+
+    text_vec_by_uid: dict[int, np.ndarray] = {}
+    if uids_with_text:
+        text_embs = embed_texts([texts_by_uid[uid] for uid in uids_with_text])
+        for uid, emb in zip(uids_with_text, text_embs, strict=True):
+            text_vec_by_uid[uid] = emb.astype(np.float32)
+
+    # 2. Fetch all liked items in one query.
+    all_liked_ids: set[int] = set()
+    for submission in submissions:
+        all_liked_ids.update(submission.liked_catalog_item_ids or [])
+
+    liked_emb_by_id: dict[int, np.ndarray] = {}
+    if all_liked_ids:
+        rows = db.scalars(
+            select(CatalogItem).where(CatalogItem.id.in_(list(all_liked_ids)))
+        ).all()
+        liked_emb_by_id = {
+            item.id: np.array(item.embedding, dtype=np.float32)
+            for item in rows
+            if item.embedding is not None
+        }
+
+    # 3. Per-user matrices and queries.
+    liked_matrix_by_uid: dict[int, np.ndarray] = {}
+    query_vec_by_uid: dict[int, np.ndarray] = {}
+
+    for submission in submissions:
+        uid = submission.user_id
+        liked_ids = [iid for iid in (submission.liked_catalog_item_ids or []) if iid in liked_emb_by_id]
+        liked_embs = [liked_emb_by_id[iid] for iid in liked_ids]
+
+        text_vec = text_vec_by_uid.get(uid)
+
+        if liked_embs:
+            liked_matrix = np.stack(liked_embs)
+            query_vec = _normalize(liked_matrix.mean(axis=0))
+        elif text_vec is not None:
+            # Fallback: text vector serves as the user's single liked vector
+            # AND as the retrieval query.
+            liked_matrix = text_vec.reshape(1, -1)
+            query_vec = text_vec
+        else:
+            # Should be unreachable: validated upstream that submission has
+            # at least text or liked items.
+            continue
+
+        liked_matrix_by_uid[uid] = liked_matrix
+        query_vec_by_uid[uid] = query_vec
+
+    return liked_matrix_by_uid, text_vec_by_uid, query_vec_by_uid
+
+
 def compute_recommendations(db: Session, room: Room) -> dict:
     """
-    Full AniSync recommendation pipeline.
+    GroupFit pos+text recommendation pipeline.
 
-    This function implements the required math:
-    1. collect private submissions
-    2. embed query texts
-    3. apply host hard constraints before retrieval
-    4. retrieve top 100 per user from eligible subset
-    5. union/deduplicate candidates
-    6. choose K with bounded silhouette logic
-    7. run manual K-means
-    8. rank by group match score
-    9. build top-5 cluster lists and top-2-per-cluster final list
+    score(i) = (1 - α) · min_u max_j (e_i · liked_u_j)
+             +      α  · mean_u (e_i · t_u)
+
+    α = 0.30  (light text complement to liked-item fairness)
+
+    Steps:
+      1. collect submissions (must have at least one of: text, liked items)
+      2. embed texts; fetch liked-item embeddings
+      3. per-user retrieval: pgvector cosine search against the user's mean
+         liked-item embedding (or text embedding if they picked no items),
+         within host hard constraints
+      4. union/dedupe candidate pool
+      5. score each candidate via GroupFit pos+text
+      6. silhouette-guided k-means; cluster-diverse rerank
     """
     submissions = list(
         db.scalars(
@@ -97,7 +181,10 @@ def compute_recommendations(db: Session, room: Room) -> dict:
         )
     )
 
-    submissions = [submission for submission in submissions if submission.query_text.strip()]
+    submissions = [
+        s for s in submissions
+        if s.query_text.strip() or (s.liked_catalog_item_ids or [])
+    ]
 
     if len(submissions) < 2:
         raise ValueError("At least 2 participants must submit preferences before recommendations can be generated.")
@@ -115,60 +202,97 @@ def compute_recommendations(db: Session, room: Room) -> dict:
     if not eligible_count:
         raise ValueError("The host's hard constraints leave no anime available for this room.")
 
-    query_texts = [submission.query_text.strip() for submission in submissions]
-    query_embeddings = embed_texts(query_texts)
+    liked_matrix_by_uid, text_vec_by_uid, query_vec_by_uid = _build_user_signals(submissions, db)
 
+    if len(query_vec_by_uid) < 2:
+        raise ValueError("Could not derive enough preference signal from submissions.")
+
+    # ── Per-user retrieval ────────────────────────────────────────────────────
     candidate_ids_by_user_id: dict[str, list[int]] = {}
     candidate_items_by_id: dict[int, CatalogItem] = {}
 
-    for submission, query_embedding in zip(submissions, query_embeddings, strict=True):
-        # pgvector exact cosine distance search inside host constraints.
-        distance_expr = CatalogItem.embedding.cosine_distance(query_embedding.astype(float).tolist())
+    # Liked items submitted by this room are excluded from candidates so we
+    # never recommend back to a user something they already told us they like.
+    excluded_ids: set[int] = set()
+    for submission in submissions:
+        excluded_ids.update(submission.liked_catalog_item_ids or [])
 
-        rows = list(
-            db.execute(
-                select(CatalogItem, distance_expr.label("distance"))
-                .where(
-                    CatalogItem.year >= room.hard_constraint_year_start,
-                    CatalogItem.year <= room.hard_constraint_year_end,
-                    CatalogItem.media_type.in_(allowed_types),
-                )
-                .order_by(distance_expr.asc())
-                .limit(100)
+    for submission in submissions:
+        uid = submission.user_id
+        query_vec = query_vec_by_uid.get(uid)
+        if query_vec is None:
+            continue
+
+        distance_expr = CatalogItem.embedding.cosine_distance(query_vec.astype(float).tolist())
+
+        stmt = (
+            select(CatalogItem)
+            .where(
+                CatalogItem.year >= room.hard_constraint_year_start,
+                CatalogItem.year <= room.hard_constraint_year_end,
+                CatalogItem.media_type.in_(allowed_types),
             )
+            .order_by(distance_expr.asc())
+            .limit(100 + len(excluded_ids))
         )
 
+        if excluded_ids:
+            stmt = stmt.where(~CatalogItem.id.in_(list(excluded_ids)))
+
+        items = list(db.scalars(stmt))[:100]
+
         item_ids: list[int] = []
-        for item, _distance in rows:
+        for item in items:
             candidate_items_by_id[item.id] = item
             item_ids.append(item.id)
 
-        candidate_ids_by_user_id[str(submission.user_id)] = item_ids
+        candidate_ids_by_user_id[str(uid)] = item_ids
 
     candidate_items = list(candidate_items_by_id.values())
 
     if len(candidate_items) < 2:
         raise ValueError("The combined candidate pool is too small to produce recommendations.")
 
-    candidate_embeddings = np.array(
+    candidate_embeddings = np.stack(
         [np.array(item.embedding, dtype=np.float32) for item in candidate_items],
-        dtype=np.float32,
+        axis=0,
     )
 
-    kmeans_result = choose_k_and_cluster(candidate_embeddings)
+    # ── GroupFit pos+text scoring ─────────────────────────────────────────────
+    user_ids_in_score = list(query_vec_by_uid.keys())
 
-    # GroupMatch(i) = average_u q_u^T e_i
-    group_match_scores = query_embeddings @ candidate_embeddings.T
-    average_scores = group_match_scores.mean(axis=0)
+    pos_rows: list[np.ndarray] = []
+    text_rows: list[np.ndarray] = []
+
+    for uid in user_ids_in_score:
+        liked_sims = liked_matrix_by_uid[uid] @ candidate_embeddings.T
+        pos_rows.append(liked_sims.max(axis=0))
+
+        text_vec = text_vec_by_uid.get(uid)
+        if text_vec is not None:
+            text_rows.append(text_vec @ candidate_embeddings.T)
+        else:
+            # User gave no text — reuse the mean liked vector for the text term
+            # so the formula stays well-defined without privileging this user.
+            text_rows.append(query_vec_by_uid[uid] @ candidate_embeddings.T)
+
+    pos_matrix = np.stack(pos_rows)    # (n_users, n_candidates)
+    text_matrix = np.stack(text_rows)  # (n_users, n_candidates)
+
+    scores = (1.0 - GROUPFIT_ALPHA) * pos_matrix.min(axis=0) + GROUPFIT_ALPHA * text_matrix.mean(axis=0)
+
     scores_by_item_id = {
         item.id: float(score)
-        for item, score in zip(candidate_items, average_scores, strict=True)
+        for item, score in zip(candidate_items, scores, strict=True)
     }
+
+    # ── Clustering and cluster-diverse rerank ─────────────────────────────────
+    kmeans_result = choose_k_and_cluster(candidate_embeddings)
 
     clusters_raw: list[dict] = []
     for cluster_index in range(kmeans_result.k):
         member_indexes = np.where(kmeans_result.assignments == cluster_index)[0].tolist()
-        cluster_items = [candidate_items[index] for index in member_indexes]
+        cluster_items = [candidate_items[i] for i in member_indexes]
 
         cluster_items.sort(key=lambda item: (-scores_by_item_id[item.id], item.title.lower()))
         top_items = cluster_items[:5]
@@ -205,20 +329,25 @@ def compute_recommendations(db: Session, room: Room) -> dict:
         key=lambda item: (-item["group_match_score"], item["title"].lower()),
     )
 
-    # Private data is stored in results_json for reproducibility,
-    # but main.py sanitizes it before sending room data to clients.
+    # ── Results envelope (private fields stripped before client send) ─────────
     results = {
         "users_included_in_compute": [
-            {
-                "user_id": submission.user_id,
-            }
-            for submission in submissions
+            {"user_id": s.user_id} for s in submissions
         ],
         "private_query_texts_by_user_id": {
-            str(submission.user_id): submission.query_text
-            for submission in submissions
+            str(s.user_id): s.query_text for s in submissions
         },
-        "embedding_model_name": "sentence-transformers/all-MiniLM-L6-v2",
+        "private_liked_item_ids_by_user_id": {
+            str(s.user_id): list(s.liked_catalog_item_ids or [])
+            for s in submissions
+        },
+        "embedding_model_name": EMBEDDING_MODEL_NAME,
+        "scoring": {
+            "algorithm": "groupfit_pos_text",
+            "alpha": GROUPFIT_ALPHA,
+            "lambda": 0.0,
+            "formula": "(1-alpha)*min_u max_j(e_i . liked_u_j) + alpha*mean_u(e_i . t_u)",
+        },
         "applied_host_constraints": {
             "allowed_year_start": room.hard_constraint_year_start,
             "allowed_year_end": room.hard_constraint_year_end,
@@ -251,26 +380,14 @@ def compute_recommendations(db: Session, room: Room) -> dict:
 
 
 def compute_vote_summary(results_json: dict, votes_by_item_id: Counter[int]) -> list[dict]:
-    """
-    Build final result summary after every room member has voted.
-
-    Sort order:
-    1. vote count descending
-    2. group match score descending
-    3. title ascending
-    """
+    """Build the final vote-summary list. Sort: votes desc, score desc, title asc."""
     final_items = results_json.get("final_recommendations", [])
     summary: list[dict] = []
 
     for item in final_items:
         item_id = int(item["catalog_item_id"])
         vote_count = int(votes_by_item_id.get(item_id, 0))
-        summary.append(
-            {
-                **item,
-                "vote_count": vote_count,
-            }
-        )
+        summary.append({**item, "vote_count": vote_count})
 
     summary.sort(
         key=lambda item: (

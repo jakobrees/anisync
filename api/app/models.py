@@ -143,6 +143,7 @@ class RoomPreferenceSubmission(Base):
     room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id", ondelete="CASCADE"), nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     query_text: Mapped[str] = mapped_column(Text, nullable=False)
+    liked_catalog_item_ids: Mapped[list] = mapped_column(JSONB, default=list, nullable=False)
     submitted_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     updated_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
 

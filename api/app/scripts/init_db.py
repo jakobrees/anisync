@@ -16,6 +16,15 @@ def main() -> None:
         connection.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
 
     Base.metadata.create_all(bind=engine)
+
+    # Idempotent column additions — keeps existing databases in sync with the
+    # current model without requiring a full drop/recreate.
+    with engine.begin() as connection:
+        connection.execute(text(
+            "ALTER TABLE room_preference_submissions "
+            "ADD COLUMN IF NOT EXISTS liked_catalog_item_ids JSONB NOT NULL DEFAULT '[]'::jsonb"
+        ))
+
     print("Database initialized successfully.")
 
 
