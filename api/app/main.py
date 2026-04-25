@@ -587,6 +587,14 @@ async def compute_room(code: str, request: Request, db: Session = Depends(get_db
     require_room_member(db, room, user)
     require_host(room, user)
 
+    # Recomputing invalidates the previous voting round: the new
+    # final_recommendations list may contain different items, so old
+    # RoomVote rows would point at items no longer on screen and would
+    # incorrectly mark users as already-voted.
+    db.execute(delete(RoomVote).where(RoomVote.room_id == room.id))
+    room.results_json = None
+    room.status = "preferences_submitted"
+
     # Broadcast compute-start state first.
     bump_room(room)
     db.commit()
