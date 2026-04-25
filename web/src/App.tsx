@@ -9,9 +9,11 @@ import {
   LogOut,
   Plus,
   RefreshCw,
+  Search,
   Sparkles,
   Users,
   Vote,
+  X,
 } from 'lucide-react'
 import { API_BASE, apiFetch, assetUrl } from './api'
 
@@ -52,6 +54,16 @@ type AnimeItem = {
   is_winner?: boolean
 }
 
+type CatalogSearchItem = {
+  catalog_item_id: number
+  title: string
+  media_type: string
+  year: number
+  score?: number | null
+  thumbnail_local_path?: string | null
+  image_local_path?: string | null
+}
+
 type Cluster = {
   cluster_index: number
   cluster_label: string
@@ -72,6 +84,7 @@ type RoomPayload = {
   }
   participants: Participant[]
   own_submission: string
+  own_liked_catalog_item_ids: number[]
   own_vote_catalog_item_ids: number[]
   vote_progress: {
     voted_count: number
@@ -382,7 +395,7 @@ function Dashboard() {
             Dashboard
           </p>
           <h1 className="text-4xl font-black tracking-tight md:text-6xl">AniSync</h1>
-          <p className="mt-3 text-slate-300">Private anime group recommendation for small groups.</p>
+          <p className="mt-3 text-slate-300">Private group anime recommendations for friends watching together.</p>
         </div>
 
         <div className="flex flex-wrap gap-3">
@@ -422,7 +435,7 @@ function Dashboard() {
 
         {rooms.length === 0 && (
           <Card>
-            <p className="text-slate-300">No rooms yet. Create a room to start the demo flow.</p>
+            <p className="text-slate-300">No rooms yet. Create one to get started.</p>
           </Card>
         )}
       </div>
@@ -503,6 +516,7 @@ function RoomPage() {
   const [room, setRoom] = useState<RoomPayload | null>(null)
   const [error, setError] = useState('')
   const [connectionState, setConnectionState] = useState('connecting')
+  const [computing, setComputing] = useState(false)
   const lastRevisionRef = useRef(0)
 
   const refreshRoom = useCallback(async () => {
@@ -574,8 +588,21 @@ function RoomPage() {
         </div>
 
         <div className="space-y-6">
-          {room.is_host && <ComputeCard room={room} refreshRoom={refreshRoom} />}
-          {room.results ? <ResultsCard room={room} refreshRoom={refreshRoom} /> : <WaitingCard />}
+          {room.is_host && (
+            <ComputeCard
+              room={room}
+              refreshRoom={refreshRoom}
+              computing={computing}
+              setComputing={setComputing}
+            />
+          )}
+          {computing ? (
+            <ComputingCard />
+          ) : room.results ? (
+            <ResultsCard room={room} refreshRoom={refreshRoom} />
+          ) : (
+            <WaitingCard />
+          )}
         </div>
       </div>
     </div>
@@ -596,11 +623,11 @@ function RoomHeader({
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <p className="mb-3 inline-flex rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm text-cyan-100">
-            Anime room · {room.code}
+            Anime room · code {room.code}
           </p>
           <h1 className="text-4xl font-black tracking-tight">{room.title}</h1>
           <p className="mt-2 text-slate-400">
-            Status: <span className="font-bold text-slate-200">{room.status}</span> · Revision {room.state_revision}
+            Status: <span className="font-bold text-slate-200">{room.status.replace(/_/g, ' ')}</span>
           </p>
         </div>
 
@@ -613,7 +640,7 @@ function RoomHeader({
             className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm transition hover:bg-white/10"
           >
             <RefreshCw className="mr-2 inline h-4 w-4" />
-            Refresh Room State
+            Refresh
           </button>
         </div>
       </div>
@@ -689,9 +716,9 @@ function ConstraintsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom
 
   return (
     <Card>
-      <h2 className="text-xl font-black">Room Hard Constraints</h2>
+      <h2 className="text-xl font-black">Room Filters</h2>
       <p className="mt-2 text-sm text-slate-400">
-        Only anime that satisfy these filters can be used anywhere in this room session.
+        Only anime matching these filters will be considered for this room.
       </p>
 
       {room.is_host ? (
@@ -725,43 +752,127 @@ function ConstraintsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom
           <ErrorMessage message={error} />
 
           <div className="flex flex-wrap gap-3">
-            <PrimaryButton onClick={() => save(false)}>Save Hard Constraints</PrimaryButton>
+            <PrimaryButton onClick={() => save(false)}>Save Filters</PrimaryButton>
             <button
               onClick={() => save(true)}
               className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold transition hover:bg-white/10"
             >
-              Reset to Defaults
+              Reset to defaults
             </button>
           </div>
         </div>
       ) : (
         <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
-          <p>Allowed release years: {startYear}–{endYear}</p>
-          <p>Allowed types: {allowedTypes.join(', ')}</p>
+          <p>Release years: {startYear}–{endYear}</p>
+          <p>Types: {allowedTypes.join(', ') || 'none'}</p>
         </div>
       )}
     </Card>
   )
 }
 
+const MAX_LIKED_ITEMS = 50
+const SEARCH_DEBOUNCE_MS = 250
+
 function PreferenceCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: () => Promise<void> }) {
   const [queryText, setQueryText] = useState(room.own_submission)
+  const [liked, setLiked] = useState<CatalogSearchItem[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<CatalogSearchItem[]>([])
+  const [searching, setSearching] = useState(false)
   const [error, setError] = useState('')
   const [saved, setSaved] = useState(false)
 
+  // Hydrate text + liked items whenever the server's view of this user's
+  // submission changes (initial load, websocket-triggered refresh, etc.).
   useEffect(() => {
     setQueryText(room.own_submission)
   }, [room.own_submission])
+
+  const savedLikedKey = room.own_liked_catalog_item_ids.join(',')
+  useEffect(() => {
+    let cancelled = false
+
+    if (room.own_liked_catalog_item_ids.length === 0) {
+      setLiked([])
+      return
+    }
+
+    apiFetch<{ items: CatalogSearchItem[] }>(
+      `/api/catalog/items?ids=${encodeURIComponent(savedLikedKey)}`,
+    )
+      .then((data) => {
+        if (!cancelled) setLiked(data.items)
+      })
+      .catch(() => {
+        // Silent: page is still usable, the user can re-pick their items.
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [savedLikedKey])
+
+  // Debounced typeahead. Avoids a request on every keystroke.
+  useEffect(() => {
+    const trimmed = searchQuery.trim()
+    if (trimmed.length < 2) {
+      setSearchResults([])
+      setSearching(false)
+      return
+    }
+
+    setSearching(true)
+    const handle = window.setTimeout(async () => {
+      try {
+        const data = await apiFetch<{ items: CatalogSearchItem[] }>(
+          `/api/catalog/search?q=${encodeURIComponent(trimmed)}&limit=10`,
+        )
+        setSearchResults(data.items)
+      } catch {
+        setSearchResults([])
+      } finally {
+        setSearching(false)
+      }
+    }, SEARCH_DEBOUNCE_MS)
+
+    return () => window.clearTimeout(handle)
+  }, [searchQuery])
+
+  function addLiked(item: CatalogSearchItem) {
+    setSaved(false)
+    setLiked((prev) => {
+      if (prev.some((existing) => existing.catalog_item_id === item.catalog_item_id)) return prev
+      if (prev.length >= MAX_LIKED_ITEMS) return prev
+      return [...prev, item]
+    })
+  }
+
+  function removeLiked(itemId: number) {
+    setSaved(false)
+    setLiked((prev) => prev.filter((item) => item.catalog_item_id !== itemId))
+  }
+
+  const likedIds = useMemo(() => new Set(liked.map((item) => item.catalog_item_id)), [liked])
+  const canSubmit = queryText.trim().length > 0 || liked.length > 0
 
   async function submit(event: FormEvent) {
     event.preventDefault()
     setError('')
     setSaved(false)
 
+    if (!canSubmit) {
+      setError('Add at least one liked anime or describe your preference before saving.')
+      return
+    }
+
     try {
       await apiFetch(`/api/rooms/${room.code}/submit`, {
         method: 'POST',
-        body: JSON.stringify({ query_text: queryText }),
+        body: JSON.stringify({
+          query_text: queryText,
+          liked_catalog_item_ids: liked.map((item) => item.catalog_item_id),
+        }),
       })
       setSaved(true)
       await refreshRoom()
@@ -772,24 +883,173 @@ function PreferenceCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom:
 
   return (
     <Card>
-      <h2 className="text-xl font-black">Describe what you want to watch</h2>
+      <h2 className="text-xl font-black">Tell the room what you want to watch</h2>
       <p className="mt-2 text-sm text-slate-400">
-        Example: I want dark psychological anime with mystery and high-stakes action.
+        Pick anime you love so the recommender knows your taste, and optionally add a sentence
+        describing the mood you're after tonight.
       </p>
 
-      <form onSubmit={submit} className="mt-4 space-y-4">
-        <Textarea value={queryText} onChange={(event) => setQueryText(event.target.value)} />
-        <ErrorMessage message={error} />
-        {saved && <p className="text-sm text-emerald-200">Saved. Other room pages will update automatically.</p>}
-        <PrimaryButton type="submit">Save / Update Preference</PrimaryButton>
+      <form onSubmit={submit} className="mt-6 space-y-6">
+        {/* ── Liked anime ── */}
+        <section>
+          <div className="flex items-baseline justify-between">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-100">
+              Anime you like
+            </h3>
+            <span className="text-xs text-slate-500">
+              {liked.length}
+              {liked.length > 0 && ` / ${MAX_LIKED_ITEMS}`}
+            </span>
+          </div>
+
+          {liked.length === 0 ? (
+            <p className="mt-2 rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-slate-400">
+              Nothing picked yet. Use the search below to add anime you've enjoyed.
+            </p>
+          ) : (
+            <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {liked.map((item) => (
+                <li
+                  key={item.catalog_item_id}
+                  className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/40 px-3 py-2 transition hover:border-cyan-300/40 hover:bg-slate-950/70"
+                >
+                  <img
+                    src={assetUrl(item.thumbnail_local_path || item.image_local_path)}
+                    alt={item.title}
+                    className="h-16 w-12 flex-shrink-0 rounded-lg object-cover shadow-md shadow-black/30"
+                    loading="lazy"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 text-sm font-bold text-slate-50">{item.title}</p>
+                    <p className="mt-1 text-[11px] uppercase tracking-widest text-slate-400">
+                      {item.media_type} · {item.year}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeLiked(item.catalog_item_id)}
+                    aria-label={`Remove ${item.title}`}
+                    className="absolute right-2 top-2 rounded-full bg-slate-900/70 p-1 text-slate-400 opacity-0 transition hover:bg-red-500/20 hover:text-red-200 group-hover:opacity-100 focus:opacity-100"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        {/* ── Search ── */}
+        <section>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-100">
+            Search anime
+          </h3>
+          <div className="relative mt-2">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search by title (e.g. 'Steins;Gate', 'Frieren')"
+              className="w-full rounded-2xl border border-white/10 bg-slate-950/60 py-3 pl-11 pr-10 text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-cyan-300/60 focus:bg-slate-950/80"
+            />
+            {searching && (
+              <Loader2 className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-slate-400" />
+            )}
+          </div>
+
+          {searchQuery.trim().length >= 2 && (
+            <ul className="mt-3 max-h-96 space-y-2 overflow-y-auto pr-1">
+              {searchResults.length === 0 && !searching && (
+                <li className="rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-4 text-center text-sm text-slate-400">
+                  No matches.
+                </li>
+              )}
+              {searchResults.map((item) => {
+                const alreadyLiked = likedIds.has(item.catalog_item_id)
+                return (
+                  <li key={item.catalog_item_id}>
+                    <button
+                      type="button"
+                      onClick={() => addLiked(item)}
+                      disabled={alreadyLiked || liked.length >= MAX_LIKED_ITEMS}
+                      className="group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/40 px-3 py-2 text-left transition hover:border-cyan-300/40 hover:bg-slate-950/70 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-white/10 disabled:hover:bg-slate-950/40"
+                    >
+                      <img
+                        src={assetUrl(item.thumbnail_local_path || item.image_local_path)}
+                        alt={item.title}
+                        className="h-16 w-12 flex-shrink-0 rounded-lg object-cover shadow-md shadow-black/30"
+                        loading="lazy"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="line-clamp-2 text-sm font-bold text-slate-50">{item.title}</p>
+                        <p className="mt-1 text-[11px] uppercase tracking-widest text-slate-400">
+                          {item.media_type} · {item.year}
+                          {item.score != null && ` · ★ ${item.score.toFixed(2)}`}
+                        </p>
+                      </div>
+                      <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition group-hover:border-cyan-300/40 group-hover:bg-cyan-300/10 group-hover:text-cyan-100">
+                        {alreadyLiked ? (
+                          <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+                        ) : (
+                          <Plus className="h-3.5 w-3.5" />
+                        )}
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </section>
+
+        {/* ── Free text ── */}
+        <section>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-100">
+            Mood for tonight (optional)
+          </h3>
+          <p className="mt-1 text-xs text-slate-400">
+            Example: I want something slow-paced and melancholic, ideally short.
+          </p>
+          <Textarea
+            className="mt-2"
+            value={queryText}
+            onChange={(event) => setQueryText(event.target.value)}
+            placeholder="Describe what you're in the mood for..."
+          />
+        </section>
+
+        {/* ── Save ── */}
+        <div className="space-y-3">
+          <ErrorMessage message={error} />
+          {saved && (
+            <p className="text-sm text-emerald-200">
+              Saved. The rest of the room will see your update automatically.
+            </p>
+          )}
+          <PrimaryButton type="submit" disabled={!canSubmit}>
+            {room.own_submission || room.own_liked_catalog_item_ids.length > 0
+              ? 'Update preference'
+              : 'Save preference'}
+          </PrimaryButton>
+        </div>
       </form>
     </Card>
   )
 }
 
-function ComputeCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: () => Promise<void> }) {
+function ComputeCard({
+  room,
+  refreshRoom,
+  computing,
+  setComputing,
+}: {
+  room: RoomPayload
+  refreshRoom: () => Promise<void>
+  computing: boolean
+  setComputing: (value: boolean) => void
+}) {
   const [error, setError] = useState('')
-  const [computing, setComputing] = useState(false)
   const submittedCount = room.participants.filter((p) => p.has_submitted).length
 
   async function compute() {
@@ -813,7 +1073,10 @@ function ComputeCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
     <Card>
       <h2 className="text-xl font-black">Host Controls</h2>
       <p className="mt-2 text-sm text-slate-400">
-        {submittedCount} participant(s) have submitted. At least 2 are required.
+        {submittedCount === 1
+          ? '1 participant has submitted'
+          : `${submittedCount} participants have submitted`}
+        . At least 2 are required.
       </p>
 
       <div className="mt-4">
@@ -828,12 +1091,26 @@ function ComputeCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
   )
 }
 
+function ComputingCard() {
+  return (
+    <Card>
+      <h2 className="flex items-center gap-2 text-xl font-black">
+        <Loader2 className="h-5 w-5 animate-spin text-cyan-200" />
+        Generating recommendations…
+      </h2>
+      <p className="mt-2 text-slate-400">
+        Embedding preferences, searching the catalog, and clustering candidates. This usually takes a few seconds.
+      </p>
+    </Card>
+  )
+}
+
 function WaitingCard() {
   return (
     <Card>
       <h2 className="text-xl font-black">Recommendations will appear here</h2>
       <p className="mt-2 text-slate-400">
-        After the host computes, this area will show clustered anime lists, the final voting list, and the group result.
+        Once the host generates recommendations, this area will show the clustered shortlists, the final voting list, and the group's pick.
       </p>
     </Card>
   )
@@ -866,9 +1143,11 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
   return (
     <div className="space-y-6">
       <Card>
-        <h2 className="text-2xl font-black">Clustered Anime Lists</h2>
+        <h2 className="text-2xl font-black">Clustered Shortlists</h2>
         <p className="mt-2 text-sm text-slate-400">
-          K={results.chosen_k}, silhouette={results.kmeans_silhouette !== null ? results.kmeans_silhouette.toFixed(4) : 'n/a'}. Each cluster is ranked by Group Match Score.
+          {results.chosen_k} clusters
+          {results.kmeans_silhouette !== null && ` · silhouette ${results.kmeans_silhouette.toFixed(3)}`}
+          . Each cluster is ranked by GroupFit score.
         </p>
 
         <div className="mt-5 space-y-5">
@@ -891,10 +1170,10 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
       <Card>
         <h2 className="flex items-center gap-2 text-2xl font-black">
           <Vote className="h-6 w-6 text-fuchsia-200" />
-          Final Recommended Anime List
+          Final Recommendations
         </h2>
         <p className="mt-2 text-sm text-slate-400">
-          Select one or more anime. Vote counts stay hidden until everyone has voted.
+          Pick one or more you'd be happy to watch. Vote counts stay hidden until everyone has voted.
         </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -922,10 +1201,11 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
 
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <PrimaryButton onClick={submitVotes}>
-            {room.own_vote_catalog_item_ids.length ? 'Update Votes' : 'Submit Votes'}
+            {room.own_vote_catalog_item_ids.length ? 'Update votes' : 'Submit votes'}
           </PrimaryButton>
           <span className="text-sm text-slate-400">
-            {room.vote_progress.voted_count} of {room.vote_progress.member_count} members have voted.
+            {room.vote_progress.voted_count} of {room.vote_progress.member_count}{' '}
+            {room.vote_progress.member_count === 1 ? 'member has' : 'members have'} voted.
           </span>
         </div>
 
@@ -937,7 +1217,7 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <Card className="border-cyan-300/30">
               <h2 className="text-3xl font-black">Final Group Result</h2>
-              <p className="mt-2 text-slate-400">Sorted by vote count, group match score, then title.</p>
+              <p className="mt-2 text-slate-400">Sorted by vote count, then GroupFit score, then title.</p>
 
               <div className="mt-5 space-y-3">
                 {results.vote_result_summary.map((item) => (
@@ -982,7 +1262,7 @@ function AnimeCard({ item, compact, showVotes }: { item: AnimeItem; compact?: bo
         </div>
         {item.group_match_score !== undefined && (
           <p className="mt-2 text-sm font-bold text-cyan-100">
-            Group Match Score: {item.group_match_score.toFixed(4)}
+            GroupFit score: {item.group_match_score.toFixed(3)}
           </p>
         )}
         {showVotes && (

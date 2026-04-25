@@ -14,6 +14,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.config import get_settings
 from app.db import get_db
 from app.models import (
+    CatalogItem,
     Room,
     RoomMember,
     RoomPreferenceSubmission,
@@ -74,7 +75,8 @@ class JoinRoomIn(BaseModel):
 
 
 class SubmissionIn(BaseModel):
-    query_text: str = Field(min_length=1, max_length=2000)
+    query_text: str = Field(default="", max_length=2000)
+    liked_catalog_item_ids: list[int] = Field(default_factory=list, max_length=50)
 
 
 class ConstraintsIn(BaseModel):
@@ -227,6 +229,7 @@ def serialize_room(db: Session, room: Room, user: User) -> dict:
         },
         "participants": participants,
         "own_submission": own_submission.query_text if own_submission else "",
+        "own_liked_catalog_item_ids": list(own_submission.liked_catalog_item_ids) if own_submission else [],
         "own_vote_catalog_item_ids": own_vote_ids,
         "vote_progress": {
             "voted_count": len(voted_user_ids),
@@ -240,6 +243,76 @@ def serialize_room(db: Session, room: Room, user: User) -> dict:
 @app.get("/api/health")
 def health() -> dict:
     return {"ok": True, "service": "anisync-api"}
+
+
+def _public_catalog_payload(item: CatalogItem) -> dict:
+    """Lightweight catalog item payload for search and batch lookups."""
+    return {
+        "catalog_item_id": item.id,
+        "title": item.title,
+        "media_type": item.media_type,
+        "year": item.year,
+        "score": item.score,
+        "thumbnail_local_path": item.thumbnail_local_path,
+        "image_local_path": item.image_local_path,
+    }
+
+
+@app.get("/api/catalog/items")
+def get_catalog_items(
+    ids: str,
+    db: Session = Depends(get_db),
+) -> dict:
+    """
+    Batch lookup by comma-separated catalog item ids. Used by the room
+    preference page to hydrate the user's previously-saved liked anime
+    on page load.
+    """
+    try:
+        id_list = [int(part) for part in ids.split(",") if part.strip()]
+    except ValueError:
+        raise HTTPException(status_code=400, detail="ids must be comma-separated integers.")
+
+    id_list = list(dict.fromkeys(id_list))[:50]
+    if not id_list:
+        return {"items": []}
+
+    items = list(db.scalars(select(CatalogItem).where(CatalogItem.id.in_(id_list))))
+    by_id = {item.id: item for item in items}
+    ordered = [by_id[iid] for iid in id_list if iid in by_id]
+    return {"items": [_public_catalog_payload(item) for item in ordered]}
+
+
+@app.get("/api/catalog/search")
+def search_catalog(
+    q: str,
+    limit: int = 10,
+    db: Session = Depends(get_db),
+) -> dict:
+    """
+    Lightweight typeahead over the catalog. Matches on the search_text column
+    (title + synonyms) and ranks by item score, with title as a tiebreaker.
+    """
+    query = q.strip()
+    if len(query) < 2:
+        return {"items": []}
+
+    limit = max(1, min(limit, 25))
+    pattern = f"%{query.lower()}%"
+
+    items = list(
+        db.scalars(
+            select(CatalogItem)
+            .where(func.lower(CatalogItem.search_text).like(pattern))
+            .order_by(
+                func.coalesce(CatalogItem.score, 0).desc(),
+                CatalogItem.title.asc(),
+            )
+            .limit(limit)
+        )
+    )
+
+    return {"items": [_public_catalog_payload(item) for item in items]}
 
 
 @app.post("/api/auth/register")
@@ -399,8 +472,20 @@ async def submit_preference(
     require_room_member(db, room, user)
 
     query_text = payload.query_text.strip()
-    if not query_text:
-        raise HTTPException(status_code=400, detail="Please enter your anime preference before submitting.")
+    liked_ids = list(dict.fromkeys(payload.liked_catalog_item_ids))  # dedupe, preserve order
+
+    if not query_text and not liked_ids:
+        raise HTTPException(
+            status_code=400,
+            detail="Please describe your preference or pick at least one anime you like before submitting.",
+        )
+
+    if liked_ids:
+        existing_count = db.scalar(
+            select(func.count(CatalogItem.id)).where(CatalogItem.id.in_(liked_ids))
+        )
+        if existing_count != len(liked_ids):
+            raise HTTPException(status_code=400, detail="One or more selected anime do not exist in the catalog.")
 
     submission = db.scalar(
         select(RoomPreferenceSubmission).where(
@@ -411,9 +496,15 @@ async def submit_preference(
 
     if submission:
         submission.query_text = query_text
+        submission.liked_catalog_item_ids = liked_ids
         submission.updated_at = utcnow()
     else:
-        db.add(RoomPreferenceSubmission(room_id=room.id, user_id=user.id, query_text=query_text))
+        db.add(RoomPreferenceSubmission(
+            room_id=room.id,
+            user_id=user.id,
+            query_text=query_text,
+            liked_catalog_item_ids=liked_ids,
+        ))
 
     submitted_count = db.scalar(
         select(func.count(RoomPreferenceSubmission.id)).where(RoomPreferenceSubmission.room_id == room.id)
@@ -495,6 +586,14 @@ async def compute_room(code: str, request: Request, db: Session = Depends(get_db
     room = get_room_by_code(db, code)
     require_room_member(db, room, user)
     require_host(room, user)
+
+    # Recomputing invalidates the previous voting round: the new
+    # final_recommendations list may contain different items, so old
+    # RoomVote rows would point at items no longer on screen and would
+    # incorrectly mark users as already-voted.
+    db.execute(delete(RoomVote).where(RoomVote.room_id == room.id))
+    room.results_json = None
+    room.status = "preferences_submitted"
 
     # Broadcast compute-start state first.
     bump_room(room)
