@@ -1,3 +1,4 @@
+import logging
 from collections import Counter, defaultdict
 
 import numpy as np
@@ -9,6 +10,9 @@ from app.ml.kmeans import choose_k_and_cluster
 from app.models import CatalogItem, Room, RoomPreferenceSubmission
 
 
+logger = logging.getLogger(__name__)
+
+
 # GroupFit pos+text hyperparameters chosen by the offline benchmark
 # (see benchmark/writeup.tex, Section "From benchmark to product"):
 #   alpha = 0.30  → text alignment as a light complement to the positive term.
@@ -17,6 +21,28 @@ GROUPFIT_ALPHA = 0.30
 POSITIVE_THRESHOLD = 7  # used in benchmark for filtering liked items by score
 EMBEDDING_DIM = 384
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+
+
+def _safe_embedding(item: CatalogItem) -> np.ndarray | None:
+    """
+    Convert a CatalogItem.embedding to a (EMBEDDING_DIM,) float32 array.
+
+    Returns None if the embedding is missing, malformed, or has the wrong
+    dimensionality. The recommendation pipeline must filter these out before
+    np.stack(), otherwise the entire compute crashes mid-room.
+    """
+    raw = getattr(item, "embedding", None)
+    if raw is None:
+        return None
+    try:
+        vector = np.asarray(raw, dtype=np.float32)
+    except (TypeError, ValueError):
+        return None
+    if vector.ndim != 1 or vector.shape[0] != EMBEDDING_DIM:
+        return None
+    if not np.isfinite(vector).all():
+        return None
+    return vector
 
 
 def item_tags(item: CatalogItem) -> list[str]:
@@ -118,11 +144,10 @@ def _build_user_signals(
         rows = db.scalars(
             select(CatalogItem).where(CatalogItem.id.in_(list(all_liked_ids)))
         ).all()
-        liked_emb_by_id = {
-            item.id: np.array(item.embedding, dtype=np.float32)
-            for item in rows
-            if item.embedding is not None
-        }
+        for item in rows:
+            vector = _safe_embedding(item)
+            if vector is not None:
+                liked_emb_by_id[item.id] = vector
 
     # 3. Per-user matrices and queries.
     liked_matrix_by_uid: dict[int, np.ndarray] = {}
@@ -155,6 +180,33 @@ def _build_user_signals(
 
 
 def compute_recommendations(db: Session, room: Room) -> dict:
+    """
+    Public entrypoint for the GroupFit pos+text recommendation pipeline.
+
+    Wraps `_compute_recommendations_inner` so that unexpected exceptions
+    (DB blips, embedding model errors, numpy errors) are logged with the
+    full traceback and re-raised as a generic RuntimeError. The
+    user-facing 400 path is preserved through ValueError pass-through.
+    """
+    try:
+        return _compute_recommendations_inner(db, room)
+    except ValueError:
+        # Validation problems (e.g. too few submissions) are surfaced to
+        # the user as a 400 by main.compute_room.
+        raise
+    except Exception:
+        logger.exception(
+            "compute_recommendations: unexpected error in room id=%s code=%s",
+            getattr(room, "id", None),
+            getattr(room, "code", None),
+        )
+        raise RuntimeError(
+            "Recommendation compute failed unexpectedly. Please retry; "
+            "if it persists, contact the host."
+        )
+
+
+def _compute_recommendations_inner(db: Session, room: Room) -> dict:
     """
     GroupFit pos+text recommendation pipeline.
 
@@ -243,6 +295,15 @@ def compute_recommendations(db: Session, room: Room) -> dict:
 
         item_ids: list[int] = []
         for item in items:
+            # Skip items with missing or malformed embeddings: pgvector cosine
+            # search would not have returned them in normal operation, but
+            # legacy rows or partial backfills can leak through.
+            if _safe_embedding(item) is None:
+                logger.warning(
+                    "compute_recommendations: skipping catalog item %s with "
+                    "missing or malformed embedding", item.id
+                )
+                continue
             candidate_items_by_id[item.id] = item
             item_ids.append(item.id)
 
@@ -254,7 +315,7 @@ def compute_recommendations(db: Session, room: Room) -> dict:
         raise ValueError("The combined candidate pool is too small to produce recommendations.")
 
     candidate_embeddings = np.stack(
-        [np.array(item.embedding, dtype=np.float32) for item in candidate_items],
+        [_safe_embedding(item) for item in candidate_items],
         axis=0,
     )
 
@@ -379,21 +440,50 @@ def compute_recommendations(db: Session, room: Room) -> dict:
     return results
 
 
+def _safe_score(value: object) -> float:
+    """Coerce a possibly-missing/None group_match_score to a sortable float."""
+    if value is None:
+        return 0.0
+    try:
+        as_float = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    if not np.isfinite(as_float):
+        return 0.0
+    return as_float
+
+
 def compute_vote_summary(results_json: dict, votes_by_item_id: Counter[int]) -> list[dict]:
-    """Build the final vote-summary list. Sort: votes desc, score desc, title asc."""
-    final_items = results_json.get("final_recommendations", [])
+    """
+    Build the final vote-summary list. Sort: votes desc, score desc, title asc.
+
+    Defensive against malformed final_recommendations entries (missing id,
+    None group_match_score, missing/None title) so a single corrupted item
+    cannot break the post-vote summary for the whole room.
+    """
+    final_items = results_json.get("final_recommendations") or []
     summary: list[dict] = []
 
     for item in final_items:
-        item_id = int(item["catalog_item_id"])
+        if not isinstance(item, dict):
+            logger.warning("compute_vote_summary: skipping non-dict item: %r", item)
+            continue
+
+        raw_id = item.get("catalog_item_id")
+        try:
+            item_id = int(raw_id)
+        except (TypeError, ValueError):
+            logger.warning("compute_vote_summary: skipping item with bad id: %r", raw_id)
+            continue
+
         vote_count = int(votes_by_item_id.get(item_id, 0))
         summary.append({**item, "vote_count": vote_count})
 
     summary.sort(
         key=lambda item: (
-            -item["vote_count"],
-            -float(item.get("group_match_score", 0.0)),
-            item["title"].lower(),
+            -int(item.get("vote_count", 0)),
+            -_safe_score(item.get("group_match_score")),
+            str(item.get("title") or "").lower(),
         )
     )
 

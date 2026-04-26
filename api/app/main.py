@@ -1,4 +1,5 @@
 import datetime as dt
+import logging
 import random
 import string
 from collections import Counter
@@ -8,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import delete, distinct, func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -25,6 +27,8 @@ from app.realtime import manager
 from app.security import get_current_user, hash_password, verify_password
 from app.services.recommender import compute_recommendations, compute_vote_summary
 
+
+logger = logging.getLogger(__name__)
 
 settings = get_settings()
 app = FastAPI(title="AniSync API")
@@ -142,7 +146,14 @@ def generate_room_code(db: Session) -> str:
         if not exists:
             return code
 
-    raise RuntimeError("Could not generate unique room code.")
+    # Surfacing this as a 503 instead of an opaque 500 lets the client retry
+    # cleanly. Reaching this branch with a 6-char alphanumeric space (~2.18B
+    # codes) implies catastrophic collisions or a DB query problem.
+    logger.error("generate_room_code: failed after 100 attempts")
+    raise HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        detail="Could not generate a unique room code. Please retry.",
+    )
 
 
 def public_results(results_json: dict | None) -> dict | None:
@@ -268,6 +279,11 @@ def get_catalog_items(
     preference page to hydrate the user's previously-saved liked anime
     on page load.
     """
+    # Cap input length up-front so a hostile client cannot force us to parse
+    # a megabyte-long query string.
+    if len(ids) > 1000:
+        raise HTTPException(status_code=400, detail="Too many ids requested.")
+
     try:
         id_list = [int(part) for part in ids.split(",") if part.strip()]
     except ValueError:
@@ -297,13 +313,26 @@ def search_catalog(
     if len(query) < 2:
         return {"items": []}
 
+    # Cap query length so we never feed a multi-KB LIKE pattern to PG.
+    if len(query) > 200:
+        query = query[:200]
+
     limit = max(1, min(limit, 25))
-    pattern = f"%{query.lower()}%"
+    # Escape SQL LIKE wildcards (% and _) and the escape character itself
+    # so user input cannot turn into pattern metacharacters that would
+    # silently widen or break the search.
+    safe_query = (
+        query.lower()
+        .replace("\\", "\\\\")
+        .replace("%", "\\%")
+        .replace("_", "\\_")
+    )
+    pattern = f"%{safe_query}%"
 
     items = list(
         db.scalars(
             select(CatalogItem)
-            .where(func.lower(CatalogItem.search_text).like(pattern))
+            .where(func.lower(CatalogItem.search_text).like(pattern, escape="\\"))
             .order_by(
                 func.coalesce(CatalogItem.score, 0).desc(),
                 CatalogItem.title.asc(),
@@ -317,17 +346,31 @@ def search_catalog(
 
 @app.post("/api/auth/register")
 def register(payload: RegisterIn, request: Request, db: Session = Depends(get_db)) -> dict:
-    existing = db.scalar(select(User).where(User.email == payload.email.lower()))
+    email = payload.email.lower().strip()
+    display_name = payload.display_name.strip()
+    if not display_name:
+        raise HTTPException(status_code=400, detail="Display name cannot be blank.")
+
+    existing = db.scalar(select(User).where(User.email == email))
     if existing:
         raise HTTPException(status_code=400, detail="That email is already registered.")
 
     user = User(
-        email=payload.email.lower(),
-        display_name=payload.display_name.strip(),
+        email=email,
+        display_name=display_name,
         password_hash=hash_password(payload.password),
     )
     db.add(user)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        # Two concurrent registrations for the same email both passed the
+        # SELECT check above and raced to INSERT; the unique constraint on
+        # users.email rejects the loser. Surface this as a clean 400 instead
+        # of an opaque 500.
+        db.rollback()
+        logger.info("register: duplicate email race for %s", email)
+        raise HTTPException(status_code=400, detail="That email is already registered.")
     db.refresh(user)
 
     request.session["user_id"] = user.id
@@ -411,18 +454,39 @@ async def create_room(payload: RoomCreateIn, request: Request, db: Session = Dep
     return {"room": serialize_room(db, room, user)}
 
 
+def _try_add_room_member(db: Session, room: Room, user: User) -> bool:
+    """
+    Idempotently add `user` to `room`. Returns True if a new membership row
+    was inserted, False if the user was already a member.
+
+    Defensively handles the race where two requests concurrently see
+    is_room_member==False and both try to insert; the unique
+    (room_id,user_id) constraint guarantees only one wins, and the loser
+    is treated as an idempotent no-op.
+    """
+    if is_room_member(db, room.id, user.id):
+        return False
+
+    db.add(RoomMember(room_id=room.id, user_id=user.id))
+    bump_room(room)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        logger.info(
+            "_try_add_room_member: race on room=%s user=%s", room.code, user.id
+        )
+        return False
+    db.refresh(room)
+    return True
+
+
 @app.post("/api/rooms/join")
 async def join_room(payload: JoinRoomIn, request: Request, db: Session = Depends(get_db)) -> dict:
     user = require_user(request, db)
     room = get_room_by_code(db, payload.code)
 
-    joined_now = False
-    if not is_room_member(db, room.id, user.id):
-        db.add(RoomMember(room_id=room.id, user_id=user.id))
-        bump_room(room)
-        joined_now = True
-        db.commit()
-        db.refresh(room)
+    joined_now = _try_add_room_member(db, room, user)
 
     if joined_now:
         await manager.broadcast(
@@ -441,13 +505,7 @@ async def get_room(code: str, request: Request, db: Session = Depends(get_db)) -
     room = get_room_by_code(db, code)
 
     # Join-by-URL behavior: a logged-in user who opens a valid room URL joins automatically.
-    joined_now = False
-    if not is_room_member(db, room.id, user.id):
-        db.add(RoomMember(room_id=room.id, user_id=user.id))
-        bump_room(room)
-        joined_now = True
-        db.commit()
-        db.refresh(room)
+    joined_now = _try_add_room_member(db, room, user)
 
     if joined_now:
         await manager.broadcast(
@@ -610,7 +668,36 @@ async def compute_room(code: str, request: Request, db: Session = Depends(get_db
     try:
         results = compute_recommendations(db, room)
     except ValueError as error:
+        # Validation problem (too few submissions, empty pool, etc.) —
+        # surface the message verbatim to the host.
         raise HTTPException(status_code=400, detail=str(error)) from error
+    except HTTPException:
+        raise
+    except Exception as error:  # noqa: BLE001 - last-resort guard around heavy ML pipeline
+        # Unexpected failure mid-compute (DB blip, embedding model error,
+        # numpy error). Roll the room back to the pre-compute state so the
+        # host can retry without a stuck "computing" UI.
+        logger.exception(
+            "compute_room: unexpected failure for room=%s host=%s",
+            room.code, user.id,
+        )
+        db.rollback()
+        room = get_room_by_code(db, code)
+        room.results_json = None
+        if room.status not in {"open", "preferences_submitted"}:
+            room.status = "preferences_submitted"
+        bump_room(room)
+        db.commit()
+        await manager.broadcast(
+            room.code,
+            event_type="compute_failed",
+            state_revision=room.state_revision,
+            changed_sections=["header"],
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="Recommendation compute failed unexpectedly. Please retry.",
+        ) from error
 
     room.results_json = results
     room.status = "voting_open"
@@ -647,10 +734,18 @@ async def vote(
     if not selected_ids:
         raise HTTPException(status_code=400, detail="Select at least one anime before submitting votes.")
 
-    final_ids = {
-        int(item["catalog_item_id"])
-        for item in room.results_json.get("final_recommendations", [])
-    }
+    final_ids: set[int] = set()
+    for item in room.results_json.get("final_recommendations", []) or []:
+        if not isinstance(item, dict):
+            continue
+        try:
+            final_ids.add(int(item["catalog_item_id"]))
+        except (KeyError, TypeError, ValueError):
+            # Skip malformed entries instead of 500-ing the entire vote.
+            continue
+
+    if not final_ids:
+        raise HTTPException(status_code=400, detail="The final recommendation list is empty.")
 
     if any(item_id not in final_ids for item_id in selected_ids):
         raise HTTPException(status_code=400, detail="You can only vote on anime in the final recommendation list.")
@@ -714,19 +809,34 @@ async def room_websocket(code: str, websocket: WebSocket, db: Session = Depends(
     The payloads are lightweight revision events.
     Complex rendering data is fetched over normal HTTP API calls.
     """
-    user_id = websocket.session.get("user_id") if hasattr(websocket, "session") else None
+    raw_user_id = websocket.session.get("user_id") if hasattr(websocket, "session") else None
+    try:
+        user_id = int(raw_user_id) if raw_user_id is not None else None
+    except (TypeError, ValueError):
+        user_id = None
+
     if not user_id:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
         return
 
-    user = db.get(User, int(user_id))
-    if not user:
-        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        return
+    try:
+        user = db.get(User, user_id)
+        if not user:
+            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            return
 
-    room = db.scalar(select(Room).where(Room.code == code.upper()))
-    if not room or not is_room_member(db, room.id, user.id):
-        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        room = db.scalar(select(Room).where(Room.code == code.upper()))
+        if not room or not is_room_member(db, room.id, user.id):
+            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            return
+    except Exception:
+        # DB blip during auth: never leave the connection in a half-open
+        # state. Close with an internal error code and let the client retry.
+        logger.exception("room_websocket: auth/DB error for code=%s", code)
+        try:
+            await websocket.close(code=status.WS_1011_INTERNAL_ERROR)
+        except Exception:
+            pass
         return
 
     await manager.connect(room.code, websocket)
@@ -749,5 +859,9 @@ async def room_websocket(code: str, websocket: WebSocket, db: Session = Depends(
     except WebSocketDisconnect:
         manager.disconnect(room.code, websocket)
     except Exception:
+        logger.exception("room_websocket: unexpected error in receive loop for code=%s", code)
         manager.disconnect(room.code, websocket)
-        await websocket.close()
+        try:
+            await websocket.close()
+        except Exception:
+            pass

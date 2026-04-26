@@ -41,12 +41,20 @@ def get_msmarco_model() -> SentenceTransformer:
     return model
 
 
+EMBEDDING_DIM = 384
+
+
 def normalize_rows(vectors: np.ndarray) -> np.ndarray:
     """
     Normalize each vector to length 1.
 
     This makes cosine similarity equal to dot product.
     """
+    if vectors.size == 0:
+        # np.linalg.norm on a (0, D) array returns (0, 1) which technically
+        # works, but downstream callers often assume at least one row. Just
+        # echo back the empty array with the same shape.
+        return vectors
     norms = np.linalg.norm(vectors, axis=1, keepdims=True)
     norms = np.maximum(norms, 1e-12)
     return vectors / norms
@@ -55,7 +63,13 @@ def normalize_rows(vectors: np.ndarray) -> np.ndarray:
 def embed_texts(texts: list[str], batch_size: int = 64, show_progress_bar: bool = False) -> np.ndarray:
     """
     Encode text into normalized 384-dimensional embeddings.
+
+    An empty input list short-circuits to an empty (0, EMBEDDING_DIM) array
+    so callers like np.stack / mean(axis=0) get the shape they expect
+    instead of crashing on the model's empty-batch behavior.
     """
+    if not texts:
+        return np.empty((0, EMBEDDING_DIM), dtype=np.float32)
     model = get_embedding_model()
     embeddings = model.encode(
         texts,
@@ -69,6 +83,8 @@ def embed_texts(texts: list[str], batch_size: int = 64, show_progress_bar: bool 
 
 def embed_texts_msmarco(texts: list[str], batch_size: int = 64, show_progress_bar: bool = False) -> np.ndarray:
     """Encode text using the asymmetric msmarco model (text→item retrieval path)."""
+    if not texts:
+        return np.empty((0, EMBEDDING_DIM), dtype=np.float32)
     model = get_msmarco_model()
     embeddings = model.encode(
         texts,

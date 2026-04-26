@@ -1,7 +1,11 @@
 import datetime as dt
+import logging
 from collections import defaultdict
 
 from fastapi import WebSocket
+
+
+logger = logging.getLogger(__name__)
 
 
 class RoomConnectionManager:
@@ -20,8 +24,11 @@ class RoomConnectionManager:
         self._connections[room_code].add(websocket)
 
     def disconnect(self, room_code: str, websocket: WebSocket) -> None:
-        self._connections[room_code].discard(websocket)
-        if not self._connections[room_code]:
+        bucket = self._connections.get(room_code)
+        if bucket is None:
+            return
+        bucket.discard(websocket)
+        if not bucket:
             self._connections.pop(room_code, None)
 
     async def broadcast(
@@ -36,6 +43,9 @@ class RoomConnectionManager:
         Broadcast a lightweight event envelope.
 
         Clients should re-fetch authoritative JSON sections over HTTP.
+        Failed sends mark the websocket dead and prune it; this loop must
+        never raise, otherwise a single dead client can break notification
+        for every other room member.
         """
         payload = {
             "event_type": event_type,
@@ -50,6 +60,10 @@ class RoomConnectionManager:
             try:
                 await websocket.send_json(payload)
             except Exception:
+                logger.debug(
+                    "broadcast: dropping dead websocket on room=%s event=%s",
+                    room_code, event_type,
+                )
                 dead_connections.append(websocket)
 
         for websocket in dead_connections:

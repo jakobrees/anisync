@@ -1,6 +1,13 @@
 import numpy as np
+import pytest
 
-from app.ml.kmeans import choose_k_and_cluster, manual_kmeans, silhouette_score
+from app.ml.kmeans import (
+    choose_k_and_cluster,
+    farthest_point_initialization,
+    manual_kmeans,
+    run_kmeans_once,
+    silhouette_score,
+)
 
 
 def test_manual_kmeans_finds_two_simple_clusters():
@@ -71,3 +78,47 @@ def test_choose_k_and_cluster_small_pool_falls_back_to_two():
     result = choose_k_and_cluster(x)
 
     assert result.k == 2
+
+
+def test_run_kmeans_once_rejects_invalid_max_iter():
+    """
+    Defensive guard: max_iter < 1 used to silently skip the loop and then
+    NameError on `iteration` outside the loop. Now it must raise loudly.
+    """
+    x = np.eye(4, dtype=np.float32)
+    with pytest.raises(ValueError):
+        run_kmeans_once(x, k=2, seed=1, max_iter=0)
+
+
+def test_run_kmeans_once_max_iter_one_does_not_crash():
+    """Regression: max_iter=1 must produce a usable result, not NameError."""
+    x = np.eye(4, dtype=np.float32)
+    result = run_kmeans_once(x, k=2, seed=1, max_iter=1)
+    assert result.k == 2
+    assert result.assignments.shape == (4,)
+    assert result.iterations >= 1
+
+
+def test_run_kmeans_once_rejects_k_larger_than_n():
+    x = np.eye(2, dtype=np.float32)
+    with pytest.raises(ValueError):
+        run_kmeans_once(x, k=3, seed=1)
+
+
+def test_farthest_point_initialization_rejects_empty_dataset():
+    rng = np.random.default_rng(0)
+    with pytest.raises(ValueError):
+        farthest_point_initialization(np.zeros((0, 4), dtype=np.float32), k=1, rng=rng)
+
+
+def test_farthest_point_initialization_rejects_zero_k():
+    rng = np.random.default_rng(0)
+    with pytest.raises(ValueError):
+        farthest_point_initialization(np.eye(4, dtype=np.float32), k=0, rng=rng)
+
+
+def test_choose_k_and_cluster_rejects_too_few_points():
+    """The recommender refuses to compute on a candidate pool of size < 2,
+    but choose_k_and_cluster itself must also surface this clearly."""
+    with pytest.raises(ValueError):
+        choose_k_and_cluster(np.zeros((1, 4), dtype=np.float32))

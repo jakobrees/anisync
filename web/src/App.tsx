@@ -533,10 +533,23 @@ function RoomPage() {
     let stopped = false
     let socket: WebSocket | null = null
     let retry = 0
+    let reconnectTimer: number | null = null
 
     function connect() {
       const wsBase = API_BASE.replace(/^http/, 'ws')
-      socket = new WebSocket(`${wsBase}/ws/rooms/${code}`)
+      try {
+        socket = new WebSocket(`${wsBase}/ws/rooms/${code}`)
+      } catch (err) {
+        // Constructor throws on invalid URL or insecure context.
+        console.warn('Room WebSocket constructor failed:', err)
+        if (!stopped) {
+          setConnectionState('reconnecting')
+          // 30 is the cap below; keep symmetric.
+          retry = Math.min(retry + 1, 30)
+          reconnectTimer = window.setTimeout(connect, Math.min(1000 * 2 ** retry, 10000))
+        }
+        return
+      }
 
       socket.onopen = () => {
         retry = 0
@@ -544,17 +557,36 @@ function RoomPage() {
       }
 
       socket.onmessage = async (event) => {
-        const payload = JSON.parse(event.data)
-        if (payload.state_revision > lastRevisionRef.current || payload.changed_sections?.includes('all')) {
-          await refreshRoom()
+        // Defensively parse: a malformed broadcast must not crash the
+        // socket handler and tear down the live-sync UI.
+        let payload: { state_revision?: number; changed_sections?: string[] }
+        try {
+          payload = JSON.parse(event.data)
+        } catch {
+          return
         }
+        const revision = typeof payload.state_revision === 'number' ? payload.state_revision : -1
+        const isAll = Array.isArray(payload.changed_sections) && payload.changed_sections.includes('all')
+        if (revision > lastRevisionRef.current || isAll) {
+          try {
+            await refreshRoom()
+          } catch (err) {
+            console.warn('Room refresh after WS event failed:', err)
+          }
+        }
+      }
+
+      socket.onerror = () => {
+        // Mirror to onclose. We let onclose drive the reconnect loop so
+        // we don't double-schedule timers.
       }
 
       socket.onclose = () => {
         if (stopped) return
         setConnectionState('reconnecting')
-        retry += 1
-        window.setTimeout(connect, Math.min(1000 * 2 ** retry, 10000))
+        // Cap the exponent so 2 ** retry never overflows on long sessions.
+        retry = Math.min(retry + 1, 30)
+        reconnectTimer = window.setTimeout(connect, Math.min(1000 * 2 ** retry, 10000))
       }
     }
 
@@ -562,6 +594,9 @@ function RoomPage() {
 
     return () => {
       stopped = true
+      if (reconnectTimer !== null) {
+        window.clearTimeout(reconnectTimer)
+      }
       socket?.close()
     }
   }, [code, refreshRoom])
@@ -661,7 +696,7 @@ function ParticipantsCard({ room }: { room: RoomPayload }) {
           <div key={participant.user_id} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-3">
             <div className="flex items-center gap-3">
               <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-fuchsia-400/80 to-cyan-300/80 font-black">
-                {participant.display_name.slice(0, 1).toUpperCase()}
+                {(participant.display_name?.trim()?.slice(0, 1) || '?').toUpperCase()}
               </div>
               <div>
                 <p className="font-bold">
@@ -822,21 +857,28 @@ function PreferenceCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom:
       return
     }
 
+    let cancelled = false
     setSearching(true)
     const handle = window.setTimeout(async () => {
       try {
         const data = await apiFetch<{ items: CatalogSearchItem[] }>(
           `/api/catalog/search?q=${encodeURIComponent(trimmed)}&limit=10`,
         )
-        setSearchResults(data.items)
+        // Guard against late responses arriving after the user kept typing
+        // or after the component unmounted: writing them in would either
+        // overwrite a fresher result or trigger a state-after-unmount warn.
+        if (!cancelled) setSearchResults(data.items ?? [])
       } catch {
-        setSearchResults([])
+        if (!cancelled) setSearchResults([])
       } finally {
-        setSearching(false)
+        if (!cancelled) setSearching(false)
       }
     }, SEARCH_DEBOUNCE_MS)
 
-    return () => window.clearTimeout(handle)
+    return () => {
+      cancelled = true
+      window.clearTimeout(handle)
+    }
   }, [searchQuery])
 
   function addLiked(item: CatalogSearchItem) {
@@ -1146,7 +1188,8 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
         <h2 className="text-2xl font-black">Clustered Shortlists</h2>
         <p className="mt-2 text-sm text-slate-400">
           {results.chosen_k} clusters
-          {results.kmeans_silhouette !== null && ` · silhouette ${results.kmeans_silhouette.toFixed(3)}`}
+          {typeof results.kmeans_silhouette === 'number' &&
+            ` · silhouette ${results.kmeans_silhouette.toFixed(3)}`}
           . Each cluster is ranked by GroupFit score.
         </p>
 
@@ -1260,14 +1303,14 @@ function AnimeCard({ item, compact, showVotes }: { item: AnimeItem; compact?: bo
             </span>
           ))}
         </div>
-        {item.group_match_score !== undefined && (
+        {typeof item.group_match_score === 'number' && Number.isFinite(item.group_match_score) && (
           <p className="mt-2 text-sm font-bold text-cyan-100">
             GroupFit score: {item.group_match_score.toFixed(3)}
           </p>
         )}
         {showVotes && (
           <p className="mt-1 text-sm font-bold text-yellow-100">
-            Votes: {item.vote_count} {item.is_winner ? '· Winner' : ''}
+            Votes: {item.vote_count ?? 0} {item.is_winner ? '· Winner' : ''}
           </p>
         )}
       </div>

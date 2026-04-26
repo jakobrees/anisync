@@ -44,6 +44,13 @@ def farthest_point_initialization(x: np.ndarray, k: int, rng: np.random.Generato
     2. Pick each next centroid as the point farthest from its nearest existing centroid.
     """
     n = x.shape[0]
+    if k <= 0:
+        raise ValueError("k must be at least 1.")
+    if n == 0:
+        raise ValueError("Cannot initialize centroids on an empty dataset.")
+    if k > n:
+        raise ValueError("k cannot be larger than the number of points.")
+
     first_index = int(rng.integers(0, n))
     chosen = [first_index]
 
@@ -84,12 +91,18 @@ def run_kmeans_once(
         raise ValueError("k cannot be larger than the number of points.")
     if k < 2:
         raise ValueError("k must be at least 2.")
+    if max_iter < 1:
+        raise ValueError("max_iter must be at least 1.")
 
     rng = np.random.default_rng(seed)
     x = x.astype(np.float32)
     centroids = farthest_point_initialization(x, k, rng)
 
     assignments = np.zeros(x.shape[0], dtype=np.int64)
+    # Pre-init `iteration` in case `max_iter == 1` and the loop body
+    # branches early; without this the post-loop reference could NameError
+    # on weirder inputs.
+    iteration = 0
 
     for iteration in range(1, max_iter + 1):
         previous_centroids = centroids.copy()
