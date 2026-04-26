@@ -73,7 +73,7 @@ python -m app.scripts.preprocess_catalog \
 # Full run (slow: tens of thousands of embeddings + image downloads)
 python -m app.scripts.preprocess_catalog \
   --raw ../data/raw/anime-offline-database.jsonl \
-  --batch-size 128 --workers 32
+  --reset --batch-size 128 --workers 32
 ```
 
 `--batch-size` controls GPU embedding batching, `--workers` controls parallel image downloads.
@@ -99,13 +99,15 @@ Password for all of them: `AniSyncDemo123!`
 
 ### 7. Run the backend
 
-From inside `api/` (with the venv active):
+If you opened a new terminal for this, re-activate the venv from the repo root, then `cd api`:
 
 ```bash
+source .venv/bin/activate
+cd api
 python -m uvicorn app.main:app --reload --port 8000
 ```
 
-Sanity check: `curl http://localhost:8000/api/health` → `{"ok":true,"service":"anisync-api"}`.
+Leave this terminal open. Sanity check from another terminal: `curl http://localhost:8000/api/health` → `{"ok":true,"service":"anisync-api"}`.
 
 ### 8. Run the frontend
 
