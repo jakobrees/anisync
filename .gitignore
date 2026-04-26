@@ -20,8 +20,11 @@ web/.vite/
 deployment/
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/anime-offline-database.jsonl.zst
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/user_profiles.jsonl.zst
+!data/processed/mal_to_catalog.json
 
 # Local generated media can become huge.
 # Do not commit posters/thumbnails to GitHub.

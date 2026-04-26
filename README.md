@@ -1,5 +1,144 @@
 # AniSync
 
+AniSync is a private group anime recommendation web app. Members of a room each share what they want to watch (liked anime + an optional mood text), the host triggers a compute, and the system clusters candidate anime and produces a final list everyone votes on.
+
+---
+
+## 0. Getting Started (local)
+
+### Prereqs
+
+Install these once:
+
+- **Git**
+- **Docker Desktop** — runs the local PostgreSQL + pgvector container
+- **Python 3.13** with **[uv](https://github.com/astral-sh/uv)** for the venv
+- **Node.js ≥ 20** with `npm` for the frontend (Vite needs a modern Node)
+- **zstd** — to decompress the bundled anime dataset (`brew install zstd` on macOS)
+
+### 1. Clone and create env files
+
+```bash
+git clone <REMOTE_REPO_URL>
+cd anisync
+cp .env.example .env
+cp web/.env.example web/.env
+```
+
+Do not commit the `.env` files.
+
+### 2. Start the database
+
+```bash
+docker compose up -d
+docker compose ps   # anisync_pg should show "Up ... (healthy)"
+```
+
+### 3. Backend venv + schema
+
+```bash
+uv venv .venv --python 3.13
+source .venv/bin/activate
+uv pip install -r requirements.txt
+
+cd api && python -m app.scripts.init_db
+```
+
+Expected: `Database initialized successfully.`
+
+### 4. Decompress the bundled anime catalog
+
+The anime metadata dump (`anime-offline-database.jsonl`, ~60 MB raw) is stored compressed in the repo as `data/raw/anime-offline-database.jsonl.zst` (~6 MB).
+Decompress it once before preprocessing:
+
+```bash
+# from the repo root
+zstd -d data/raw/anime-offline-database.jsonl.zst
+```
+
+### 5. Preprocess the catalog
+
+From inside `api/`:
+
+```bash
+# Quick smoke test (1k items, no image downloads — fast)
+python -m app.scripts.preprocess_catalog \
+  --raw ../data/raw/anime-offline-database.jsonl \
+  --media-dir ../media \
+  --processed-output ../data/processed/catalog_summary.jsonl \
+  --reset --max-items 1000 --skip-images
+
+# Full run (slow: tens of thousands of embeddings + image downloads)
+python -m app.scripts.preprocess_catalog \
+  --raw ../data/raw/anime-offline-database.jsonl \
+  --batch-size 128 --workers 32
+```
+
+`--batch-size` controls GPU embedding batching, `--workers` controls parallel image downloads.
+
+### 6. Seed demo users
+
+From inside `api/`:
+
+```bash
+python -m app.scripts.seed_demo
+```
+
+Creates four demo accounts:
+
+```
+host@example.com
+kai@example.com
+mina@example.com
+theo@example.com
+```
+
+Password for all of them: `AniSyncDemo123!`
+
+### 7. Run the backend
+
+From inside `api/` (with the venv active):
+
+```bash
+python -m uvicorn app.main:app --reload --port 8000
+```
+
+Sanity check: `curl http://localhost:8000/api/health` → `{"ok":true,"service":"anisync-api"}`.
+
+### 8. Run the frontend
+
+In a new terminal:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Open http://localhost:5173.
+
+### 9. Demo flow
+
+Use two browser sessions (e.g. one normal + one incognito):
+
+1. Login as `host@example.com`, create a room, copy the room code.
+2. Login as `kai@example.com` in the second session, join with the code.
+3. Both users add a few liked anime via the search bar (and optionally a mood line).
+4. Host clicks **Generate Group Recommendations**.
+5. Both users vote on the final list.
+6. After everyone votes, the group result appears with the winner highlighted.
+
+### 10. Optional — running the offline benchmark
+
+The offline benchmark in `benchmark/` measures recommendation quality (NDCG@K) by replaying real MAL user profiles against AniSync's recommender. Two derived inputs are bundled in `data/processed/`:
+
+- `user_profiles.jsonl.zst` — ~2,000 MAL users with ≥15 ratings, with each rating already mapped to a `catalog_item_id` (decompress with `zstd -d data/processed/user_profiles.jsonl.zst`)
+- `mal_to_catalog.json` — MAL ID → catalog ID mapping derived from the bundled anime database
+
+The 2.1 GB raw `animelists_cleaned.csv` is **not** bundled and is only needed if you want to regenerate `user_profiles.jsonl` from scratch. With the bundled files, you can run benchmarks directly — see `benchmark/README.md` for details.
+
+---
+
 ## 1. Tech Stack
 
 ### Backend and API
