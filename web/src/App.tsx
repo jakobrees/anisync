@@ -279,9 +279,9 @@ function ErrorMessage({ message }: { message: string }) {
 
 function AuthPage({ mode, refreshMe }: { mode: 'login' | 'register'; refreshMe: () => Promise<void> }) {
   const navigate = useNavigate()
-  const [email, setEmail] = useState(mode === 'login' ? 'host@example.com' : '')
+  const [email, setEmail] = useState('')
   const [displayName, setDisplayName] = useState('')
-  const [password, setPassword] = useState(mode === 'login' ? 'AniSyncDemo123!' : '')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const isRegister = mode === 'register'
 
@@ -332,7 +332,7 @@ function AuthPage({ mode, refreshMe }: { mode: 'login' | 'register'; refreshMe: 
       <Card>
         <h2 className="text-2xl font-black">{isRegister ? 'Create an account' : 'Login'}</h2>
         <p className="mt-2 text-sm text-slate-400">
-          {isRegister ? 'Start a new private anime room.' : 'Use a seeded demo account or your own account.'}
+          {isRegister ? 'Create an account to start a private anime room.' : 'Sign in to create or join private anime rooms.'}
         </p>
 
         <form onSubmit={submit} className="mt-6 space-y-4">
@@ -341,6 +341,7 @@ function AuthPage({ mode, refreshMe }: { mode: 'login' | 'register'; refreshMe: 
             placeholder="Email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            autoComplete="email"
             required
           />
 
@@ -349,6 +350,7 @@ function AuthPage({ mode, refreshMe }: { mode: 'login' | 'register'; refreshMe: 
               placeholder="Display name"
               value={displayName}
               onChange={(event) => setDisplayName(event.target.value)}
+              autoComplete="name"
               required
             />
           )}
@@ -358,6 +360,7 @@ function AuthPage({ mode, refreshMe }: { mode: 'login' | 'register'; refreshMe: 
             placeholder="Password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            autoComplete={isRegister ? 'new-password' : 'current-password'}
             required
           />
 
@@ -1196,10 +1199,7 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
       <Card>
         <h2 className="text-2xl font-black">Clustered Shortlists</h2>
         <p className="mt-2 text-sm text-slate-400">
-          {results.chosen_k} clusters
-          {typeof results.kmeans_silhouette === 'number' &&
-            ` · silhouette ${results.kmeans_silhouette.toFixed(3)}`}
-          . Each cluster is ranked by GroupFit score.
+          Browse the recommendation groups below, then vote from the final list.
         </p>
 
         <div className="mt-5 space-y-5">
@@ -1269,7 +1269,7 @@ function ResultsCard({ room, refreshRoom }: { room: RoomPayload; refreshRoom: ()
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <Card className="border-cyan-300/30">
               <h2 className="text-3xl font-black">Final Group Result</h2>
-              <p className="mt-2 text-slate-400">Sorted by vote count, then GroupFit score, then title.</p>
+              <p className="mt-2 text-slate-400">Sorted by vote count, then title.</p>
 
               <div className="mt-5 space-y-3">
                 {results.vote_result_summary.map((item) => (
@@ -1312,11 +1312,7 @@ function AnimeCard({ item, compact, showVotes }: { item: AnimeItem; compact?: bo
             </span>
           ))}
         </div>
-        {typeof item.group_match_score === 'number' && Number.isFinite(item.group_match_score) && (
-          <p className="mt-2 text-sm font-bold text-cyan-100">
-            GroupFit score: {item.group_match_score.toFixed(3)}
-          </p>
-        )}
+        
         {showVotes && (
           <p className="mt-1 text-sm font-bold text-yellow-100">
             Votes: {item.vote_count ?? 0} {item.is_winner ? '· Winner' : ''}
