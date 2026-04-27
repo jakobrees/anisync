@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
 from app.config import get_settings
-from app.db import get_db
+from app.db import SessionLocal, get_db
 from app.models import (
     CatalogItem,
     Room,
@@ -814,12 +814,14 @@ async def vote(
 
 
 @app.websocket("/ws/rooms/{code}")
-async def room_websocket(code: str, websocket: WebSocket, db: Session = Depends(get_db)) -> None:
+async def room_websocket(code: str, websocket: WebSocket) -> None:
     """
     Room-scoped WebSocket.
 
-    The payloads are lightweight revision events.
-    Complex rendering data is fetched over normal HTTP API calls.
+    The database is needed only for initial WebSocket authentication and
+    membership validation. Do not keep a SQLAlchemy Session open for the
+    entire WebSocket lifetime, because long-lived room pages can exhaust
+    Supabase Session Pooler clients.
     """
     raw_user_id = websocket.session.get("user_id") if hasattr(websocket, "session") else None
 
@@ -835,19 +837,24 @@ async def room_websocket(code: str, websocket: WebSocket, db: Session = Depends(
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
         return
 
-    try:
-        user = db.get(User, user_id)
-        if not user:
-            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-            return
+    room_code = code.upper()
+    room_revision = 0
 
-        room = db.scalar(select(Room).where(Room.code == code.upper()))
-        if not room or not is_room_member(db, room.id, user.id):
-            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-            return
+    try:
+        with SessionLocal() as db:
+            user = db.get(User, user_id)
+            if not user:
+                await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+                return
+
+            room = db.scalar(select(Room).where(Room.code == room_code))
+            if not room or not is_room_member(db, room.id, user.id):
+                await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+                return
+
+            room_code = room.code
+            room_revision = room.state_revision
     except Exception:
-        # DB blip during auth: never leave the connection in a half-open
-        # state. Close with an internal error code and let the client retry.
         logger.exception("room_websocket: auth/DB error for code=%s", code)
         try:
             await websocket.close(code=status.WS_1011_INTERNAL_ERROR)
@@ -855,28 +862,26 @@ async def room_websocket(code: str, websocket: WebSocket, db: Session = Depends(
             pass
         return
 
-    await manager.connect(room.code, websocket)
+    await manager.connect(room_code, websocket)
 
     try:
         await websocket.send_json(
             {
                 "event_type": "room_resync_required",
-                "room_code": room.code,
-                "state_revision": room.state_revision,
+                "room_code": room_code,
+                "state_revision": room_revision,
                 "changed_sections": ["all"],
                 "server_timestamp": utcnow().isoformat(),
             }
         )
 
         while True:
-            # We do not need client messages for V1.
-            # Receiving keeps the connection open and detects disconnects.
             await websocket.receive_text()
     except WebSocketDisconnect:
-        manager.disconnect(room.code, websocket)
+        manager.disconnect(room_code, websocket)
     except Exception:
         logger.exception("room_websocket: unexpected error in receive loop for code=%s", code)
-        manager.disconnect(room.code, websocket)
+        manager.disconnect(room_code, websocket)
         try:
             await websocket.close()
         except Exception:
