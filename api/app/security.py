@@ -78,9 +78,12 @@ def get_user_id_from_auth_token(token: str | None) -> int | None:
 
 
 def _get_bearer_token(request: Request) -> str | None:
-    auth_header = request.headers.get("authorization", "")
+    headers = getattr(request, "headers", {}) or {}
+    auth_header = headers.get("authorization", "")
+
     if not auth_header.lower().startswith("bearer "):
         return None
+
     return auth_header.split(" ", 1)[1].strip()
 
 

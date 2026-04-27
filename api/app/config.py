@@ -31,6 +31,12 @@ class Settings(BaseSettings):
     supabase_service_role_key: str = ""
     supabase_storage_bucket: str = "anisync-media"
 
+    # Keep SQLAlchemy's pool intentionally small for Supabase Session Pooler.
+    database_pool_size: int = 1
+    database_max_overflow: int = 2
+    database_pool_timeout: int = 10
+    database_pool_recycle_seconds: int = 300
+
     model_config = SettingsConfigDict(
         env_file="../.env",
         env_file_encoding="utf-8",
