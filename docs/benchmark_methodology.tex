@@ -43,9 +43,15 @@ user's ratings?
 \end{quote}
 
 This is a recall task, not a discovery task. We are explicit about the
-mismatch in Section~\ref{sec:limits}. The benchmark's purpose is to
-\emph{rule out clearly broken approaches} and to provide an apples-to-apples
-comparison between candidate scoring functions, not to choose the final
+mismatch in Section~\ref{sec:limits}. The benchmark's purpose is
+threefold: \emph{rule out clearly broken approaches} (sieve), \emph{confirm
+that surviving algorithms coherently track individual preference signal}
+(coherence floor), and \emph{provide an apples-to-apples comparison between
+candidate scoring functions} (ablation surface). The coherence floor
+matters because the product arguments for group-level fairness and
+diversity only make sense given that the underlying preference-tracking
+works at all --- fairness in distributing irrelevant recommendations
+is not a feature. The benchmark is not designed to choose the final
 algorithm on its own.
 
 \section{The metric: NDCG@K}
@@ -290,6 +296,19 @@ Algorithm & mean NDCG & std & mean worst-user NDCG \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+\paragraph{Reading the absolute numbers.}
+NDCG of $\sim 0.10$ looks low at face value, but the right comparison
+is to the random baseline. With $\sim 50$ relevant items per user in a
+$\sim 33{,}000$-item catalog, random ranking scores near zero on this
+metric. The fact that the surviving algorithms cluster in the
+$0.10$ range --- and that \texttt{groupmatch\_raw\_llm} at $0.047$ is
+visibly distinguishable as broken --- means the metric is sensitive
+enough to discriminate algorithms that track preference from those
+that do not. Differences between close performers (e.g.\ the $\sim 4\%$
+gap between \texttt{groupmatch\_clustered} and \texttt{groupfit\_pos\_text})
+are within the per-group standard deviation and should be interpreted
+accordingly.
 
 \subsection{GroupFit ablation: $\lambda \times \beta$}
 
