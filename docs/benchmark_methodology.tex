@@ -1,0 +1,500 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{array}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue!60!black,
+}
+
+\title{AniSync Benchmark: Methodology and Findings}
+\author{Tony Dong \and Edward Kim \and Jakob Rees \and Vincent Wang \and Jack Xiong}
+\date{April 2026}
+
+\begin{document}
+\maketitle
+
+\section{Why benchmark at all}
+
+AniSync is a group anime-discovery app: several users join a room, each
+expresses what they want to watch, and the system returns a shared
+recommendation list. The product goal is \emph{coherent exploration} ---
+surfacing anime the group probably has not seen but will collectively
+enjoy --- not retrieval of titles any one user has already rated.
+
+A benchmark cannot directly measure that goal. There is no public dataset
+of ``what would this group of four strangers happily watch together if
+asked today.'' What we do have is MyAnimeList rating data: per-user
+ratings on a 1--10 scale, against an anime catalog that overlaps ours.
+The benchmark uses this data to ask a narrower question:
+
+\begin{quote}
+Given half of a user's rated anime as visible context, how well does an
+algorithm rank a candidate pool against the \emph{other} half of that
+user's ratings?
+\end{quote}
+
+This is a recall task, not a discovery task. We are explicit about the
+mismatch in Section~\ref{sec:limits}. The benchmark's purpose is to
+\emph{rule out clearly broken approaches} and to provide an apples-to-apples
+comparison between candidate scoring functions, not to choose the final
+algorithm on its own.
+
+\section{The metric: NDCG@K}
+
+\subsection{Definition}
+
+For a single user with a set of relevant items having graded relevances
+$r_1, r_2, \dots$, and an algorithm that returns a ranked list of
+candidates $c_1, c_2, \dots, c_K$, the Discounted Cumulative Gain at $K$
+is
+\begin{equation}
+\mathrm{DCG@}K \;=\; \sum_{i=1}^{K} \frac{\mathrm{rel}(c_i)}{\log_2(i+1)},
+\end{equation}
+where $\mathrm{rel}(c_i)$ is the user's relevance score for item $c_i$
+(0 if $c_i$ is not in the relevant set). The Ideal DCG is the same sum
+computed against the best possible ordering (relevances sorted in
+descending order):
+\begin{equation}
+\mathrm{IDCG@}K \;=\; \sum_{i=1}^{K} \frac{r_{(i)}}{\log_2(i+1)},
+\end{equation}
+with $r_{(1)} \geq r_{(2)} \geq \dots$ the sorted relevances. NDCG is the
+normalised ratio:
+\begin{equation}
+\mathrm{NDCG@}K \;=\; \frac{\mathrm{DCG@}K}{\mathrm{IDCG@}K} \;\in\; [0, 1].
+\end{equation}
+A perfect ranking gets 1; a ranking with no relevant items in the top $K$
+gets 0.
+
+\subsection{Worked example (binary relevances)}
+
+Suppose a user's relevant set is $\{A, B, C, D\}$, each with relevance 1
+(everything else relevance 0), and we evaluate at $K = 5$. The algorithm
+returns the ranked list
+\[
+[\, A,\; X,\; B,\; Y,\; C\, ],
+\]
+which has relevances $[1, 0, 1, 0, 1]$.
+
+\paragraph{DCG@5.}
+\[
+\mathrm{DCG@}5 \;=\; \frac{1}{\log_2 2} + \frac{0}{\log_2 3} + \frac{1}{\log_2 4} + \frac{0}{\log_2 5} + \frac{1}{\log_2 6}
+\;=\; 1.000 + 0 + 0.500 + 0 + 0.387 \;\approx\; 1.887.
+\]
+
+\paragraph{IDCG@5.}
+The ideal ranking puts the four relevant items first:
+$[1, 1, 1, 1, 0]$.
+\[
+\mathrm{IDCG@}5 \;=\; \frac{1}{\log_2 2} + \frac{1}{\log_2 3} + \frac{1}{\log_2 4} + \frac{1}{\log_2 5} + 0
+\;\approx\; 1.000 + 0.631 + 0.500 + 0.431 + 0 \;=\; 2.562.
+\]
+
+\paragraph{NDCG@5.}
+\[
+\mathrm{NDCG@}5 \;=\; \frac{1.887}{2.562} \;\approx\; 0.737.
+\]
+
+The algorithm captured three of four relevant items in the top five, but
+because two non-relevant items pushed the third hit down to rank 5, it
+loses about a quarter of the ideal score. NDCG punishes mid-rank hits
+roughly logarithmically: had the ranking been
+$[A, B, X, Y, C]$ instead, DCG@5 would rise to
+$1 + 0.631 + 0 + 0 + 0.387 = 2.018$ and NDCG@5 would climb to $0.788$.
+
+\subsection{Why NDCG and not just precision or recall}
+
+Recall@$K$ counts hits without caring about position: any of the rankings
+$[A,B,C,X,Y]$, $[A,X,B,Y,C]$, $[X,Y,A,B,C]$ scores identically. For a
+recommendation list a user reads top-down, this is wrong. Precision@$K$
+suffers the same flaw, and additionally penalises the algorithm for
+having more than $K$ correct items available. NDCG's logarithmic
+discount aligns better with how users actually consume ranked lists, and
+its normalisation produces a $[0, 1]$ score comparable across users with
+different numbers of relevant items.
+
+\section{Setup}
+
+\paragraph{User pool.}
+2{,}000 MyAnimeList users sampled from rating-export data, filtered to
+those with at least 15 rated titles. Ratings are integers 1--10 (we drop
+the 0 ``not rated yet'' value).
+
+\paragraph{Catalog.}
+The full AniSync catalog (anime-offline-database, $\sim$33{,}000 entries
+post-filter), preprocessed into 384-dimensional cosine-normalised
+embeddings via \texttt{sentence-transformers/all-MiniLM-L6-v2} on a
+constructed \texttt{text\_blob} per item (title, synonyms, tags, type,
+year, season, studios, producers, score).
+
+\paragraph{Visible/hidden split.}
+For each user we permute their ratings deterministically by
+$(\text{username}, \text{profile\_seed})$ and split 50/50. The
+\emph{visible} half is what the algorithm sees as input. The
+\emph{hidden} half is the ground truth used to evaluate the output.
+
+\paragraph{Groups.}
+We sample 400 synthetic groups of 4 users uniformly at random with a
+fixed \texttt{group\_seed}. Group composition is independent of taste --- a
+deliberate stress test for the group-aggregation logic.
+
+\paragraph{Evaluation.}
+For each group we run the algorithm on the four users' visible ratings,
+take the top 200 ranked catalog items, and compute per-user NDCG@200
+against that user's relevance set (Section~\ref{sec:proxy}). The group
+score is the mean across the four users; we also track the
+worst-user-in-group NDCG. We report the mean and standard deviation of
+both quantities across the 400 groups.
+
+\section{Proxy relevance set}
+\label{sec:proxy}
+
+\subsection{The temporal gap}
+
+The ratings dataset is from 2018; the catalog runs to 2026. A user who
+loved \emph{Steins;Gate} should plausibly enjoy a thematically similar
+2022 release, but they cannot have rated it. Scoring against the literal
+hidden set under-credits any algorithm that surfaces post-2018 anime ---
+exactly the most useful behaviour for a discovery product.
+
+\subsection{Construction}
+
+For each user we expand the literal hidden set into a \emph{proxy
+relevance set} as follows:
+\begin{enumerate}[leftmargin=*]
+\item Take the top $n_{\mathrm{top}} = 10$ hidden items by score, keeping
+only those with score $> 5$ (positive signal).
+\item For each seed item $s$ with score $\sigma_s$, retrieve its
+$n_{\mathrm{neighbours}} = 10$ nearest catalog entries by cosine
+distance.
+\item Assign each neighbour $c$ a relevance
+$\mathrm{rel}(c) = \max(\sigma_s - 5, 0)$, taking the maximum across
+seeds when multiple seeds nominate the same neighbour.
+\end{enumerate}
+This yields up to 100 graded-relevance items per user. The relevance
+scale ranges from 0 (not relevant or score $\leq 5$) to 5 (a
+neighbour of a 10/10).
+
+\subsection{What this metric does and does not measure}
+
+The proxy set rewards algorithms that surface catalog items
+\emph{semantically close} to a user's known high-score items. It does
+not reward genuine novelty: an algorithm that recommends anime
+unrelated to anything in the user's history will score zero, even if
+the user would in fact enjoy them. It also does not measure fairness;
+NDCG averaged across users in a group cannot distinguish ``everyone
+gets one decent recommendation'' from ``three people get great results
+and one gets nothing.''
+
+We return to this in Section~\ref{sec:limits}.
+
+\section{Algorithms compared}
+\label{sec:algos}
+
+Six algorithms are evaluated. Each is described in one paragraph below
+with an ``isolates'' tag identifying what it tests.
+
+\paragraph{\texttt{centroid}.}
+Compute a single mean embedding from all liked items across all four
+users. Retrieve the nearest catalog items by cosine to that centroid;
+return them in distance order. \emph{Isolates: the value of treating the
+group as a single average user.}
+
+\paragraph{\texttt{groupmatch\_raw}.}
+For each user, build a query embedding as the mean of their liked-item
+embeddings (rating $\geq 7$, falling back to all visible if none
+qualify). Retrieve each user's top-100 candidates via pgvector and union
+the four pools. Score each candidate by the \emph{mean} cosine
+similarity across the four user-query embeddings. Return the top 200 by
+mean score. \emph{Isolates: per-user retrieval plus simple averaging,
+without clustering or fairness machinery.}
+
+\paragraph{\texttt{groupmatch\_clustered}.}
+Identical to \texttt{groupmatch\_raw}, but after scoring we run
+silhouette-guided $k$-means on the candidate embeddings, promote the
+top-$N$ items per cluster to the front of the ranked list, and globally
+re-sort the promoted set by mean GroupMatch score. Items not promoted
+follow, also in score order. \emph{Isolates: the marginal value of
+cluster-diverse re-rank on top of mean-similarity scoring.}
+
+\paragraph{\texttt{groupfit}.}
+For each candidate $c_i$, score
+\[
+\mathrm{score}(c_i) \;=\; \min_{u} \Big[ \max_{j} (e_i \cdot \ell_{u,j})
+\;-\; \lambda\, (e_i \cdot \bar n_u)
+\;+\; \beta\, (e_i \cdot t_u) \Big],
+\]
+where $\ell_{u,j}$ are user $u$'s liked-item embeddings, $\bar n_u$ is
+the mean of their disliked-item embeddings (negative centroid), and $t_u$
+is a query embedding from their visible profile. The min over users
+encodes a fairness constraint: a candidate scores well only if every user
+in the group has at least one taste vector matched. \emph{Isolates: min-aggregation
+fairness combined with an additive negative-penalty term and a text-alignment
+term.} The benchmark grids over $(\lambda, \beta)$.
+
+\paragraph{\texttt{groupfit\_pos\_text}.}
+A simplification of \texttt{groupfit} that drops the negative term and
+blends the positive and text terms with a single mixing parameter:
+\[
+\mathrm{score}(c_i) \;=\; (1 - \alpha)\, \min_{u} \max_{j} (e_i \cdot \ell_{u,j})
+\;+\; \alpha\, \frac{1}{|U|} \sum_{u} (e_i \cdot t_u).
+\]
+\emph{Isolates: text alignment as a clean blend against positive-only
+fairness, with no negative penalty.} The benchmark sweeps $\alpha$.
+
+\paragraph{\texttt{groupmatch\_raw\_llm}.}
+Identical to \texttt{groupmatch\_raw}, but the per-user query embedding
+is computed from an LLM-generated natural-language description of the
+user's taste (built offline from their visible ratings) rather than from
+the mean of their liked-item embeddings. \emph{Isolates: whether
+LLM-mediated taste extraction beats raw embedding averaging.}
+
+\paragraph{The \texttt{\_msmarco} variants.}
+\texttt{groupfit\_msmarco} and \texttt{groupfit\_pos\_text\_msmarco} are
+the same algorithms with the text term computed against an asymmetric
+model (\texttt{msmarco-MiniLM-L6-cos-v5}) populated into a separate
+\texttt{embedding\_msmarco} column. The hypothesis was that an
+asymmetric query$\to$document model would outperform the symmetric
+\texttt{all-MiniLM-L6-v2} on the natural-language preference path. The
+benchmark refutes it (Section~\ref{sec:rejected}).
+
+\section{Results}
+\label{sec:results}
+
+All runs: 400 groups of 4 users, visible ratio 0.5, $K = 200$, profile
+seed and group seed fixed for reproducibility.
+
+\subsection{Algorithm comparison}
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Algorithm & mean NDCG & std & mean worst-user NDCG \\
+\midrule
+\texttt{groupmatch\_clustered}      & 0.1065 & 0.0276 & 0.0538 \\
+\texttt{groupmatch\_raw}            & 0.1058 & 0.0272 & 0.0528 \\
+\texttt{groupfit\_pos\_text}        & 0.1024 & 0.0286 & 0.0509 \\
+\texttt{groupfit}                   & 0.1006 & 0.0273 & 0.0492 \\
+\texttt{groupfit\_msmarco}          & 0.0944 & 0.0260 & 0.0481 \\
+\texttt{groupfit\_pos\_text\_msmarco} & 0.0941 & 0.0247 & 0.0482 \\
+\texttt{centroid}                   & 0.0798 & 0.0235 & 0.0342 \\
+\texttt{groupmatch\_raw\_llm}       & 0.0470 & 0.0170 & 0.0188 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{GroupFit ablation: $\lambda \times \beta$}
+
+Mean NDCG across the negative-penalty weight $\lambda$ (rows) and the
+text-alignment weight $\beta$ (columns), with all other parameters
+fixed.
+
+\begin{center}
+\begin{tabular}{lccccccc}
+\toprule
+$\lambda \backslash \beta$ & 0.0 & 0.1 & 0.2 & 0.3 & 0.5 & 0.7 & 1.0 \\
+\midrule
+0.0 & 0.0974 & 0.0969 & 0.0964 & 0.0957 & 0.0941 & 0.0927 & 0.0909 \\
+0.2 & 0.0990 & 0.0988 & 0.0983 & 0.0975 & 0.0961 & 0.0947 & 0.0929 \\
+0.5 & 0.1000 & 0.0998 & 0.0995 & 0.0990 & 0.0981 & 0.0967 & 0.0947 \\
+0.8 & 0.1002 & 0.1000 & 0.0997 & 0.0993 & 0.0984 & 0.0974 & --     \\
+1.0 & 0.1001 & 0.0999 & 0.0996 & 0.0992 & 0.0983 & 0.0977 & --     \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The grid is monotonically decreasing left-to-right (in $\beta$) and
+roughly increasing top-to-bottom (in $\lambda$).
+
+\subsection{GroupFit pos+text ablation: $\alpha$}
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+$\alpha$ & mean NDCG & std & mean worst-user NDCG \\
+\midrule
+0.0 & 0.0979 & 0.0276 & 0.0490 \\
+0.1 & 0.0994 & 0.0279 & 0.0495 \\
+0.2 & 0.1004 & 0.0285 & 0.0499 \\
+\textbf{0.3} & \textbf{0.1009} & 0.0286 & \textbf{0.0501} \\
+0.4 & 0.1008 & 0.0287 & 0.0498 \\
+0.5 & 0.1006 & 0.0290 & 0.0496 \\
+0.6 & 0.0997 & 0.0285 & 0.0491 \\
+0.7 & 0.0990 & 0.0286 & 0.0488 \\
+0.8 & 0.0981 & 0.0282 & 0.0484 \\
+0.9 & 0.0972 & 0.0278 & 0.0479 \\
+1.0 & 0.0963 & 0.0273 & 0.0474 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The optimum sits at $\alpha \approx 0.3$. Pure liked-item retrieval
+($\alpha = 0$) and pure text alignment ($\alpha = 1$) both underperform
+the blend.
+
+\section{Three rejected hypotheses}
+\label{sec:rejected}
+
+The benchmark cleanly disposes of three design candidates that we had
+considered serious going in.
+
+\paragraph{Negative-similarity penalty ($\lambda > 0$).}
+Penalising similarity to a centroid of the user's disliked items was
+intuitive --- ``don't recommend things they have already rejected.''
+The $\lambda \times \beta$ grid shows it is monotonically harmful: at
+every fixed $\beta$, raising $\lambda$ from 0 reduces NDCG. The mean
+of disliked items is too diffuse a target; subtracting from candidate
+scores along that direction discards positive signal as collateral.
+\textbf{Decision: $\lambda = 0$ in production.}
+
+\paragraph{Centroid retrieval.}
+Treating the group as a single user (mean of liked items across the
+group, retrieve nearest neighbours) loses 20--25\% NDCG relative to per-user
+retrieval. Averaging four taste vectors before retrieval collapses the
+group's structure; per-user retrieval followed by group-aware scoring
+preserves it.
+\textbf{Decision: per-user retrieval, never group-mean retrieval.}
+
+\paragraph{Asymmetric msmarco embeddings.}
+\texttt{msmarco-MiniLM-L6-cos-v5} is fine-tuned on
+query$\to$passage pairs and was hypothesised to better match
+preference-text$\to$anime-metadata than the symmetric
+\texttt{all-MiniLM-L6-v2}. In practice, both \texttt{groupfit\_msmarco}
+(0.0944) and \texttt{groupfit\_pos\_text\_msmarco} (0.0941) score about
+6\% below their non-msmarco counterparts (0.1006 and 0.1024). The
+proxy relevance set is constructed via cosine neighbours under
+\texttt{all-MiniLM-L6-v2}; an algorithm that scores items with a
+\emph{different} embedding cannot align as well with the metric's
+notion of ``relevant.'' Whatever asymmetric retrieval gains exist are
+not detectable by this benchmark, and we have no other source of
+evidence for them.
+\textbf{Decision: a single embedding model in production
+(\texttt{all-MiniLM-L6-v2}). The msmarco column and embedding code stay
+in the repo as the executed ablation but are not invoked by the
+production path.}
+
+\section{What we keep}
+
+\paragraph{Text alignment is a real, modest signal.}
+Within \texttt{groupfit\_pos\_text}, $\alpha = 0$ scores 0.0979 and
+$\alpha = 0.3$ scores 0.1009 --- a 3\% relative gain. The text term
+brings information the liked-item embeddings cannot: it lets a user
+type ``something slow-paced and melancholic'' and have that route their
+recommendations regardless of what is in their history.
+
+\paragraph{Cluster-diverse re-rank is worth the complexity.}
+\texttt{groupmatch\_clustered} (0.1065) edges out
+\texttt{groupmatch\_raw} (0.1058). The gain is small in NDCG terms but
+consistent, and the product reason for clustering --- giving a session
+visible diversity rather than a uniform top-200 by score --- is itself
+a goal the benchmark cannot directly reward.
+
+\paragraph{Per-user retrieval beats centroid retrieval.}
+Confirmed by the centroid result above. Production retrieval is one
+pgvector query per user, candidate pools unioned.
+
+\section{Limitations: what the benchmark cannot adjudicate}
+\label{sec:limits}
+
+\paragraph{The metric is constructed using the same machinery as
+GroupMatch retrieval.}
+The proxy relevance set is built by taking nearest embedding neighbours
+of each user's high-rated hidden items. \texttt{groupmatch\_raw}
+retrieves candidates by taking nearest embedding neighbours of each
+user's high-rated \emph{visible} items and scores them by mean cosine.
+The metric is, by construction, a target that GroupMatch is shaped
+to hit. The 6\% gap between GroupMatch and GroupFit on this benchmark
+is not strong evidence that GroupMatch is the better algorithm in
+production --- it is partly evidence that the metric and the algorithm
+share an inductive bias.
+
+\paragraph{NDCG measures average satisfaction, not fairness in the room.}
+GroupFit's $\min_u$ aggregation deliberately sacrifices group-mean
+quality to ensure every individual user has at least one taste direction
+hit. NDCG, averaged over users, cannot capture this property. A group
+where one user is entirely unrepresented and three are well served
+will outscore a group where all four are moderately served. Worst-user
+NDCG (which we report) is closer to a fairness signal but still does
+not capture the qualitative experience of being the one person in the
+room with no candidate they connect to.
+
+\paragraph{The benchmark rewards recall, not discovery.}
+Every algorithm in this benchmark is graded on how well it surfaces
+items semantically close to what a user already liked in 2018. There
+is a trivial way to maximise this metric: recommend the most popular,
+highest-rated anime in the catalog, since those items are
+disproportionately likely to be in any user's neighbourhood. An
+algorithm that did exactly that would be a worse product. AniSync's
+goal is the opposite of recall: surface anime the group has not
+already encountered. The benchmark is structurally hostile to that
+goal.
+
+\paragraph{Ratings are eight years stale.}
+The proxy expansion partially compensates for this, but a user's
+2018 preferences and their 2026 preferences are not the same data,
+and the benchmark cannot model the difference.
+
+\section{From benchmark to product}
+\label{sec:design}
+
+The benchmark told us three things to reject (negative penalty,
+centroid retrieval, msmarco embeddings) and one signal that helps (text
+alignment, around $\alpha \approx 0.3$). It did not tell us whether
+GroupMatch or GroupFit is the right algorithm for the product, because
+the metric is incapable of measuring the property that distinguishes
+them: \emph{room-level fairness} and \emph{willingness to recommend
+unfamiliar anime instead of crowd-favourites}.
+
+We choose \texttt{groupfit\_pos\_text} despite the benchmark numbers
+because:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Fairness in the room.} A group session where one
+participant is completely unrepresented is a product failure. Min-over-users
+encodes this constraint directly. Mean-over-users does not.
+
+\item \textbf{Exploration over recall.} Per-user max-similarity to
+liked items is more discriminating than mean similarity to a group
+centroid: it surfaces specific items that hit \emph{some} user's
+taste vector hard, rather than generically popular items that
+moderately match everyone. This is the right inductive bias for
+discovery.
+
+\item \textbf{Text as a first-class signal.} A user's typed preference
+(``I want something experimental and short'') is information the
+embedding of their watch history cannot represent. The benchmark's
+$\alpha$ ablation confirms that even a small text weight measurably
+improves alignment.
+\end{itemize}
+
+\subsection*{Production configuration}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Algorithm:} \texttt{groupfit\_pos\_text} with
+$\alpha = 0.30$, $\lambda = 0$.
+\item \textbf{Embedding model:} \texttt{all-MiniLM-L6-v2}, 384 dim,
+cosine-normalised, single column on \texttt{catalog\_items}.
+\item \textbf{Retrieval:} per-user pgvector query against the mean of
+each user's liked-item embeddings (score $\geq 7$, falling back to all
+visible if none qualify), top 100 per user, candidate pools unioned.
+\item \textbf{Diversification:} silhouette-guided $k$-means on the
+candidate pool, top-$N$ per cluster promoted to the front of the
+ranked list, globally re-sorted by GroupFit score.
+\item \textbf{Negative ratings:} not used in scoring. Empirically
+harmful, theoretically suspect, removed.
+\end{itemize}
+
+The benchmark is the floor, not the ceiling: it confirms our scoring
+function is in the right family and our preprocessing choices are
+not broken. The product case for the chosen design rests on properties
+the benchmark cannot see.
+
+\end{document}

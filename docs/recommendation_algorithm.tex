@@ -1,0 +1,194 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{array}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue!60!black,
+}
+
+\title{AniSync App: Algorithm and Recommendation Flow}
+\author{Tony Dong \and Edward Kim \and Jakob Rees \and Vincent Wang \and Jack Xiong}
+\date{April 2026}
+
+\begin{document}
+\maketitle
+
+\section{Setup and notation}
+
+A room contains $n \geq 2$ users. We represent each user $u \in \{1, \dots, n\}$
+as a pair
+\[
+  P_u \;=\; (L_u,\, T_u),
+\]
+where:
+\begin{itemize}[leftmargin=2em]
+  \item $L_u = \{a_{u,1}, a_{u,2}, \dots, a_{u,m_u}\}$ is the set of catalog
+        anime the user has explicitly marked as \emph{liked}. Each
+        $a_{u,j}$ identifies a row in the catalog and carries a
+        precomputed embedding $\mathbf{e}_{u,j} \in \mathbb{R}^{384}$
+        already stored in Postgres.
+  \item $T_u \in \Sigma^{*}$ is the user's optional free-text mood
+        description (\textit{e.g.\,``I want something slow-paced and
+        melancholic, ideally short''}).
+\end{itemize}
+
+At submission time the user supplies at least one of $L_u$ or $T_u$;
+empty submissions are rejected.
+
+The catalog is a fixed set $C = \{c_1, \dots, c_N\}$ with $N \approx 38{,}000$.
+Every $c \in C$ has a precomputed embedding
+$\mathbf{e}_c \in \mathbb{R}^{384}$ produced offline by
+\texttt{sentence-transformers/all-MiniLM-L6-v2} over a structured text blob
+(title + tags + studios + a short description). All embeddings are
+$\ell_2$-normalized, so dot products are cosine similarities in $[-1, 1]$.
+
+\section{Per-user signals}
+
+Once all users have submitted, we derive three quantities per user.
+
+\paragraph{Liked-item matrix.}
+We fetch each $\mathbf{e}_{u,j}$ from the catalog (no new model calls)
+and stack them:
+\[
+  \mathbf{L}_u \in \mathbb{R}^{m_u \times 384}.
+\]
+
+\paragraph{Text vector.}
+If $T_u \neq \varnothing$, we compute
+$\mathbf{t}_u = \texttt{embed}(T_u) \in \mathbb{R}^{384}$ on the fly.
+This is the only embedding-model call at request time.
+
+\paragraph{Retrieval query.}
+A single 384-dim vector that summarizes the user's taste, used only
+for candidate retrieval:
+\[
+  \mathbf{q}_u =
+  \begin{cases}
+    \mathrm{normalize}\!\left(\tfrac{1}{m_u}\sum_{j} \mathbf{e}_{u,j}\right) & \text{if } L_u \neq \varnothing, \\[4pt]
+    \mathbf{t}_u & \text{otherwise (text-only fallback).}
+  \end{cases}
+\]
+
+For users who supply only liked items, we also reuse $\mathbf{q}_u$ as
+their ``text vector'' so the scoring formula stays well-defined without
+privileging text-only users.
+
+\section{Pipeline}
+
+\subsection{Step 1: Per-user retrieval}
+
+For each user $u$, we run a pgvector cosine-distance search against the
+catalog under the host's hard constraints (year range, allowed media
+types) and exclude any anime already in $\bigcup_v L_v$:
+\[
+  R_u \;=\; \mathrm{topk}_{c \in C \setminus \bigcup_v L_v}\bigl(
+    \mathbf{q}_u \cdot \mathbf{e}_c
+  \bigr),\qquad |R_u| = 100.
+\]
+The exclusion ensures we never recommend back to a user something
+\emph{any} room member already flagged as liked.
+
+\subsection{Step 2: Group candidate pool}
+
+We union and deduplicate:
+\[
+  \mathcal{R} \;=\; \bigcup_{u=1}^{n} R_u,
+\]
+giving a pool of typically 200--500 unique candidates. Stack their
+embeddings into $\mathbf{E} \in \mathbb{R}^{|\mathcal{R}| \times 384}$.
+
+\subsection{Step 3: GroupFit pos+text scoring}
+
+For each candidate $i \in \mathcal{R}$ we compute
+\begin{equation}
+  \mathrm{score}(i) \;=\;
+  \underbrace{(1 - \alpha)\,\min_{u}\;\max_{j}\;\bigl(\mathbf{e}_i \cdot \mathbf{e}_{u,j}\bigr)}_{\text{positive term: per-user fairness floor}}
+  \;+\;
+  \underbrace{\alpha\,\frac{1}{n}\sum_{u}\;\bigl(\mathbf{e}_i \cdot \mathbf{t}_u\bigr)}_{\text{text term: average mood alignment}},
+  \label{eq:groupfit}
+\end{equation}
+with $\alpha = 0.30$ chosen by the offline benchmark (see
+\texttt{writeup.tex}).
+
+The two terms answer complementary questions:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Positive term.} For each user $u$, find their
+        \emph{best-matching} liked item against candidate $i$
+        ($\max_j$). Then take the \emph{worst} of those across users
+        ($\min_u$). A high score here means \emph{everyone} has at least
+        one liked anime that $i$ resembles --- no user is ignored.
+  \item \textbf{Text term.} Average alignment with each user's mood
+        description. This is symmetric and forgiving; it nudges the
+        ranking but cannot dominate when $\alpha$ is small.
+\end{itemize}
+
+In practice we compute the sims in two batched matrix multiplies,
+$\mathbf{L}_u \mathbf{E}^\top$ and $\mathbf{T} \mathbf{E}^\top$, then
+reduce with \texttt{max}, \texttt{min}, and \texttt{mean}.
+
+\subsection{Step 4: Clustering}
+
+We run a manual K-means implementation
+(\texttt{api/app/ml/kmeans.py}) over $\mathbf{E}$, choosing $k$ in
+$\{2, \dots, 6\}$ by silhouette score. Each candidate $i$ is assigned a
+cluster label $z(i) \in \{1, \dots, k\}$. Clusters typically reflect
+thematic groupings in embedding space (\textit{e.g.\,} action-shounen,
+slice-of-life, psychological) although they are not literally
+genre-labeled.
+
+\subsection{Step 5: Per-cluster ranking and final list}
+
+Within each cluster $\kappa$ we rank by GroupFit score and keep the
+top 5 for the UI's clustered shortlist view:
+\[
+  \mathrm{Cluster}_\kappa = \mathrm{top}_5\bigl(\{i : z(i) = \kappa\},\,
+                                                 \mathrm{score}\bigr).
+\]
+For voting we then take the top 2 per cluster, deduplicate across
+clusters, and re-sort globally by score:
+\[
+  F \;=\; \mathrm{sort}_{\downarrow\mathrm{score}}\Bigl(
+    \bigcup_{\kappa=1}^{k} \mathrm{top}_2\bigl(\{i : z(i) = \kappa\},\,
+                                                \mathrm{score}\bigr)
+  \Bigr).
+\]
+$F$ is the final voting list shown to all users.
+
+\subsection{Step 6: Voting and result}
+
+Each user submits a subset $V_u \subseteq F$. The room's final result
+ranks $F$ first by total vote count
+$v(i) = |\{u : i \in V_u\}|$, then by GroupFit score, then by title.
+Items tied for the top vote count are flagged as winners.
+
+\section{Cost summary}
+
+The whole compute is dominated by I/O and a few small matrix
+multiplications:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Embedding model calls at request time:} only the
+        $T_u$ texts (\(\leq n\) short strings), $\sim 50$ ms total
+        on warm cache.
+  \item \textbf{Catalog embeddings:} all reused from the offline
+        preprocessing run; no model calls.
+  \item \textbf{Vector search:} $n$ pgvector cosine-distance queries,
+        each returning 100 rows under SQL hard-constraint filters.
+  \item \textbf{Scoring \& clustering:} $O(|\mathcal{R}| \cdot 384)$
+        and $O(|\mathcal{R}| \cdot k \cdot 384)$ respectively;
+        milliseconds in practice.
+\end{itemize}
+
+The first compute after server start incurs an additional one-time
+$\sim 3$--$6$ s cost to load the
+\texttt{all-MiniLM-L6-v2} weights into memory; subsequent computes
+hit a warm model.
+
+\end{document}
