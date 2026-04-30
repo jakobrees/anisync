@@ -34,7 +34,8 @@ media/thumbnails/*
 !media/thumbnails/.gitkeep
 
 # Benchmark artefacts
-benchmark/cache/
+benchmark/cache/*
+!benchmark/cache/llm.tar.zst
 benchmark/results/*.json
 
 # macOS
